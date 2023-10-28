@@ -8,7 +8,7 @@ import retrofit2.http.Query
 
 const val endpoint = "products"
 
-interface ProductApi {
+interface ApiService {
     @GET(value = endpoint)
     suspend fun getAllProducts(
         @Query(value = "limit") limit: Int? = null,
@@ -20,4 +20,11 @@ interface ProductApi {
 
     @GET(value = "$endpoint/categories")
     suspend fun getAllCategories(): List<String>
+
+    @GET(value = "$endpoint/category/{category}")
+    suspend fun getProductsOfCategory(
+        @Path(value = "category") category: String,
+        @Query(value = "limit") limit: Int? = null,
+        @Query(value = "skip") skip: Int? = null
+    ): GetAllProductsResponse
 }

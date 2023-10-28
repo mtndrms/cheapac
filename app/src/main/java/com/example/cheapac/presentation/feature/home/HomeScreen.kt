@@ -23,6 +23,7 @@ import com.example.cheapac.presentation.component.HorizontalProducts
 @Composable
 internal fun HomeRoute(
     navigateToCategories: () -> Unit,
+    navigateToCategory: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -30,6 +31,7 @@ internal fun HomeRoute(
     HomeScreen(
         uiState = uiState,
         navigateToCategories = navigateToCategories,
+        navigateToCategory = navigateToCategory,
         modifier = modifier
     )
 }
@@ -37,11 +39,13 @@ internal fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     navigateToCategories: () -> Unit,
+    navigateToCategory: (String) -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
 ) {
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
             .then(modifier)
@@ -50,13 +54,29 @@ internal fun HomeScreen(
             modifier = Modifier.align(Alignment.TopCenter),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HighlightsCarousel(highlights = uiState.highlights, autoSwipeDuration = 3000,modifier = Modifier.height(128.dp))
+            HighlightsCarousel(
+                highlights = uiState.highlights,
+                autoSwipeDuration = 3000,
+                modifier = Modifier.height(128.dp)
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            CategoriesCatalog(categories = uiState.categories, navigateToCategories = navigateToCategories, modifier = Modifier)
+            CategoriesCatalog(
+                categories = uiState.categories,
+                navigateToCategories = navigateToCategories,
+                navigateToCategory = navigateToCategory,
+                modifier = Modifier
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            HighlightsCarousel(highlights = uiState.highlights, autoSwipeDuration = 5000, modifier = Modifier.height(192.dp))
+            HighlightsCarousel(
+                highlights = uiState.highlights,
+                autoSwipeDuration = 5000,
+                modifier = Modifier.height(192.dp)
+            )
             Spacer(modifier = Modifier.height(20.dp))
-            HorizontalProducts(products = uiState.highlights, modifier = Modifier)
+            HorizontalProducts(
+                products = uiState.highlights,
+                modifier = Modifier
+            )
         }
     }
 }

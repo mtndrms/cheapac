@@ -10,4 +10,11 @@ class ProductRepository @Inject constructor(private val remoteDataSource: Remote
         remoteDataSource.getAllProducts(limit, skip)
 
     suspend fun getOneById(id: Int): ProductDto = remoteDataSource.getOneProductById(id)
+
+    suspend fun getProductsOfCategory(
+        category: String,
+        limit: Int? = null,
+        skip: Int? = null
+    ): GetAllProductsResponse =
+        remoteDataSource.getProductsOfCategory(category = category, limit = limit, skip = skip)
 }

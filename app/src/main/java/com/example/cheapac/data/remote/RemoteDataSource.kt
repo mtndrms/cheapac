@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RemoteDataSource @Inject constructor(
-    private val api: ProductApi
+    private val api: ApiService
 ) {
     suspend fun getAllProducts(limit: Int? = null, skip: Int? = null): GetAllProductsResponse =
         withContext(Dispatchers.IO) {
@@ -22,5 +22,14 @@ class RemoteDataSource @Inject constructor(
     suspend fun getAllCategories(): List<String> =
         withContext(Dispatchers.IO) {
             api.getAllCategories()
+        }
+
+    suspend fun getProductsOfCategory(
+        category: String,
+        limit: Int? = null,
+        skip: Int? = null
+    ): GetAllProductsResponse =
+        withContext(Dispatchers.IO) {
+            api.getProductsOfCategory(category = category, limit = limit, skip = skip)
         }
 }

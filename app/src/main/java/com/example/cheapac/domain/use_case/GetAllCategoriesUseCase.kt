@@ -62,6 +62,10 @@ class GetAllCategoriesUseCase @Inject constructor(private val categoryRepository
     }
 
     private fun toCategory(title: String): Category {
-        return Category(title = betterCategoryTitle(title), iconId = pickCategoryIcon(title))
+        return Category(
+            code = title,
+            title = betterCategoryTitle(title),
+            iconId = pickCategoryIcon(title)
+        )
     }
 }

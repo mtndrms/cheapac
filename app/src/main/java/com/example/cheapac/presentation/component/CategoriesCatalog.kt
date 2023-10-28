@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -50,6 +52,7 @@ private val testCategories = mutableListOf(
 fun CategoriesCatalog(
     categories: UiState<List<Category>>,
     navigateToCategories: () -> Unit,
+    navigateToCategory: (String) -> Unit,
     modifier: Modifier
 ) {
     val configuration = LocalConfiguration.current
@@ -89,8 +92,7 @@ fun CategoriesCatalog(
                             .background(color = MaterialTheme.colorScheme.secondaryContainer)
                             .clickable {
                                 if (it + 1 < ROW * COLUMN) {
-                                    // navigateToCategory(data[it])
-                                    Log.i("TODO", "Go to ${data[it]} category")
+                                    navigateToCategory(data[it].code)
                                 } else {
                                     navigateToCategories()
                                 }
@@ -98,6 +100,11 @@ fun CategoriesCatalog(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Icon(
+                            painter = painterResource(id = data[it].iconId),
+                            contentDescription = data[it].title
+                        )
+                        Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = if (it + 1 < ROW * COLUMN) {
                                 data[it].title.replaceFirst("-", "\n")

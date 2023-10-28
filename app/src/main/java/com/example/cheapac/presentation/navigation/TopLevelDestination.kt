@@ -17,5 +17,12 @@ enum class TopLevelDestination(
         iconTextResId = R.string.home,
         titleTextResId = R.string.home,
         route = "home"
-    )
+    ),
+    PROFILE(
+        selectedIcon = CheapacIcons.Profile,
+        unselectedIcon = CheapacIcons.ProfileOutlined,
+        iconTextResId = R.string.profile,
+        titleTextResId = R.string.profile,
+        route = "profile"
+    ),
 }

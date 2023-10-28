@@ -1,8 +1,8 @@
-package com.example.cheapac.presentation.feature.categories
+package com.example.cheapac.presentation.feature.products
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cheapac.domain.use_case.GetAllCategoriesUseCase
+import com.example.cheapac.domain.use_case.GetProductsOfCategoryUseCase
 import com.example.cheapac.utils.Resource
 import com.example.cheapac.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,37 +15,33 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
-class CategoriesViewModel @Inject constructor(
-    private val getAllCategoriesUseCase: GetAllCategoriesUseCase
-): ViewModel() {
-    private val _uiState = MutableStateFlow(CategoriesUiState())
+class ProductsViewModel @Inject constructor(
+    private val getProductsOfCategoryUseCase: GetProductsOfCategoryUseCase
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(ProductsUiState())
     val uiState = _uiState.asStateFlow()
 
     private var job: Job? = null
 
-    init {
-//        getAllCategories()
-    }
-
-    private fun getAllCategories() {
-        job = getAllCategoriesUseCase().onEach { result ->
+    fun getProductsOfCategory(category: String) {
+        job = getProductsOfCategoryUseCase(category).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
                     _uiState.update {
-                        it.copy(categories = UiState(isLoading = true))
+                        it.copy(products = UiState(isLoading = true))
                     }
                 }
 
                 is Resource.Error -> {
                     _uiState.update {
-                        it.copy(categories = UiState(message = result.message ?: ""))
+                        it.copy(products = UiState(message = result.message ?: ""))
                     }
                 }
 
                 is Resource.Success -> {
                     result.data?.let { data ->
                         _uiState.update {
-                            it.copy(categories = UiState(data = data))
+                            it.copy(products = UiState(data = data))
                         }
                     }
                 }

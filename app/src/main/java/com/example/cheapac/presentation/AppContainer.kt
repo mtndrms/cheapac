@@ -13,6 +13,9 @@ import com.example.cheapac.presentation.feature.categories.categoriesScreen
 import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 import com.example.cheapac.presentation.feature.home.homeScreen
+import com.example.cheapac.presentation.feature.products.navigateToProductList
+import com.example.cheapac.presentation.feature.products.productsScreen
+import com.example.cheapac.presentation.feature.profile.profileScreen
 
 @Composable
 fun AppContainer(
@@ -24,12 +27,17 @@ fun AppContainer(
     ) {
         Scaffold(
             topBar = {
-                TopBar(
-                    currentScreenTitle = appState.currentDestinationTitle,
-                    onTitleClick = {
-                        appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
-                    }
-                )
+                if (appState.shouldShowTopBar) {
+                    TopBar(
+                        currentScreenTitle = appState.currentDestinationTitle,
+                        navigateToProfile = {
+                            appState.navigateToTopLevelDestination(
+                                TopLevelDestination.PROFILE
+                            )
+                        },
+                        onTitleClick = { appState.navigateToTopLevelDestination(TopLevelDestination.HOME) }
+                    )
+                }
             },
             modifier = Modifier.fillMaxSize()
         ) { innerPadding ->
@@ -38,8 +46,13 @@ fun AppContainer(
                 navController = appState.navController,
                 startDestination = TopLevelDestination.HOME.route
             ) {
-                homeScreen(appState.navController::navigateToCategories)
+                homeScreen(
+                    navigateToCategories = appState.navController::navigateToCategories,
+                    navigateToCategory = appState.navController::navigateToProductList
+                )
                 categoriesScreen()
+                profileScreen(goBack = appState.navController::popBackStack)
+                productsScreen()
             }
         }
     }

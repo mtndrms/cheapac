@@ -1,6 +1,6 @@
 package com.example.cheapac.di
 
-import com.example.cheapac.data.remote.ProductApi
+import com.example.cheapac.data.remote.ApiService
 import com.example.cheapac.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -30,7 +30,7 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideProductApi(okHttpClient: OkHttpClient): ProductApi {
+    fun provideProductApi(okHttpClient: OkHttpClient): ApiService {
         return Retrofit.Builder()
             .baseUrl(Constants.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())

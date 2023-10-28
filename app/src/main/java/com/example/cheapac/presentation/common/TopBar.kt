@@ -22,11 +22,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
+import com.example.cheapac.presentation.navigation.TopLevelDestination
 
 private val height = 64.dp
 
 @Composable
-fun TopBar(currentScreenTitle: String, onTitleClick: () -> Unit) {
+fun TopBar(currentScreenTitle: String, onTitleClick: () -> Unit, navigateToProfile: () -> Unit) {
     Surface(
         modifier = Modifier
             .height(height)
@@ -62,10 +63,10 @@ fun TopBar(currentScreenTitle: String, onTitleClick: () -> Unit) {
                     )
                 }
 
-                IconButton(onClick = { }) {
+                IconButton(onClick = navigateToProfile) {
                     Icon(
                         imageVector = CheapacIcons.ProfileOutlined,
-                        contentDescription = "profile",
+                        contentDescription = stringResource(id = TopLevelDestination.PROFILE.titleTextResId),
                         tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.size(24.dp)
                     )

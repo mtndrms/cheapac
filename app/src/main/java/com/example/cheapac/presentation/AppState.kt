@@ -16,6 +16,7 @@ import androidx.navigation.navOptions
 import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 import com.example.cheapac.presentation.feature.home.navigateToHome
+import com.example.cheapac.presentation.feature.profile.navigateToProfile
 import com.example.cheapac.utils.getDestinationTitle
 import com.example.cheapac.utils.hideBottomBarOnThisDestinations
 import com.example.cheapac.utils.showTopBarOnThisDestinations
@@ -79,6 +80,10 @@ class AppState(
 
             when (topLevelDestination) {
                 TopLevelDestination.HOME -> navController.navigateToHome(
+                    topLevelDestinationNavOptions
+                )
+
+                TopLevelDestination.PROFILE -> navController.navigateToProfile(
                     topLevelDestinationNavOptions
                 )
             }

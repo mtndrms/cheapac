@@ -110,5 +110,11 @@ private fun CategoriesRow(category: Category) {
 @Preview(showBackground = true)
 @Composable
 private fun PreviewCategoriesRow() {
-    CategoriesRow(category = Category("Men's Watches", iconId = CheapacIcons.MenWatches.id))
+    CategoriesRow(
+        category = Category(
+            code = "mens-watches",
+            "Men's Watches",
+            iconId = CheapacIcons.MenWatches.id
+        )
+    )
 }

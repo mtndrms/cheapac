@@ -9,5 +9,9 @@ enum class Destination(
     CATEGORIES(
         titleTextResId = R.string.categories,
         route = "categories"
+    ),
+    PRODUCTS(
+        titleTextResId = R.string.products,
+        route = "products"
     )
 }
