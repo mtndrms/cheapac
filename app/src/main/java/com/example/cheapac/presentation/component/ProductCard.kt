@@ -1,12 +1,9 @@
 package com.example.cheapac.presentation.component
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +14,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -27,27 +25,34 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.cheapac.presentation.common.CheapacIcons
 
 @Composable
 fun ProductCard(title: String, price: Int, imageUrl: String, discountRate: Int = 0) {
     Surface(
         shadowElevation = 1.dp,
-        tonalElevation = 1.dp,
-        shape = RoundedCornerShape(3.dp),
+        shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(150.dp)
             .height(250.dp)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = MaterialTheme.colorScheme.secondaryContainer)
+        ) {
             Box(modifier = Modifier.fillMaxHeight(0.5f)) {
-                Image(
-                    imageVector = CheapacIcons.Cart,
-                    contentDescription = "Product thumbnail",
-                    modifier = Modifier.fillMaxSize()
+                AsyncImage(
+                    model = imageUrl,
+                    contentDescription = title,
+                    contentScale = ContentScale.FillBounds,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(15.dp)
                 )
 
                 IconButton(
@@ -80,12 +85,24 @@ fun ProductCard(title: String, price: Int, imageUrl: String, discountRate: Int =
                         .fillMaxWidth()
                         .padding(start = 10.dp)
                 ) {
-                    Text(text = "Product title", style = MaterialTheme.typography.titleLarge)
-                    Text(text = "1234.5678 TL", style = MaterialTheme.typography.labelLarge, fontSize = 16.sp)
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.titleSmall,
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = "$$price",
+                        style = MaterialTheme.typography.labelSmall,
+                        fontSize = 14.sp
+                    )
                 }
 
                 Button(
                     onClick = { },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.secondary,
+                        contentColor = MaterialTheme.colorScheme.onSecondary
+                    ),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .align(Alignment.CenterHorizontally)

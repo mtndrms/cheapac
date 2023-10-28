@@ -41,12 +41,12 @@ internal fun HomeScreen(modifier: Modifier, uiState: HomeUiState) {
             modifier = Modifier.align(Alignment.TopCenter),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            HighlightsCarousel(highlights = uiState.highlights, modifier = Modifier.height(128.dp))
-            Spacer(modifier = Modifier.height(10.dp))
+            HighlightsCarousel(highlights = uiState.highlights, autoSwipeDuration = 3000,modifier = Modifier.height(128.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             CategoriesCatalog(categories = uiState.categories, modifier = Modifier)
-            Spacer(modifier = Modifier.height(10.dp))
-            HighlightsCarousel(highlights = uiState.highlights, modifier = Modifier.height(192.dp))
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(20.dp))
+            HighlightsCarousel(highlights = uiState.highlights, autoSwipeDuration = 5000, modifier = Modifier.height(192.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             HorizontalProducts(products = uiState.highlights, modifier = Modifier)
         }
     }

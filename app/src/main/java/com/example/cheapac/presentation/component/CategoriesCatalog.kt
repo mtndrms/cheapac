@@ -3,12 +3,15 @@ package com.example.cheapac.presentation.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,12 +21,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
-import com.example.cheapac.domain.model.Product
+import com.example.cheapac.utils.UiState
 
 private const val ROW = 2
-private const val COLUMN = 4
+private const val COLUMN = 5
 private val testCategories = mutableListOf(
     "Men's clothing",
     "Women's clothing",
@@ -40,47 +44,84 @@ private val testCategories = mutableListOf(
 )
 
 @Composable
-fun CategoriesCatalog(categories: List<Product>, modifier: Modifier) {
+fun CategoriesCatalog(categories: UiState<List<String>>, modifier: Modifier) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val horizontalPadding = screenWidth * 0.05f
     val cardSize = screenWidth / COLUMN
     val spaceBetweenElements = 5.dp
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(COLUMN),
-        verticalArrangement = Arrangement.spacedBy(spaceBetweenElements),
-        horizontalArrangement = Arrangement.spacedBy(spaceBetweenElements),
+    Text(
+        text = stringResource(R.string.categories),
+        style = MaterialTheme.typography.titleMedium,
+        color = MaterialTheme.colorScheme.onBackground,
+        textAlign = TextAlign.Start,
         modifier = Modifier
-            .height(cardSize * 2 + spaceBetweenElements)
-            .padding(horizontal = horizontalPadding)
-            .then(modifier)
-    ) {
-        if (testCategories.isNotEmpty()) {
-            items(testCategories.subList(0, ROW * COLUMN).size) {
-                Column(
-                    modifier = Modifier
-                        .size(cardSize)
-                        .clip(RoundedCornerShape(3.dp))
-                        .background(MaterialTheme.colorScheme.error),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (it + 1 < ROW * COLUMN) {
+            .fillMaxWidth()
+            .padding(start = horizontalPadding)
+    )
+
+    Spacer(modifier = Modifier.height(5.dp))
+
+    categories.data?.let { data ->
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(COLUMN),
+            verticalArrangement = Arrangement.spacedBy(spaceBetweenElements),
+            horizontalArrangement = Arrangement.spacedBy(spaceBetweenElements),
+            modifier = Modifier
+                .height(cardSize * 2 + spaceBetweenElements)
+                .padding(horizontal = horizontalPadding)
+                .then(modifier)
+        ) {
+            if (data.isNotEmpty()) {
+                items(data.subList(0, ROW * COLUMN).size) {
+                    Column(
+                        modifier = Modifier
+                            .size(cardSize)
+                            .clip(RoundedCornerShape(5.dp))
+                            .background(color = MaterialTheme.colorScheme.secondaryContainer),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
-                            text = testCategories[it],
+                            text = if (it + 1 < ROW * COLUMN) {
+                                data[it].replaceFirstChar { it.uppercase() }.replaceFirst("-", "\n")
+                            } else {
+                                stringResource(id = R.string.see_all)
+                            },
                             textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onError
-                        )
-                    } else {
-                        Text(
-                            text = stringResource(id = R.string.all),
-                            textAlign = TextAlign.Center,
-                            color = MaterialTheme.colorScheme.onError
+                            maxLines = if (!data[it].contains("-")) 1 else 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = MaterialTheme.typography.titleSmall,
+                            color = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                 }
             }
+        }
+    }
+
+    if (categories.isLoading) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(modifier)
+        ) {
+            CircularProgressIndicator()
+        }
+    }
+
+    categories.message?.let { message ->
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(modifier)
+        ) {
+            Text(text = message, color = MaterialTheme.colorScheme.error)
         }
     }
 }

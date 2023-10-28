@@ -1,7 +1,7 @@
 package com.example.cheapac.di
 
-import com.example.cheapac.data.remote.data_source.ProductRemoteDataSource
-import com.example.cheapac.data.remote.service.ProductApi
+import com.example.cheapac.data.remote.RemoteDataSource
+import com.example.cheapac.data.remote.ProductApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ import javax.inject.Singleton
 object RemoteDataSourceModule {
     @Provides
     @Singleton
-    fun provideProductRemoteDataSource(productApi: ProductApi): ProductRemoteDataSource {
-        return ProductRemoteDataSource(productApi)
+    fun provideProductRemoteDataSource(productApi: ProductApi): RemoteDataSource {
+        return RemoteDataSource(productApi)
     }
 }

@@ -1,6 +1,6 @@
 package com.example.cheapac.di
 
-import com.example.cheapac.data.remote.service.ProductApi
+import com.example.cheapac.data.remote.ProductApi
 import com.example.cheapac.utils.Constants
 import dagger.Module
 import dagger.Provides

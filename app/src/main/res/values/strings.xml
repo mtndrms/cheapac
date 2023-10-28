@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">Cheapac</string>
     <string name="home">Home</string>
-    <string name="all">All</string>
+    <string name="see_all">See all</string>
+    <string name="popular_picks">Popular Picks</string>
+    <string name="top_selling_categories">Top Selling Categories</string>
+    <string name="featured">Featured</string>
+    <string name="categories">Categories</string>
 </resources>

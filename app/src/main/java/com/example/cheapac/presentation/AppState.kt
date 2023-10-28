@@ -27,7 +27,11 @@ fun rememberAppState(
     windowSizeClass: WindowSizeClass
 ): AppState {
     return remember(navController) {
-        AppState(navController = navController, coroutineScope, windowSizeClass)
+        AppState(
+            navController = navController,
+            coroutineScope = coroutineScope,
+            windowSizeClass = windowSizeClass
+        )
     }
 }
 
@@ -73,7 +77,9 @@ class AppState(
             }
 
             when (topLevelDestination) {
-                TopLevelDestination.HOME -> navController.navigateToHome(topLevelDestinationNavOptions)
+                TopLevelDestination.HOME -> navController.navigateToHome(
+                    topLevelDestinationNavOptions
+                )
             }
         }
     }

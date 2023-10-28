@@ -3,10 +3,19 @@ package com.example.cheapac.domain.use_case
 import com.example.cheapac.data.mapper.toProductList
 import com.example.cheapac.data.repository.ProductRepository
 import com.example.cheapac.domain.model.Product
+import com.example.cheapac.utils.Resource
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class GetAllProductsUseCase(private val productRepository: ProductRepository) {
-    suspend operator fun invoke(): List<Product> {
-        val products = productRepository.getAll().products
-        return products.toProductList()
+class GetAllProductsUseCase @Inject constructor(private val productRepository: ProductRepository) {
+    operator fun invoke(): Flow<Resource<List<Product>>> = flow {
+        try {
+            emit(Resource.Loading())
+            val products = productRepository.getAll().products.toProductList()
+            emit(Resource.Success(data = products))
+        } catch (exception: Exception) {
+            emit(Resource.Error(message = exception.message ?: ""))
+        }
     }
 }
