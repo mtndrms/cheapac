@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.example.cheapac.presentation.common.TopBar
+import com.example.cheapac.presentation.feature.categories.categoriesScreen
+import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 import com.example.cheapac.presentation.feature.home.homeScreen
 
@@ -23,6 +25,7 @@ fun AppContainer(
         Scaffold(
             topBar = {
                 TopBar(
+                    currentScreenTitle = appState.currentDestinationTitle,
                     onTitleClick = {
                         appState.navigateToTopLevelDestination(TopLevelDestination.HOME)
                     }
@@ -35,7 +38,8 @@ fun AppContainer(
                 navController = appState.navController,
                 startDestination = TopLevelDestination.HOME.route
             ) {
-                homeScreen()
+                homeScreen(appState.navController::navigateToCategories)
+                categoriesScreen()
             }
         }
     }

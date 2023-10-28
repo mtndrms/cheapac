@@ -1,6 +1,8 @@
 package com.example.cheapac.presentation.component
 
+import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
+import com.example.cheapac.domain.model.Category
 import com.example.cheapac.utils.UiState
 
 private const val ROW = 2
@@ -44,7 +47,11 @@ private val testCategories = mutableListOf(
 )
 
 @Composable
-fun CategoriesCatalog(categories: UiState<List<String>>, modifier: Modifier) {
+fun CategoriesCatalog(
+    categories: UiState<List<Category>>,
+    navigateToCategories: () -> Unit,
+    modifier: Modifier
+) {
     val configuration = LocalConfiguration.current
     val screenWidth = configuration.screenWidthDp.dp
     val horizontalPadding = screenWidth * 0.05f
@@ -79,18 +86,26 @@ fun CategoriesCatalog(categories: UiState<List<String>>, modifier: Modifier) {
                         modifier = Modifier
                             .size(cardSize)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(color = MaterialTheme.colorScheme.secondaryContainer),
+                            .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                            .clickable {
+                                if (it + 1 < ROW * COLUMN) {
+                                    // navigateToCategory(data[it])
+                                    Log.i("TODO", "Go to ${data[it]} category")
+                                } else {
+                                    navigateToCategories()
+                                }
+                            },
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         Text(
                             text = if (it + 1 < ROW * COLUMN) {
-                                data[it].replaceFirstChar { it.uppercase() }.replaceFirst("-", "\n")
+                                data[it].title.replaceFirst("-", "\n")
                             } else {
                                 stringResource(id = R.string.see_all)
                             },
                             textAlign = TextAlign.Center,
-                            maxLines = if (!data[it].contains("-")) 1 else 2,
+                            maxLines = if (!data[it].title.contains("-")) 1 else 2,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSecondaryContainer

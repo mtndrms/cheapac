@@ -2,6 +2,7 @@ package com.example.cheapac.utils
 
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hierarchy
+import com.example.cheapac.presentation.navigation.Destination
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 
 fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
@@ -23,5 +24,6 @@ fun NavDestination?.hideBottomBarOnThisDestinations() =
 fun NavDestination?.getDestinationTitle() =
     when (this?.route) {
         TopLevelDestination.HOME.route -> TopLevelDestination.HOME.titleTextResId
+        Destination.CATEGORIES.route -> Destination.CATEGORIES.titleTextResId
         else -> TopLevelDestination.HOME.titleTextResId
     }

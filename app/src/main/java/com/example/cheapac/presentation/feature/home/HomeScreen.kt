@@ -21,16 +21,25 @@ import com.example.cheapac.presentation.component.HighlightsCarousel
 import com.example.cheapac.presentation.component.HorizontalProducts
 
 @Composable
-internal fun HomeRoute(modifier: Modifier = Modifier, viewModel: HomeViewModel = hiltViewModel()) {
+internal fun HomeRoute(
+    navigateToCategories: () -> Unit,
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     HomeScreen(
-        modifier = modifier,
-        uiState = uiState
+        uiState = uiState,
+        navigateToCategories = navigateToCategories,
+        modifier = modifier
     )
 }
 
 @Composable
-internal fun HomeScreen(modifier: Modifier, uiState: HomeUiState) {
+internal fun HomeScreen(
+    navigateToCategories: () -> Unit,
+    uiState: HomeUiState,
+    modifier: Modifier
+) {
     Box(
         modifier = Modifier.fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
@@ -43,7 +52,7 @@ internal fun HomeScreen(modifier: Modifier, uiState: HomeUiState) {
         ) {
             HighlightsCarousel(highlights = uiState.highlights, autoSwipeDuration = 3000,modifier = Modifier.height(128.dp))
             Spacer(modifier = Modifier.height(20.dp))
-            CategoriesCatalog(categories = uiState.categories, modifier = Modifier)
+            CategoriesCatalog(categories = uiState.categories, navigateToCategories = navigateToCategories, modifier = Modifier)
             Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(highlights = uiState.highlights, autoSwipeDuration = 5000, modifier = Modifier.height(192.dp))
             Spacer(modifier = Modifier.height(20.dp))

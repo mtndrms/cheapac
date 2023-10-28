@@ -26,7 +26,7 @@ import com.example.cheapac.R
 private val height = 64.dp
 
 @Composable
-fun TopBar(onTitleClick: () -> Unit) {
+fun TopBar(currentScreenTitle: String, onTitleClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .height(height)
@@ -39,7 +39,7 @@ fun TopBar(onTitleClick: () -> Unit) {
                 .padding(start = 16.dp, end = 8.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.app_name),
+                text = currentScreenTitle,
                 color = MaterialTheme.colorScheme.onSurface,
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier

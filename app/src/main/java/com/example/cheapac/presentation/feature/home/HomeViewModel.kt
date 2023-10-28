@@ -28,7 +28,7 @@ class HomeViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-        getHighlights()
+//        getHighlights()
         getAllCategories()
 //        getAllProducts()
     }

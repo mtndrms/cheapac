@@ -13,6 +13,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 import com.example.cheapac.presentation.feature.home.navigateToHome
 import com.example.cheapac.utils.getDestinationTitle
