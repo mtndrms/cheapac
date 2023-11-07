@@ -3,8 +3,8 @@ package com.example.cheapac.presentation.feature.products
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheapac.domain.use_case.GetProductsOfCategoryUseCase
-import com.example.cheapac.utils.Resource
-import com.example.cheapac.utils.UiState
+import com.example.cheapac.data.Resource
+import com.example.cheapac.data.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +34,7 @@ class ProductsViewModel @Inject constructor(
 
                 is Resource.Error -> {
                     _uiState.update {
-                        it.copy(products = UiState(message = result.message ?: ""))
+                        it.copy(products = UiState(message = result.message))
                     }
                 }
 

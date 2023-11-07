@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -21,10 +20,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
 import com.example.cheapac.domain.model.Product
-import com.example.cheapac.utils.UiState
+import com.example.cheapac.data.UiState
 
 @Composable
-fun HorizontalProducts(products: UiState<List<Product>>, modifier: Modifier) {
+fun HorizontalProducts(
+    products: UiState<List<Product>>,
+    navigateToProductDetail: (Int) -> Unit,
+    modifier: Modifier
+) {
     Text(
         text = stringResource(R.string.featured),
         style = MaterialTheme.typography.titleMedium,
@@ -50,9 +53,11 @@ fun HorizontalProducts(products: UiState<List<Product>>, modifier: Modifier) {
                 }
 
                 ProductCard(
+                    id = product.id,
                     title = product.title,
                     price = product.price,
-                    imageUrl = product.imageUrl
+                    imageUrl = product.thumbnail,
+                    navigateToProductDetail = navigateToProductDetail
                 )
 
                 if (index == data.size - 1) {

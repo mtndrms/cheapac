@@ -2,7 +2,7 @@ package com.example.cheapac.presentation.feature.home
 
 import com.example.cheapac.domain.model.Category
 import com.example.cheapac.domain.model.Product
-import com.example.cheapac.utils.UiState
+import com.example.cheapac.data.UiState
 
 data class HomeUiState(
     val isSignedIn: Boolean = false,

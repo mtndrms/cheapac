@@ -3,7 +3,7 @@ package com.example.cheapac.domain.use_case
 import com.example.cheapac.data.mapper.toProductList
 import com.example.cheapac.data.repository.ProductRepository
 import com.example.cheapac.domain.model.Product
-import com.example.cheapac.utils.Resource
+import com.example.cheapac.data.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject

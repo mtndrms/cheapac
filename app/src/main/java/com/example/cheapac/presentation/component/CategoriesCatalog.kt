@@ -1,6 +1,5 @@
 package com.example.cheapac.presentation.component
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -29,7 +28,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
 import com.example.cheapac.domain.model.Category
-import com.example.cheapac.utils.UiState
+import com.example.cheapac.presentation.common.CheapacIcons
+import com.example.cheapac.data.UiState
 
 private const val ROW = 2
 private const val COLUMN = 5
@@ -100,10 +100,17 @@ fun CategoriesCatalog(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            painter = painterResource(id = data[it].iconId),
-                            contentDescription = data[it].title
-                        )
+                        if (it + 1 < ROW * COLUMN) {
+                            Icon(
+                                painter = painterResource(id = data[it].iconId),
+                                contentDescription = data[it].title
+                            )
+                        } else {
+                            Icon(
+                                imageVector = CheapacIcons.MenuHamburger,
+                                contentDescription = data[it].title
+                            )
+                        }
                         Spacer(modifier = Modifier.height(5.dp))
                         Text(
                             text = if (it + 1 < ROW * COLUMN) {

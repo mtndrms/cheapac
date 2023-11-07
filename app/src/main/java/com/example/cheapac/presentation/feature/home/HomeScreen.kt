@@ -24,6 +24,7 @@ import com.example.cheapac.presentation.component.HorizontalProducts
 internal fun HomeRoute(
     navigateToCategories: () -> Unit,
     navigateToCategory: (String) -> Unit,
+    navigateToProductDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -32,6 +33,7 @@ internal fun HomeRoute(
         uiState = uiState,
         navigateToCategories = navigateToCategories,
         navigateToCategory = navigateToCategory,
+        navigateToProductDetail = navigateToProductDetail,
         modifier = modifier
     )
 }
@@ -40,6 +42,7 @@ internal fun HomeRoute(
 internal fun HomeScreen(
     navigateToCategories: () -> Unit,
     navigateToCategory: (String) -> Unit,
+    navigateToProductDetail: (Int) -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
 ) {
@@ -75,6 +78,7 @@ internal fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             HorizontalProducts(
                 products = uiState.highlights,
+                navigateToProductDetail = navigateToProductDetail,
                 modifier = Modifier
             )
         }

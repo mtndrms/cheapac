@@ -14,7 +14,7 @@ fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.profileScreen(goBack: () -> Unit) {
     composable(
-        TopLevelDestination.PROFILE.route,
+        route = TopLevelDestination.PROFILE.route,
         enterTransition = {
             slideInVertically(
                 initialOffsetY = {

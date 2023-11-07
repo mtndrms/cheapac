@@ -1,6 +1,7 @@
 package com.example.cheapac.presentation.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,20 +27,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.presentation.common.CheapacIcons
 
 @Composable
-fun ProductCard(title: String, price: Int, imageUrl: String, discountRate: Int = 0) {
+fun ProductCard(
+    id: Int,
+    title: String,
+    price: Int,
+    imageUrl: String,
+    discountRate: Int = 0,
+    navigateToProductDetail: (Int) -> Unit
+) {
     Surface(
         shadowElevation = 1.dp,
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
             .width(150.dp)
             .height(250.dp)
+            .clickable {
+                navigateToProductDetail(id)
+            }
     ) {
         Column(
             modifier = Modifier
@@ -46,10 +60,13 @@ fun ProductCard(title: String, price: Int, imageUrl: String, discountRate: Int =
                 .background(color = MaterialTheme.colorScheme.secondaryContainer)
         ) {
             Box(modifier = Modifier.fillMaxHeight(0.5f)) {
-                AsyncImage(
+                SubcomposeAsyncImage(
                     model = imageUrl,
                     contentDescription = title,
                     contentScale = ContentScale.FillBounds,
+                    loading = {
+                        CircularProgressIndicator()
+                    },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(15.dp)

@@ -4,11 +4,9 @@ import android.os.CountDownTimer
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -35,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.cheapac.domain.model.Product
-import com.example.cheapac.utils.UiState
+import com.example.cheapac.data.UiState
 import kotlinx.coroutines.launch
 
 val testHighlights = mutableListOf(
@@ -107,7 +105,7 @@ fun HighlightsCarousel(
                 Box(modifier = Modifier.fillMaxSize()) {
                     AsyncImage(
                         model = ImageRequest.Builder(LocalContext.current)
-                            .data(data[pageIndex].imageUrl)
+                            .data(data[pageIndex].thumbnail)
                             .crossfade(true)
                             .build(),
                         contentDescription = data[pageIndex].title,

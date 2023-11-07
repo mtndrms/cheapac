@@ -8,9 +8,12 @@ fun ProductDto.toProduct(): Product {
         id = id,
         title = title,
         price = price,
+        discountPercentage = discountPercentage,
+        rating = rating,
         category = category,
         description = description,
-        imageUrl = thumbnail
+        thumbnail = thumbnail,
+        images = images
     )
 }
 

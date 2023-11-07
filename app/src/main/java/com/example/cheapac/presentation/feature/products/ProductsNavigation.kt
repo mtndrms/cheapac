@@ -12,12 +12,12 @@ fun NavController.navigateToProductList(category: String, navOptions: NavOptions
     this.navigate("${Destination.PRODUCTS.route}/$category", navOptions)
 }
 
-fun NavGraphBuilder.productsScreen() {
+fun NavGraphBuilder.productsScreen(navigateToProductDetail: (Int) -> Unit) {
     composable(
         route = "${Destination.PRODUCTS.route}/{category}",
         arguments = listOf(navArgument("category") { type = NavType.StringType })
     ) { backStackEntry ->
         val category = backStackEntry.arguments?.getString("category")
-        ProductsRoute(category = category)
+        ProductsRoute(category = category, navigateToProductDetail = navigateToProductDetail)
     }
 }

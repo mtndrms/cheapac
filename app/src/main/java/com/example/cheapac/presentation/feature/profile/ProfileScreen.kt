@@ -41,7 +41,7 @@ internal fun ProfileScreen(goBack: () -> Unit, modifier: Modifier) {
             modifier = Modifier.fillMaxWidth()
         ) {
             IconButton(onClick = goBack) {
-                Icon(imageVector = CheapacIcons.ArrowBack, contentDescription = "Go back")
+                Icon(imageVector = CheapacIcons.ArrowBack, contentDescription = "go back")
             }
             Spacer(modifier = Modifier.width(15.dp))
             Text(

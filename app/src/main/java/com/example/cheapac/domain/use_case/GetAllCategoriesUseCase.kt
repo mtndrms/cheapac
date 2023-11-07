@@ -3,8 +3,7 @@ package com.example.cheapac.domain.use_case
 import com.example.cheapac.data.repository.CategoryRepository
 import com.example.cheapac.domain.model.Category
 import com.example.cheapac.presentation.common.CheapacIcons
-import com.example.cheapac.presentation.common.Icon
-import com.example.cheapac.utils.Resource
+import com.example.cheapac.data.Resource
 import com.example.cheapac.utils.capitalize
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

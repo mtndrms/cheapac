@@ -12,12 +12,14 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 
 fun NavGraphBuilder.homeScreen(
     navigateToCategories: () -> Unit,
-    navigateToCategory: (String) -> Unit
+    navigateToCategory: (String) -> Unit,
+    navigateToProductDetail: (Int) -> Unit
 ) {
     composable(route = TopLevelDestination.HOME.route) {
         HomeRoute(
             navigateToCategories = navigateToCategories,
-            navigateToCategory = navigateToCategory
+            navigateToCategory = navigateToCategory,
+            navigateToProductDetail = navigateToProductDetail
         )
     }
 }

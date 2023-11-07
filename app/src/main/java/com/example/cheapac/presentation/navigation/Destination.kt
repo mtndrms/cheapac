@@ -13,5 +13,9 @@ enum class Destination(
     PRODUCTS(
         titleTextResId = R.string.products,
         route = "products"
+    ),
+    PRODUCT_DETAIL(
+        titleTextResId = R.string.product_detail,
+        route = "product_detail"
     )
 }

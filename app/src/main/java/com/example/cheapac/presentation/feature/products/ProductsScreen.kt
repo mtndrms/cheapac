@@ -7,11 +7,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
@@ -32,53 +30,54 @@ import com.example.cheapac.utils.capitalize
 @Composable
 fun ProductsRoute(
     category: String?,
+    navigateToProductDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProductsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    ProductsScreen(modifier, uiState, viewModel::getProductsOfCategory, category)
+    ProductsScreen(
+        modifier = modifier,
+        uiState = uiState,
+        navigateToProductDetail = navigateToProductDetail,
+        fetchData = viewModel::getProductsOfCategory,
+        category = category
+    )
 }
 
 @Composable
 fun ProductsScreen(
     modifier: Modifier,
     uiState: ProductsUiState,
+    navigateToProductDetail: (Int) -> Unit,
     fetchData: (String) -> Unit,
     category: String?
 ) {
     category?.let {
         LaunchedEffect(true) {
-            fetchData(it)
+            if (uiState.products.data == null) {
+                fetchData(it)
+            }
         }
+    }
 
-        uiState.products.data?.let { data ->
-            Column(modifier = Modifier.fillMaxSize()) {
-                Spacer(modifier = Modifier.height(20.dp))
-                Text(
-                    text = it.capitalize(),
-                    textAlign = TextAlign.Center,
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                Spacer(modifier = Modifier.height(20.dp))
-                Divider(
-                    thickness = 3.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier.fillMaxWidth().alpha(0.15f)
-                )
-                LazyVerticalGrid(
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(20.dp),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(20.dp)
-                ) {
-                    items(data) { product ->
-                        ProductCard(
-                            title = product.title,
-                            price = product.price,
-                            imageUrl = product.imageUrl
-                        )
-                    }
+    uiState.products.data?.let { data ->
+        Column(modifier = Modifier.fillMaxSize()) {
+            Header(title = category ?: "null")
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(2),
+                contentPadding = PaddingValues(20.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+                modifier = Modifier.fillMaxSize()
+            ) {
+                items(data) { product ->
+                    ProductCard(
+                        id = product.id,
+                        title = product.title,
+                        price = product.price,
+                        imageUrl = product.thumbnail,
+                        navigateToProductDetail = navigateToProductDetail
+                    )
                 }
             }
         }
@@ -89,7 +88,7 @@ fun ProductsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .then(modifier)
         ) {
             CircularProgressIndicator()
@@ -101,10 +100,31 @@ fun ProductsScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxSize()
                 .then(modifier)
         ) {
             Text(text = message, color = MaterialTheme.colorScheme.error)
         }
+    }
+}
+
+@Composable
+fun Header(title: String) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.height(20.dp))
+        Text(
+            text = title.capitalize(),
+            textAlign = TextAlign.Center,
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Divider(
+            thickness = 2.dp,
+            color = MaterialTheme.colorScheme.tertiary,
+            modifier = Modifier
+                .fillMaxWidth()
+                .alpha(0.15f)
+        )
     }
 }

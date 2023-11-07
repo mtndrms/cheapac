@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.cheapac.domain.use_case.GetAllCategoriesUseCase
 import com.example.cheapac.domain.use_case.GetAllProductsUseCase
 import com.example.cheapac.domain.use_case.GetHighlightsUseCase
-import com.example.cheapac.utils.Resource
-import com.example.cheapac.utils.UiState
+import com.example.cheapac.data.Resource
+import com.example.cheapac.data.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
