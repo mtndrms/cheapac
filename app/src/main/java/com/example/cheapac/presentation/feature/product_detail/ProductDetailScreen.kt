@@ -1,12 +1,8 @@
 package com.example.cheapac.presentation.feature.product_detail
 
 import android.util.Log
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.gestures.detectVerticalDragGestures
-import androidx.compose.foundation.gestures.rememberScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -32,10 +27,8 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -44,23 +37,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.LayoutCoordinates
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
+import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.RatingBar
 import com.example.cheapac.utils.applyDiscount
 import com.example.cheapac.utils.capitalize
 
-private val bottomSectionHeight = 96.dp
+private const val BOTTOM_BAR_HEIGHT = 96
+private const val PIXEL_NEED_TO_SCROLL_FOR_FULL_IMAGE_COLLAPSE = 200
 
 @Composable
 internal fun ProductDetailRoute(
@@ -84,16 +80,14 @@ internal fun ProductDetailScreen(
     goBack: () -> Unit,
     uiState: ProductDetailUiState
 ) {
-    var offset by remember { mutableStateOf(0f) }
-
     val scrollState = rememberScrollState()
+    var topBoxSize by remember { mutableStateOf(IntSize(1, 1)) }
+    val topBoxHeight = topBoxSize.height
+    var calculatedWeight by remember { mutableFloatStateOf(1f) }
 
-    val isReachedToTop = remember { derivedStateOf { scrollState.value == 0 } }
-    val isReachedToBottom = remember { derivedStateOf { scrollState.value == scrollState.maxValue } }
-
-    val scrollableState = rememberScrollableState { delta ->
-        offset += delta
-        delta
+    LaunchedEffect(key1 = scrollState.value) {
+        calculatedWeight =
+            (topBoxHeight.toFloat() / (topBoxHeight + scrollState.value)).coerceIn(0.001f, 1f)
     }
 
     id?.let {
@@ -102,96 +96,27 @@ internal fun ProductDetailScreen(
         }
     }
 
-    if (isReachedToTop.value) {
-        Log.i("ProductDetailScreen", "TOP")
-    }
-
-    if (isReachedToBottom.value) {
-        Log.i("ProductDetailScreen", "BOTTOM")
-    }
-
     uiState.product.data?.let { data ->
         Column(modifier = Modifier.fillMaxSize()) {
             Box(modifier = Modifier.weight(weight = 1f, fill = true)) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.5f)
-                        .align(Alignment.TopCenter)
-                ) {
-                    IconButton(
-                        onClick = goBack,
+                Column(modifier = Modifier.fillMaxSize()) {
+                    CollapsingToolbar(
+                        data = data,
+                        goBack = goBack,
                         modifier = Modifier
-                            .zIndex(1f)
-                            .padding(10.dp)
-                            .align(Alignment.TopStart)
-                            .alpha(0.2f)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.tertiary)
-                            .size(36.dp)
-                    ) {
-                        Icon(
-                            imageVector = CheapacIcons.ArrowBack,
-                            contentDescription = "go back",
-                            tint = Color.White
-                        )
-                    }
+                            .weight(calculatedWeight)
+                            .onGloballyPositioned { layoutCoordinates: LayoutCoordinates ->
+                                topBoxSize = layoutCoordinates.size
+                            }
+                    )
 
-                    SubcomposeAsyncImage(
-                        model = data.thumbnail,
-                        contentDescription = data.title,
-                        contentScale = ContentScale.Crop,
-                        loading = { CircularProgressIndicator() },
-                        modifier = Modifier.fillMaxSize()
+                    Description(
+                        scrollState = scrollState,
+                        data = data,
+                        modifier = Modifier.weight(1f)
                     )
                 }
-
-                Box(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .fillMaxHeight(0.5f)
-                        .align(Alignment.BottomCenter)
-                        .scrollable(
-                            orientation = Orientation.Vertical,
-                            state = scrollableState
-                        )
-                        .verticalScroll(scrollState)
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(horizontal = 10.dp)
-                    ) {
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(text = data.title, style = MaterialTheme.typography.titleLarge)
-                            Row {
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = CheapacIcons.FavoriteOutlined,
-                                        contentDescription = "favorite"
-                                    )
-                                }
-
-                                IconButton(onClick = { /*TODO*/ }) {
-                                    Icon(
-                                        imageVector = CheapacIcons.Share,
-                                        contentDescription = "share"
-                                    )
-                                }
-                            }
-                        }
-                        RatingBar(rating = data.rating)
-                        Spacer(modifier = Modifier.height(10.dp))
-                        Text(text = data.description.capitalize().repeat(20))
-                    }
-                }
             }
-
             BottomSectionProductDetail(
                 price = data.price,
                 discountRate = data.discountPercentage.toInt()
@@ -199,25 +124,121 @@ internal fun ProductDetailScreen(
         }
     }
 
-    if (uiState.product.isLoading) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            CircularProgressIndicator()
-        }
+    uiState.product.message?.let { message ->
+        ErrorState(message = message)
     }
 
-    uiState.product.message?.let { message ->
+    if (uiState.product.isLoading) {
+        LoadingState()
+    }
+}
+
+@Composable
+fun ErrorState(message: String) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(text = message, color = MaterialTheme.colorScheme.error)
+    }
+}
+
+@Composable
+fun LoadingState() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun CollapsingToolbar(
+    data: Product,
+    goBack: () -> Unit,
+    modifier: Modifier
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        IconButton(
+            onClick = goBack,
+            modifier = Modifier
+                .zIndex(1f)
+                .padding(10.dp)
+                .align(Alignment.TopStart)
+                .alpha(0.2f)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.tertiary)
+                .size(36.dp)
+        ) {
+            Icon(
+                imageVector = CheapacIcons.ArrowBack,
+                contentDescription = "go back",
+                tint = Color.White
+            )
+        }
+
+        SubcomposeAsyncImage(
+            model = data.thumbnail,
+            contentDescription = data.title,
+            contentScale = ContentScale.Crop,
+            loading = { CircularProgressIndicator() },
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
+
+@Composable
+private fun Description(
+    scrollState: ScrollState,
+    data: Product,
+    modifier: Modifier
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState)
+            .then(modifier)
+    ) {
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 10.dp)
         ) {
-            Text(text = message, color = MaterialTheme.colorScheme.error)
+            Spacer(modifier = Modifier.height(10.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(text = data.title, style = MaterialTheme.typography.titleLarge)
+                Row {
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = CheapacIcons.FavoriteOutlined,
+                            contentDescription = "favorite"
+                        )
+                    }
+
+                    IconButton(onClick = { /*TODO*/ }) {
+                        Icon(
+                            imageVector = CheapacIcons.Share,
+                            contentDescription = "share"
+                        )
+                    }
+                }
+            }
+            RatingBar(rating = data.rating)
+            Spacer(modifier = Modifier.height(10.dp))
+            Text(text = data.description.capitalize().repeat(10))
         }
     }
 }
@@ -228,7 +249,7 @@ fun BottomSectionProductDetail(price: Int, discountRate: Int, modifier: Modifier
         shadowElevation = 10.dp,
         modifier = Modifier
             .fillMaxWidth()
-            .height(bottomSectionHeight)
+            .height(BOTTOM_BAR_HEIGHT.dp)
             .background(MaterialTheme.colorScheme.surface)
             .then(modifier)
     ) {
