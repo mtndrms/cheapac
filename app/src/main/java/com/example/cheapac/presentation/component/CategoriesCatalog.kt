@@ -52,7 +52,7 @@ private val testCategories = mutableListOf(
 fun CategoriesCatalog(
     categories: UiState<List<Category>>,
     navigateToCategories: () -> Unit,
-    navigateToCategory: (String) -> Unit,
+    navigateToCategory: (code: String, title: String) -> Unit,
     modifier: Modifier
 ) {
     val configuration = LocalConfiguration.current
@@ -92,7 +92,7 @@ fun CategoriesCatalog(
                             .background(color = MaterialTheme.colorScheme.secondaryContainer)
                             .clickable {
                                 if (it + 1 < ROW * COLUMN) {
-                                    navigateToCategory(data[it].code)
+                                    navigateToCategory(data[it].code, data[it].title)
                                 } else {
                                     navigateToCategories()
                                 }

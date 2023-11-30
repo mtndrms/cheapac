@@ -10,8 +10,8 @@ fun NavController.navigateToCategories(navOptions: NavOptions? = null) {
     this.navigate(Destination.CATEGORIES.route, navOptions)
 }
 
-fun NavGraphBuilder.categoriesScreen() {
+fun NavGraphBuilder.categoriesScreen(navigateToCategory: (code: String, title: String) -> Unit) {
     composable(Destination.CATEGORIES.route) {
-        CategoriesRoute()
+        CategoriesRoute(navigateToCategory = navigateToCategory)
     }
 }

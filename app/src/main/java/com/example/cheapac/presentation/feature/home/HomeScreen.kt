@@ -23,7 +23,7 @@ import com.example.cheapac.presentation.component.HorizontalProducts
 @Composable
 internal fun HomeRoute(
     navigateToCategories: () -> Unit,
-    navigateToCategory: (String) -> Unit,
+    navigateToCategory: (code: String, title: String) -> Unit,
     navigateToProductDetail: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
@@ -41,7 +41,7 @@ internal fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     navigateToCategories: () -> Unit,
-    navigateToCategory: (String) -> Unit,
+    navigateToCategory: (code: String, title: String) -> Unit,
     navigateToProductDetail: (Int) -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
@@ -59,7 +59,7 @@ internal fun HomeScreen(
         ) {
             HighlightsCarousel(
                 highlights = uiState.highlights,
-                autoSwipeDuration = 3000,
+                autoSwipeDuration = 5000,
                 modifier = Modifier.height(128.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -72,7 +72,7 @@ internal fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(
                 highlights = uiState.highlights,
-                autoSwipeDuration = 5000,
+                autoSwipeDuration = 8000,
                 modifier = Modifier.height(192.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))

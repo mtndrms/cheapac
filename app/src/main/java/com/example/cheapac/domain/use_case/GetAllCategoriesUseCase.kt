@@ -22,6 +22,7 @@ class GetAllCategoriesUseCase @Inject constructor(private val categoryRepository
 
     private fun betterCategoryTitle(category: String): String {
         return when (category) {
+            "home-decoration" -> "Home decoration"
             "womens-dresses" -> "Women's dresses"
             "womens-shoes" -> "Women's shoes"
             "mens-shirts" -> "Men's shirts"

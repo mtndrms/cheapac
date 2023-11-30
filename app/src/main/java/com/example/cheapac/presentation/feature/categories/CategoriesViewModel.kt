@@ -24,7 +24,7 @@ class CategoriesViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-//        getAllCategories()
+        getAllCategories()
     }
 
     private fun getAllCategories() {

@@ -5,6 +5,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -29,11 +31,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.presentation.common.CheapacIcons
+import com.example.cheapac.utils.applyDiscount
 
 @Composable
 fun ProductCard(
@@ -41,15 +45,15 @@ fun ProductCard(
     title: String,
     price: Int,
     imageUrl: String,
-    discountRate: Int = 0,
+    discountRate: Int,
     navigateToProductDetail: (Int) -> Unit
 ) {
     Surface(
         shadowElevation = 1.dp,
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
-            .width(150.dp)
-            .height(250.dp)
+            .width(180.dp)
+            .height(300.dp)
             .clickable {
                 navigateToProductDetail(id)
             }
@@ -59,7 +63,12 @@ fun ProductCard(
                 .fillMaxSize()
                 .background(color = MaterialTheme.colorScheme.secondaryContainer)
         ) {
-            Box(modifier = Modifier.fillMaxHeight(0.5f)) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f, fill = true)
+                    .padding(horizontal = 15.dp, vertical = 10.dp)
+            ) {
                 SubcomposeAsyncImage(
                     model = imageUrl,
                     contentDescription = title,
@@ -68,8 +77,7 @@ fun ProductCard(
                         CircularProgressIndicator()
                     },
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(15.dp)
+                        .fillMaxSize()
                 )
 
                 IconButton(
@@ -93,25 +101,54 @@ fun ProductCard(
 
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .padding(vertical = 5.dp),
+                    .fillMaxWidth()
+                    .padding(vertical = 5.dp)
+                    .weight(1f, fill = true),
                 verticalArrangement = Arrangement.SpaceBetween
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(start = 10.dp)
+                        .padding(start = 15.dp)
                 ) {
                     Text(
                         text = title,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleSmall,
-                        fontSize = 14.sp
+                        fontSize = 16.sp
                     )
-                    Text(
-                        text = "$$price",
-                        style = MaterialTheme.typography.labelSmall,
-                        fontSize = 14.sp
-                    )
+
+                    Spacer(modifier = Modifier.height(3.dp))
+
+                    if (discountRate > 1) {
+                        Row {
+                            Text(
+                                text = "$$price",
+                                textDecoration = TextDecoration.LineThrough,
+                                style = MaterialTheme.typography.labelSmall,
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.width(5.dp))
+                            Text(
+                                text = "$discountRate%",
+                                style = MaterialTheme.typography.labelSmall,
+                                fontSize = 16.sp
+                            )
+                            Spacer(modifier = Modifier.width(3.dp))
+                            Icon(
+                                imageVector = CheapacIcons.ArrowDown,
+                                contentDescription = "discount icon",
+                                tint = Color.Green
+                            )
+                        }
+
+                        Text(
+                            text = "$${price.applyDiscount(discountRate).toInt()}",
+                            style = MaterialTheme.typography.labelSmall,
+                            fontSize = 18.sp
+                        )
+                    }
                 }
 
                 Button(
@@ -124,7 +161,12 @@ fun ProductCard(
                         .fillMaxWidth(0.9f)
                         .align(Alignment.CenterHorizontally)
                 ) {
-                    Text(text = "Add to cart")
+                    Icon(
+                        imageVector = CheapacIcons.CartOutlined,
+                        contentDescription = "add to cart"
+                    )
+                    Spacer(modifier = Modifier.width(5.dp))
+                    Text(text = "Add to cart", maxLines = 1)
                 }
             }
         }

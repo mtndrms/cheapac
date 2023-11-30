@@ -1,6 +1,5 @@
 package com.example.cheapac.presentation.feature.product_detail
 
-import android.util.Log
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -8,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -56,7 +54,6 @@ import com.example.cheapac.utils.applyDiscount
 import com.example.cheapac.utils.capitalize
 
 private const val BOTTOM_BAR_HEIGHT = 96
-private const val PIXEL_NEED_TO_SCROLL_FOR_FULL_IMAGE_COLLAPSE = 200
 
 @Composable
 internal fun ProductDetailRoute(
@@ -117,6 +114,7 @@ internal fun ProductDetailScreen(
                     )
                 }
             }
+
             BottomSectionProductDetail(
                 price = data.price,
                 discountRate = data.discountPercentage.toInt()
@@ -134,18 +132,6 @@ internal fun ProductDetailScreen(
 }
 
 @Composable
-fun ErrorState(message: String) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
-    ) {
-        Text(text = message, color = MaterialTheme.colorScheme.error)
-    }
-}
-
-@Composable
 fun LoadingState() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -154,6 +140,18 @@ fun LoadingState() {
             .fillMaxSize()
     ) {
         CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun ErrorState(message: String) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+    ) {
+        Text(text = message, color = MaterialTheme.colorScheme.error)
     }
 }
 
@@ -278,8 +276,15 @@ fun BottomSectionProductDetail(price: Int, discountRate: Int, modifier: Modifier
                                 color = MaterialTheme.colorScheme.onSurface,
                                 style = MaterialTheme.typography.bodyLarge
                             )
+                            Spacer(modifier = Modifier.width(3.dp))
+                            Icon(
+                                imageVector = CheapacIcons.ArrowDown,
+                                contentDescription = "discount icon",
+                                tint = Color.Green
+                            )
                         }
                     }
+
                     Text(
                         text = "$${price.applyDiscount(discountRate)}",
                         color = MaterialTheme.colorScheme.onSurface,
@@ -287,7 +292,7 @@ fun BottomSectionProductDetail(price: Int, discountRate: Int, modifier: Modifier
                     )
                 }
 
-                Button(onClick = { /*TODO*/ }) {
+                Button(onClick = { }) {
                     Text(text = stringResource(id = R.string.add_to_cart))
                 }
             }

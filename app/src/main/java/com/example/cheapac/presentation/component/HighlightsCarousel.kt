@@ -101,6 +101,8 @@ fun HighlightsCarousel(
         ) {
             HorizontalPager(state = pagerState) {
                 pageIndex = pagerState.settledPage + 1
+                timer.cancel()
+                timer.start()
 
                 Box(modifier = Modifier.fillMaxSize()) {
                     AsyncImage(

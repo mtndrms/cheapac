@@ -3,6 +3,7 @@ package com.example.cheapac.presentation.common
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
@@ -35,6 +36,7 @@ object CheapacIcons {
     val Category: ImageVector = Icons.Default.List
     val CategoryOutlined: ImageVector = Icons.Outlined.List
     val ArrowBack: ImageVector = Icons.Default.ArrowBack
+    val ArrowDown: ImageVector = Icons.Default.ArrowDownward
     val Settings: ImageVector = Icons.Outlined.Settings
     val Help: ImageVector = Icons.Outlined.Info
     val MenuHamburger: ImageVector = Icons.Default.Menu

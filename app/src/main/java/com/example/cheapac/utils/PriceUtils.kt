@@ -1,5 +1,5 @@
 package com.example.cheapac.utils
 
-fun Int.applyDiscount(discountRate: Int): Int {
-    return this - (this / 100) * discountRate
+fun Int.applyDiscount(discountRate: Int): Float {
+    return this - (this.toFloat() / 100f) * discountRate
 }

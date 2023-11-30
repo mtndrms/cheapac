@@ -1,5 +1,6 @@
 package com.example.cheapac.presentation.feature.categories
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,19 +35,20 @@ import com.example.cheapac.presentation.common.CheapacIcons
 
 @Composable
 internal fun CategoriesRoute(
+    navigateToCategory: (code: String, title: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CategoriesScreen(modifier, uiState)
+    CategoriesScreen(navigateToCategory, modifier, uiState)
 }
 
 @Composable
-internal fun CategoriesScreen(modifier: Modifier, uiState: CategoriesUiState) {
+internal fun CategoriesScreen(navigateToCategory: (code: String, title: String) -> Unit, modifier: Modifier, uiState: CategoriesUiState) {
     uiState.categories.data?.let { data ->
         LazyColumn(modifier = Modifier.fillMaxSize()) {
             items(data) {
-                CategoriesRow(category = it)
+                CategoriesRow(category = it, navigateToCategory = navigateToCategory)
                 Divider(
                     thickness = 1.dp,
                     color = MaterialTheme.colorScheme.tertiary,
@@ -84,12 +86,13 @@ internal fun CategoriesScreen(modifier: Modifier, uiState: CategoriesUiState) {
 }
 
 @Composable
-private fun CategoriesRow(category: Category) {
+private fun CategoriesRow(category: Category, navigateToCategory: (code: String, title: String) -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .padding(horizontal = 20.dp),
+            .padding(horizontal = 20.dp)
+            .clickable { navigateToCategory(category.code, category.title) },
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -115,6 +118,7 @@ private fun PreviewCategoriesRow() {
             code = "mens-watches",
             "Men's Watches",
             iconId = CheapacIcons.MenWatches.id
-        )
+        ),
+        navigateToCategory = { _, _ ->  }
     )
 }

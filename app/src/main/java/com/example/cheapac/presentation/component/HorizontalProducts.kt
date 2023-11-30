@@ -57,6 +57,7 @@ fun HorizontalProducts(
                     title = product.title,
                     price = product.price,
                     imageUrl = product.thumbnail,
+                    discountRate = product.discountPercentage.toInt(),
                     navigateToProductDetail = navigateToProductDetail
                 )
 
