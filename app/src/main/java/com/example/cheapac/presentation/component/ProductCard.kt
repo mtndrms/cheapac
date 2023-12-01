@@ -52,15 +52,14 @@ fun ProductCard(
         shadowElevation = 1.dp,
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
-            .width(180.dp)
-            .height(300.dp)
             .clickable {
                 navigateToProductDetail(id)
             }
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .width(180.dp)
+                .height(300.dp)
                 .background(color = MaterialTheme.colorScheme.secondaryContainer)
         ) {
             Box(
@@ -74,7 +73,13 @@ fun ProductCard(
                     contentDescription = title,
                     contentScale = ContentScale.FillBounds,
                     loading = {
-                        CircularProgressIndicator()
+                        Column(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     },
                     modifier = Modifier
                         .fillMaxSize()

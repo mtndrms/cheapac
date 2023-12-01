@@ -72,7 +72,7 @@ internal fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(
                 highlights = uiState.highlights,
-                autoSwipeDuration = 8000,
+                autoSwipeDuration = 5000,
                 modifier = Modifier.height(192.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))

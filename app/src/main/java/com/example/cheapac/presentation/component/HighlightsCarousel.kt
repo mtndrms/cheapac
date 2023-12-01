@@ -1,6 +1,7 @@
 package com.example.cheapac.presentation.component
 
 import android.os.CountDownTimer
+import android.util.Log
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -31,9 +32,11 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
 import coil.request.ImageRequest
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.data.UiState
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 val testHighlights = mutableListOf(
@@ -59,6 +62,7 @@ fun HighlightsCarousel(
     modifier: Modifier
 ) {
     val scope = rememberCoroutineScope()
+    var timerJob: Job? = null
     var pageIndex by remember { mutableIntStateOf(0) }
 
     highlights.data?.let { data ->
@@ -70,17 +74,15 @@ fun HighlightsCarousel(
         }
 
         val timer = object : CountDownTimer(autoSwipeDuration, autoSwipeDuration) {
-            override fun onTick(millisUntilFinished: Long) {}
-            override fun onFinish() {
-                scope.launch {
-                    if (pageIndex < pagerState.pageCount - 1) {
-                        pageIndex.inc()
-                    } else {
-                        pageIndex = 0
-                    }
+            override fun onTick(millisUntilFinished: Long) {
+                Log.i("HighlightsCarousel", "onTick")
+            }
 
+            override fun onFinish() {
+                timerJob = scope.launch {
+                    Log.i("HighlightsCarousel", "onFinish")
                     pagerState.animateScrollToPage(
-                        page = pageIndex,
+                        page = if (pageIndex + 1 == pagerState.pageCount) 0 else pageIndex + 1,
                         pageOffsetFraction = 0f,
                         animationSpec = tween(500)
                     )
@@ -88,9 +90,26 @@ fun HighlightsCarousel(
             }
         }
 
-        LaunchedEffect(pageIndex) {
-            timer.cancel()
+        LaunchedEffect(key1 = true) {
             timer.start()
+        }
+
+        LaunchedEffect(key1 = pagerState.settledPage) {
+            timerJob?.let { job: Job ->
+                job.cancel()
+                timer.cancel()
+            }
+
+            timer.start()
+
+            // scrolling forward
+            pageIndex = if (pageIndex < pagerState.settledPage) {
+                pageIndex.inc()
+            } else if (pagerState.settledPage < pageIndex) {
+                if (pagerState.settledPage != 0) {
+                    pageIndex.dec()
+                } else 0
+            } else 0
         }
 
         Box(
@@ -100,59 +119,80 @@ fun HighlightsCarousel(
                 .then(modifier)
         ) {
             HorizontalPager(state = pagerState) {
-                pageIndex = pagerState.settledPage + 1
-                timer.cancel()
-                timer.start()
-
                 Box(modifier = Modifier.fillMaxSize()) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(LocalContext.current)
-                            .data(data[pageIndex].thumbnail)
-                            .crossfade(true)
-                            .build(),
-                        contentDescription = data[pageIndex].title,
+                    SubcomposeAsyncImage(
+                        model = data[pageIndex].thumbnail,
+                        contentDescription = "highlights",
                         contentScale = ContentScale.FillBounds,
+                        loading = {
+                            Column(
+                                modifier = Modifier.fillMaxSize(),
+                                verticalArrangement = Arrangement.Center,
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        },
                         modifier = Modifier.fillMaxSize()
                     )
                 }
             }
 
-            Text(
-                text = "$pageIndex/${data.size}",
-                color = MaterialTheme.colorScheme.onTertiary,
-                style = MaterialTheme.typography.labelMedium,
-                modifier = Modifier
-                    .padding(10.dp)
-                    .align(Alignment.BottomEnd)
-                    .clip(RoundedCornerShape(5.dp))
-                    .alpha(0.5f)
-                    .background(MaterialTheme.colorScheme.tertiary)
-                    .padding(horizontal = 7.dp, vertical = 3.dp)
+            Indicator(
+                modifier = Modifier.align(Alignment.BottomEnd),
+                pageIndex = pageIndex + 1,
+                size = data.size
             )
         }
     }
 
     if (highlights.isLoading) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(modifier)
-        ) {
-            CircularProgressIndicator()
-        }
+        LoadingState(modifier = modifier)
     }
 
     highlights.message?.let { message ->
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .then(modifier)
-        ) {
-            Text(text = message, color = MaterialTheme.colorScheme.error)
-        }
+        ErrorState(message = message, modifier = modifier)
+    }
+}
+
+@Composable
+fun Indicator(modifier: Modifier, pageIndex: Int, size: Int) {
+    Text(
+        text = "$pageIndex/${size}",
+        color = MaterialTheme.colorScheme.onTertiary,
+        style = MaterialTheme.typography.labelMedium,
+        modifier = Modifier
+            .padding(10.dp)
+            .clip(RoundedCornerShape(5.dp))
+            .alpha(0.5f)
+            .background(MaterialTheme.colorScheme.tertiary)
+            .padding(horizontal = 7.dp, vertical = 3.dp)
+            .then(modifier)
+    )
+}
+
+@Composable
+fun LoadingState(modifier: Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        CircularProgressIndicator()
+    }
+}
+
+@Composable
+fun ErrorState(message: String, modifier: Modifier) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(modifier)
+    ) {
+        Text(text = message, color = MaterialTheme.colorScheme.error)
     }
 }

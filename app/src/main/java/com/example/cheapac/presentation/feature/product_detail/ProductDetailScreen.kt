@@ -122,12 +122,12 @@ internal fun ProductDetailScreen(
         }
     }
 
-    uiState.product.message?.let { message ->
-        ErrorState(message = message)
-    }
-
     if (uiState.product.isLoading) {
         LoadingState()
+    }
+
+    uiState.product.message?.let { message ->
+        ErrorState(message = message)
     }
 }
 
@@ -188,7 +188,15 @@ fun CollapsingToolbar(
             model = data.thumbnail,
             contentDescription = data.title,
             contentScale = ContentScale.Crop,
-            loading = { CircularProgressIndicator() },
+            loading = {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    CircularProgressIndicator()
+                }
+            },
             modifier = Modifier.fillMaxSize()
         )
     }
