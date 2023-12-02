@@ -353,7 +353,7 @@ fun BottomBarProductDetail(
                             ).lowercase()
                         )
                         Spacer(modifier = Modifier.width(5.dp))
-                        Text(text = stringResource(id = R.string.add_to_cart))
+                        Text(text = stringResource(id = R.string.add_to_cart), style = MaterialTheme.typography.labelLarge)
                     }
                 } else {
                     Button(onClick = { }) {

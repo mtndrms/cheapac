@@ -1,6 +1,7 @@
 package com.example.cheapac.presentation.feature.profile
 
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,7 +36,9 @@ internal fun ProfileRoute(goBack: () -> Unit, modifier: Modifier = Modifier) {
 
 @Composable
 internal fun ProfileScreen(goBack: () -> Unit, modifier: Modifier) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()

@@ -38,7 +38,7 @@ fun HorizontalProducts(
             .padding(start = 20.dp)
     )
 
-    Spacer(modifier = Modifier.height(10.dp))
+    Spacer(modifier = Modifier.height(5.dp))
 
     products.data?.let { data ->
         LazyRow(
