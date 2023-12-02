@@ -6,11 +6,13 @@ import com.example.cheapac.domain.model.Product
 fun ProductDto.toProduct(): Product {
     return Product(
         id = id,
+        brand = brand,
         title = title,
         price = price,
         discountPercentage = discountPercentage,
         rating = rating,
         category = category,
+        stock = stock,
         description = description,
         thumbnail = thumbnail,
         images = images

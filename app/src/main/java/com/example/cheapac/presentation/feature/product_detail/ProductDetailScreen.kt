@@ -47,6 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
+import com.example.cheapac.data.mapper.betterCategoryTitle
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.RatingBar
@@ -219,7 +220,8 @@ private fun Description(
                 .fillMaxSize()
                 .padding(horizontal = 10.dp)
         ) {
-            Spacer(modifier = Modifier.height(10.dp))
+            Spacer(modifier = Modifier.height(15.dp))
+            PathVisualizer(category = betterCategoryTitle(data.category), brand = data.brand)
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
@@ -247,6 +249,11 @@ private fun Description(
             Text(text = data.description.capitalize().repeat(10))
         }
     }
+}
+
+@Composable
+fun PathVisualizer(category: String, brand: String) {
+    Text(text = "$category > $brand", style = MaterialTheme.typography.titleSmall)
 }
 
 @Composable
