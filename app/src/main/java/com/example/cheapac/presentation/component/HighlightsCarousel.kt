@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -16,6 +17,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,21 +40,6 @@ import com.example.cheapac.domain.model.Product
 import com.example.cheapac.data.UiState
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-
-val testHighlights = mutableListOf(
-    "Men's clothing",
-    "Women's clothing",
-    "Technology",
-    "Books",
-    "Education",
-    "Smartphones",
-    "Market",
-    "Outdoor",
-    "Cosmetic",
-    "Phones",
-    "Computers",
-    "Fashion"
-)
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -112,37 +99,43 @@ fun HighlightsCarousel(
             } else 0
         }
 
-        Box(
-            modifier = Modifier
-                .fillMaxWidth(0.9f)
-                .clip(RoundedCornerShape(5.dp))
-                .then(modifier)
+        Surface(
+            shadowElevation = 1.dp,
+            shape = RoundedCornerShape(5.dp),
+            modifier = Modifier.then(modifier)
         ) {
-            HorizontalPager(state = pagerState) {
-                Box(modifier = Modifier.fillMaxSize()) {
-                    SubcomposeAsyncImage(
-                        model = data[pageIndex].thumbnail,
-                        contentDescription = "highlights",
-                        contentScale = ContentScale.FillBounds,
-                        loading = {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                verticalArrangement = Arrangement.Center,
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                CircularProgressIndicator()
-                            }
-                        },
-                        modifier = Modifier.fillMaxSize()
-                    )
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(0.9f)
+                    .fillMaxHeight()
+                    .clip(RoundedCornerShape(5.dp))
+            ) {
+                HorizontalPager(state = pagerState) {
+                    Box(modifier = Modifier.fillMaxSize()) {
+                        SubcomposeAsyncImage(
+                            model = data[pageIndex].thumbnail,
+                            contentDescription = "highlights",
+                            contentScale = ContentScale.FillBounds,
+                            loading = {
+                                Column(
+                                    modifier = Modifier.fillMaxSize(),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                ) {
+                                    CircularProgressIndicator()
+                                }
+                            },
+                            modifier = Modifier.fillMaxSize()
+                        )
+                    }
                 }
-            }
 
-            Indicator(
-                modifier = Modifier.align(Alignment.BottomEnd),
-                pageIndex = pageIndex + 1,
-                size = data.size
-            )
+                Indicator(
+                    modifier = Modifier.align(Alignment.BottomEnd),
+                    pageIndex = pageIndex + 1,
+                    size = data.size
+                )
+            }
         }
     }
 

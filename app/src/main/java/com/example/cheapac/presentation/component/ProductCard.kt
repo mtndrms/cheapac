@@ -124,16 +124,15 @@ fun ProductCard(
                         fontSize = 16.sp
                     )
 
-                    Spacer(modifier = Modifier.height(3.dp))
-
-                    if (discountRate > 1) {
-                        Row {
-                            Text(
-                                text = "$$price",
-                                textDecoration = TextDecoration.LineThrough,
-                                style = MaterialTheme.typography.labelSmall,
-                                fontSize = 16.sp
-                            )
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Row {
+                        Text(
+                            text = "$$price",
+                            textDecoration = if (discountRate > 0) TextDecoration.LineThrough else TextDecoration.None,
+                            style = MaterialTheme.typography.labelSmall,
+                            fontSize = if (discountRate > 0) 16.sp else 18.sp
+                        )
+                        if (discountRate > 0) {
                             Spacer(modifier = Modifier.width(5.dp))
                             Text(
                                 text = "$discountRate%",
@@ -147,12 +146,14 @@ fun ProductCard(
                                 tint = Color.Green
                             )
                         }
+                    }
 
+                    if (discountRate > 0) {
                         Text(
                             text = "$${price.applyDiscount(discountRate).toInt()}",
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 18.sp
-                        )
+                        )    
                     }
                 }
 

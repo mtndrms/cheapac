@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.ProductCard
 import com.example.cheapac.utils.capitalize
@@ -81,7 +82,7 @@ fun ProductsScreen(
                 verticalArrangement = Arrangement.spacedBy(15.dp),
                 modifier = Modifier.fillMaxSize()
             ) {
-                items(data) { product ->
+                items(data) { product: Product ->
                     ProductCard(
                         id = product.id,
                         title = product.title,
