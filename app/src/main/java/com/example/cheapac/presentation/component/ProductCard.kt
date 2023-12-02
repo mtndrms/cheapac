@@ -31,11 +31,13 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
+import com.example.cheapac.R
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.applyDiscount
 
@@ -46,6 +48,7 @@ fun ProductCard(
     price: Int,
     imageUrl: String,
     discountRate: Int,
+    isInStock: Boolean = true,
     navigateToProductDetail: (Int) -> Unit
 ) {
     Surface(
@@ -88,9 +91,9 @@ fun ProductCard(
                 IconButton(
                     onClick = { },
                     modifier = Modifier
-                        .padding(10.dp)
+                        .padding(5.dp)
                         .align(Alignment.TopEnd)
-                        .alpha(0.5f)
+                        .alpha(0.8f)
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.tertiary)
                         .size(36.dp)
@@ -98,7 +101,7 @@ fun ProductCard(
                     Icon(
                         imageVector = CheapacIcons.FavoriteOutlined,
                         contentDescription = "favorite",
-                        tint = MaterialTheme.colorScheme.onTertiary,
+                        tint = Color.White,
                         modifier = Modifier.padding(3.dp)
                     )
                 }
@@ -153,26 +156,43 @@ fun ProductCard(
                             text = "$${price.applyDiscount(discountRate).toInt()}",
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 18.sp
-                        )    
+                        )
                     }
                 }
 
                 Button(
-                    onClick = { },
+                    onClick = {},
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.secondary,
+                        containerColor = if (isInStock) {
+                            MaterialTheme.colorScheme.secondary
+                        } else {
+                            MaterialTheme.colorScheme.error
+                        },
                         contentColor = MaterialTheme.colorScheme.onSecondary
                     ),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
                         .align(Alignment.CenterHorizontally)
                 ) {
-                    Icon(
-                        imageVector = CheapacIcons.CartOutlined,
-                        contentDescription = "add to cart"
-                    )
+                    if (isInStock) {
+                        Icon(
+                            imageVector = CheapacIcons.CartOutlined,
+                            contentDescription = "add to cart"
+                        )
+                    }
+
                     Spacer(modifier = Modifier.width(5.dp))
-                    Text(text = "Add to cart", maxLines = 1)
+                    Text(
+                        text = stringResource(
+                            id = if (isInStock) {
+                                R.string.add_to_cart
+                            } else {
+                                R.string.notify_me
+                            }
+                        ),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
                 }
             }
         }

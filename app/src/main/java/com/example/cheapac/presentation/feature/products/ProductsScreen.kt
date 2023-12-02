@@ -89,6 +89,7 @@ fun ProductsScreen(
                         price = product.price,
                         imageUrl = product.thumbnail,
                         discountRate = product.discountPercentage.toInt(),
+                        isInStock = product.stock != 0,
                         navigateToProductDetail = navigateToProductDetail
                     )
                 }

@@ -3,6 +3,7 @@ package com.example.cheapac.presentation.feature.categories
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -44,9 +45,15 @@ internal fun CategoriesRoute(
 }
 
 @Composable
-internal fun CategoriesScreen(navigateToCategory: (code: String, title: String) -> Unit, modifier: Modifier, uiState: CategoriesUiState) {
+internal fun CategoriesScreen(
+    navigateToCategory: (code: String, title: String) -> Unit,
+    modifier: Modifier,
+    uiState: CategoriesUiState
+) {
     uiState.categories.data?.let { data ->
-        LazyColumn(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
             items(data) {
                 CategoriesRow(category = it, navigateToCategory = navigateToCategory)
                 Divider(
@@ -86,13 +93,16 @@ internal fun CategoriesScreen(navigateToCategory: (code: String, title: String) 
 }
 
 @Composable
-private fun CategoriesRow(category: Category, navigateToCategory: (code: String, title: String) -> Unit) {
+private fun CategoriesRow(
+    category: Category,
+    navigateToCategory: (code: String, title: String) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(64.dp)
-            .padding(horizontal = 20.dp)
-            .clickable { navigateToCategory(category.code, category.title) },
+            .clickable { navigateToCategory(category.code, category.title) }
+            .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -119,6 +129,6 @@ private fun PreviewCategoriesRow() {
             "Men's Watches",
             iconId = CheapacIcons.MenWatches.id
         ),
-        navigateToCategory = { _, _ ->  }
+        navigateToCategory = { _, _ -> }
     )
 }

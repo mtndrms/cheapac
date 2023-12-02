@@ -71,7 +71,7 @@ fun CategoriesCatalog(
             .padding(start = horizontalPadding)
     )
 
-    Spacer(modifier = Modifier.height(5.dp))
+    Spacer(modifier = Modifier.height(10.dp))
 
     categories.data?.let { data ->
         LazyVerticalGrid(

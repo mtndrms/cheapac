@@ -16,4 +16,7 @@
     <string name="products">Products</string>
     <string name="product_detail">"Product Detail"</string>
     <string name="add_to_cart">Add to cart</string>
+    <string name="x_in_stock">1%d in stock</string>
+    <string name="out_of_stock">Out of stock</string>
+    <string name="notify_me">Notify me when it\'s in stock</string>
 </resources>

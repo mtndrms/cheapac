@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -116,9 +117,10 @@ internal fun ProductDetailScreen(
                 }
             }
 
-            BottomSectionProductDetail(
+            BottomBarProductDetail(
                 price = data.price,
-                discountRate = data.discountPercentage.toInt()
+                discountRate = data.discountPercentage.toInt(),
+                isInStock = data.stock != 0
             )
         }
     }
@@ -173,7 +175,7 @@ fun CollapsingToolbar(
                 .zIndex(1f)
                 .padding(10.dp)
                 .align(Alignment.TopStart)
-                .alpha(0.2f)
+                .alpha(0.8f)
                 .clip(CircleShape)
                 .background(MaterialTheme.colorScheme.tertiary)
                 .size(36.dp)
@@ -182,6 +184,31 @@ fun CollapsingToolbar(
                 imageVector = CheapacIcons.ArrowBack,
                 contentDescription = "go back",
                 tint = Color.White
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .zIndex(1f)
+                .align(Alignment.BottomEnd)
+                .padding(10.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(
+                    if (data.stock != 0) {
+                        MaterialTheme.colorScheme.tertiary
+                    } else {
+                        MaterialTheme.colorScheme.error
+                    }
+                )
+                .padding(vertical = 5.dp, horizontal = 10.dp)
+        ) {
+            Text(
+                text = if (data.stock != 0) {
+                    stringResource(R.string.x_in_stock, data.stock)
+                } else {
+                    stringResource(id = R.string.out_of_stock)
+                },
+                color = MaterialTheme.colorScheme.background
             )
         }
 
@@ -257,7 +284,12 @@ fun PathVisualizer(category: String, brand: String) {
 }
 
 @Composable
-fun BottomSectionProductDetail(price: Int, discountRate: Int, modifier: Modifier = Modifier) {
+fun BottomBarProductDetail(
+    price: Int,
+    discountRate: Int,
+    isInStock: Boolean,
+    modifier: Modifier = Modifier
+) {
     Surface(
         shadowElevation = 10.dp,
         modifier = Modifier
@@ -307,8 +339,14 @@ fun BottomSectionProductDetail(price: Int, discountRate: Int, modifier: Modifier
                     )
                 }
 
-                Button(onClick = { }) {
-                    Text(text = stringResource(id = R.string.add_to_cart))
+                if (isInStock) {
+                    Button(onClick = { }) {
+                        Text(text = stringResource(id = R.string.add_to_cart))
+                    }
+                } else {
+                    Button(onClick = { }) {
+                        Text(text = stringResource(R.string.notify_me))
+                    }
                 }
             }
         }

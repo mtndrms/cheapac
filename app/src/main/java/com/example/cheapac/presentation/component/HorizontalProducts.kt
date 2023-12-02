@@ -38,7 +38,7 @@ fun HorizontalProducts(
             .padding(start = 20.dp)
     )
 
-    Spacer(modifier = Modifier.height(5.dp))
+    Spacer(modifier = Modifier.height(10.dp))
 
     products.data?.let { data ->
         LazyRow(
@@ -58,6 +58,7 @@ fun HorizontalProducts(
                     price = product.price,
                     imageUrl = product.thumbnail,
                     discountRate = product.discountPercentage.toInt(),
+                    isInStock = product.stock != 0,
                     navigateToProductDetail = navigateToProductDetail
                 )
 
