@@ -157,8 +157,8 @@ fun Indicator(modifier: Modifier, pageIndex: Int, size: Int) {
         modifier = Modifier
             .padding(10.dp)
             .clip(RoundedCornerShape(5.dp))
-            .alpha(0.5f)
-            .background(MaterialTheme.colorScheme.tertiary)
+            .alpha(0.8f)
+            .background(MaterialTheme.colorScheme.primary)
             .padding(horizontal = 7.dp, vertical = 3.dp)
             .then(modifier)
     )

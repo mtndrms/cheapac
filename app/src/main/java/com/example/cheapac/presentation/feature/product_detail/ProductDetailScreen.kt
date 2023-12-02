@@ -177,7 +177,7 @@ fun CollapsingToolbar(
                 .align(Alignment.TopStart)
                 .alpha(0.8f)
                 .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.tertiary)
+                .background(MaterialTheme.colorScheme.primary)
                 .size(36.dp)
         ) {
             Icon(
@@ -195,7 +195,7 @@ fun CollapsingToolbar(
                 .clip(RoundedCornerShape(10.dp))
                 .background(
                     if (data.stock != 0) {
-                        MaterialTheme.colorScheme.tertiary
+                        MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
                     }
@@ -208,7 +208,11 @@ fun CollapsingToolbar(
                 } else {
                     stringResource(id = R.string.out_of_stock)
                 },
-                color = MaterialTheme.colorScheme.background
+                color = if (data.stock != 0) {
+                    MaterialTheme.colorScheme.onPrimary
+                } else {
+                    MaterialTheme.colorScheme.onError
+                }
             )
         }
 
@@ -247,14 +251,13 @@ private fun Description(
                 .fillMaxSize()
                 .padding(horizontal = 10.dp)
         ) {
-            Spacer(modifier = Modifier.height(15.dp))
-            PathVisualizer(category = betterCategoryTitle(data.category), brand = data.brand)
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(text = data.title, style = MaterialTheme.typography.titleLarge)
+                PathVisualizer(category = betterCategoryTitle(data.category), brand = data.brand)
                 Row {
                     IconButton(onClick = { /*TODO*/ }) {
                         Icon(
@@ -271,6 +274,8 @@ private fun Description(
                     }
                 }
             }
+            Text(text = data.title, style = MaterialTheme.typography.titleLarge)
+            Spacer(modifier = Modifier.height(5.dp))
             RatingBar(rating = data.rating)
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = data.description.capitalize().repeat(10))
@@ -341,6 +346,13 @@ fun BottomBarProductDetail(
 
                 if (isInStock) {
                     Button(onClick = { }) {
+                        Icon(
+                            imageVector = CheapacIcons.CartOutlined,
+                            contentDescription = stringResource(
+                                id = R.string.add_to_cart
+                            ).lowercase()
+                        )
+                        Spacer(modifier = Modifier.width(5.dp))
                         Text(text = stringResource(id = R.string.add_to_cart))
                     }
                 } else {

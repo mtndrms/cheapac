@@ -89,7 +89,7 @@ fun CategoriesCatalog(
                         modifier = Modifier
                             .size(cardSize)
                             .clip(RoundedCornerShape(5.dp))
-                            .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                            .background(color = MaterialTheme.colorScheme.primaryContainer)
                             .clickable {
                                 if (it + 1 < ROW * COLUMN) {
                                     navigateToCategory(data[it].code, data[it].title)
@@ -122,7 +122,7 @@ fun CategoriesCatalog(
                             maxLines = if (!data[it].title.contains("-")) 1 else 2,
                             overflow = TextOverflow.Ellipsis,
                             style = MaterialTheme.typography.titleSmall,
-                            color = MaterialTheme.colorScheme.onSecondaryContainer
+                            color = MaterialTheme.colorScheme.onPrimaryContainer
                         )
                     }
                 }

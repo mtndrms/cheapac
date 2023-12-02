@@ -63,7 +63,7 @@ fun ProductCard(
             modifier = Modifier
                 .width(180.dp)
                 .height(300.dp)
-                .background(color = MaterialTheme.colorScheme.secondaryContainer)
+                .background(color = MaterialTheme.colorScheme.primaryContainer)
         ) {
             Box(
                 modifier = Modifier
@@ -95,7 +95,7 @@ fun ProductCard(
                         .align(Alignment.TopEnd)
                         .alpha(0.8f)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.tertiary)
+                        .background(MaterialTheme.colorScheme.primary)
                         .size(36.dp)
                 ) {
                     Icon(
@@ -164,11 +164,15 @@ fun ProductCard(
                     onClick = {},
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isInStock) {
-                            MaterialTheme.colorScheme.secondary
+                            MaterialTheme.colorScheme.primary
                         } else {
                             MaterialTheme.colorScheme.error
                         },
-                        contentColor = MaterialTheme.colorScheme.onSecondary
+                        contentColor = if (isInStock) {
+                            MaterialTheme.colorScheme.onPrimary
+                        } else {
+                            MaterialTheme.colorScheme.onError
+                        }
                     ),
                     modifier = Modifier
                         .fillMaxWidth(0.9f)
