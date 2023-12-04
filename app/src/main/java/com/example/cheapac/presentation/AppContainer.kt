@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.example.cheapac.presentation.common.TopBar
+import com.example.cheapac.presentation.feature.cart.cartScreen
 import com.example.cheapac.presentation.feature.categories.categoriesScreen
 import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.navigation.TopLevelDestination
@@ -20,6 +21,9 @@ import com.example.cheapac.presentation.feature.product_detail.productDetailScre
 import com.example.cheapac.presentation.feature.products.navigateToProductList
 import com.example.cheapac.presentation.feature.products.productsScreen
 import com.example.cheapac.presentation.feature.profile.profileScreen
+import com.example.cheapac.presentation.feature.purchase_history.purchaseHistoryScreen
+import com.example.cheapac.presentation.feature.recently_viewed.recentlyViewedScreen
+import com.example.cheapac.presentation.feature.wishlist.wishlistScreen
 
 @Composable
 fun AppContainer(
@@ -64,6 +68,10 @@ fun AppContainer(
                     goBack = appState.navController::popBackStack
                 )
                 productDetailScreen(goBack = appState.navController::popBackStack)
+                cartScreen()
+                wishlistScreen()
+                recentlyViewedScreen()
+                purchaseHistoryScreen()
             }
         }
     }

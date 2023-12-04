@@ -29,8 +29,8 @@ class HomeViewModel @Inject constructor(
 
     init {
         getHighlights()
-        getAllCategories()
-        getAllProducts()
+//        getAllCategories()
+//        getAllProducts()
     }
 
     private fun getHighlights() {

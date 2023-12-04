@@ -1,5 +1,9 @@
 package com.example.cheapac.presentation.feature.product_detail
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -83,10 +87,14 @@ internal fun ProductDetailScreen(
     var topBoxSize by remember { mutableStateOf(IntSize(1, 1)) }
     val topBoxHeight = topBoxSize.height
     var calculatedWeight by remember { mutableFloatStateOf(1f) }
+    val state = remember {
+        MutableTransitionState(false).apply {
+            targetState = true
+        }
+    }
 
     LaunchedEffect(key1 = scrollState.value) {
-        calculatedWeight =
-            (topBoxHeight.toFloat() / (topBoxHeight + scrollState.value)).coerceIn(0.001f, 1f)
+        calculatedWeight = (topBoxHeight.toFloat() / (topBoxHeight + scrollState.value)).coerceIn(0.001f, 1f)
     }
 
     id?.let {
@@ -102,6 +110,7 @@ internal fun ProductDetailScreen(
                     CollapsingToolbar(
                         data = data,
                         goBack = goBack,
+                        visibilityState = state,
                         modifier = Modifier
                             .weight(calculatedWeight)
                             .onGloballyPositioned { layoutCoordinates: LayoutCoordinates ->
@@ -162,6 +171,7 @@ fun ErrorState(message: String) {
 fun CollapsingToolbar(
     data: Product,
     goBack: () -> Unit,
+    visibilityState: MutableTransitionState<Boolean>,
     modifier: Modifier
 ) {
     Box(
@@ -187,7 +197,10 @@ fun CollapsingToolbar(
             )
         }
 
-        Row(
+        AnimatedVisibility(
+            visibleState = visibilityState,
+            enter = scaleIn(),
+            exit = scaleOut(),
             modifier = Modifier
                 .zIndex(1f)
                 .align(Alignment.BottomEnd)
@@ -353,7 +366,10 @@ fun BottomBarProductDetail(
                             ).lowercase()
                         )
                         Spacer(modifier = Modifier.width(5.dp))
-                        Text(text = stringResource(id = R.string.add_to_cart), style = MaterialTheme.typography.labelLarge)
+                        Text(
+                            text = stringResource(id = R.string.add_to_cart),
+                            style = MaterialTheme.typography.labelLarge
+                        )
                     }
                 } else {
                     Button(onClick = { }) {

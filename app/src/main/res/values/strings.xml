@@ -19,4 +19,5 @@
     <string name="x_in_stock">1%d in stock</string>
     <string name="out_of_stock">Out of stock</string>
     <string name="notify_me">Notify me when it\'s in stock</string>
+    <string name="your_cart">Your cart</string>
 </resources>

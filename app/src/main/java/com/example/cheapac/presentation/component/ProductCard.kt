@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -61,7 +60,7 @@ fun ProductCard(
     ) {
         Column(
             modifier = Modifier
-                .width(180.dp)
+                .width(170.dp)
                 .height(300.dp)
                 .background(color = MaterialTheme.colorScheme.primaryContainer)
         ) {
@@ -69,7 +68,7 @@ fun ProductCard(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f, fill = true)
-                    .padding(horizontal = 15.dp, vertical = 10.dp)
+                    .padding(horizontal = 10.dp, vertical = 10.dp)
             ) {
                 SubcomposeAsyncImage(
                     model = imageUrl,
