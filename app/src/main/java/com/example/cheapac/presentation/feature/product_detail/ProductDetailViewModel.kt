@@ -2,9 +2,13 @@ package com.example.cheapac.presentation.feature.product_detail
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cheapac.domain.use_case.GetProductUseCase
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
+import com.example.cheapac.domain.model.Product
+import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
+import com.example.cheapac.domain.use_case.CheckProductIsWishlisted
+import com.example.cheapac.domain.use_case.GetProductUseCase
+import com.example.cheapac.domain.use_case.RemoveProductFromWishlist
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +20,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductDetailViewModel @Inject constructor(
-    private val getProductUseCase: GetProductUseCase
+    private val getProductUseCase: GetProductUseCase,
+    private val addProductToWishlistUseCase: AddProductToWishlistUseCase,
+    private val checkProductIsWishlisted: CheckProductIsWishlisted,
+    private val removeProductFromWishlist: RemoveProductFromWishlist
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailUiState())
     val uiState = _uiState.asStateFlow()
@@ -43,6 +50,63 @@ class ProductDetailViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(product = UiState(data = data))
                         }
+                        checkIfProductWishlisted(data.id)
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun addToWishlist(product: Product, note: String) {
+        job = addProductToWishlistUseCase(product = product, note).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {
+                    _uiState.update {
+                        it.copy(addToWishlistStatus = UiState(isLoading = true))
+                    }
+                }
+
+                is Resource.Error -> {
+                    _uiState.update {
+                        it.copy(addToWishlistStatus = UiState(message = result.message))
+                    }
+                }
+
+                is Resource.Success -> {
+                    _uiState.update {
+                        it.copy(
+                            addToWishlistStatus = UiState(data = result.data),
+                            isWishlisted = result.data ?: false
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun removeFromWishlist(id: Int) {
+        job = removeProductFromWishlist(id = id).onEach { result ->
+            if (result) {
+                _uiState.update {
+                    it.copy(isWishlisted = false)
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun checkIfProductWishlisted(id: Int) {
+        job = checkProductIsWishlisted(id = id).onEach { result ->
+            when (result) {
+                is Resource.Loading,
+                is Resource.Error -> {
+                    _uiState.update {
+                        it.copy(isWishlisted = false)
+                    }
+                }
+
+                is Resource.Success -> {
+                    _uiState.update {
+                        it.copy(isWishlisted = result.data ?: false)
                     }
                 }
             }

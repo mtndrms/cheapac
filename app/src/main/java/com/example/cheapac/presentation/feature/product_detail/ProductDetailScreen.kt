@@ -1,5 +1,6 @@
 package com.example.cheapac.presentation.feature.product_detail
 
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.scaleIn
@@ -52,6 +53,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
+import com.example.cheapac.data.UiState
 import com.example.cheapac.data.mapper.betterCategoryTitle
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
@@ -72,6 +74,8 @@ internal fun ProductDetailRoute(
         id = id,
         uiState = uiState,
         getProduct = viewModel::getProduct,
+        addToWishlist = viewModel::addToWishlist,
+        removeProductFromWishlist = viewModel::removeFromWishlist,
         goBack = goBack
     )
 }
@@ -79,9 +83,11 @@ internal fun ProductDetailRoute(
 @Composable
 internal fun ProductDetailScreen(
     id: Int?,
+    uiState: ProductDetailUiState,
     getProduct: (Int) -> Unit,
+    addToWishlist: (Product, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit,
     goBack: () -> Unit,
-    uiState: ProductDetailUiState
 ) {
     val scrollState = rememberScrollState()
     var topBoxSize by remember { mutableStateOf(IntSize(1, 1)) }
@@ -94,7 +100,8 @@ internal fun ProductDetailScreen(
     }
 
     LaunchedEffect(key1 = scrollState.value) {
-        calculatedWeight = (topBoxHeight.toFloat() / (topBoxHeight + scrollState.value)).coerceIn(0.001f, 1f)
+        calculatedWeight =
+            (topBoxHeight.toFloat() / (topBoxHeight + scrollState.value)).coerceIn(0.001f, 1f)
     }
 
     id?.let {
@@ -120,6 +127,10 @@ internal fun ProductDetailScreen(
 
                     Description(
                         scrollState = scrollState,
+                        addToWishlist = addToWishlist,
+                        removeProductFromWishlist = removeProductFromWishlist,
+                        addToWishlistStatus = uiState.addToWishlistStatus,
+                        isWishlisted = uiState.isWishlisted,
                         data = data,
                         modifier = Modifier.weight(1f)
                     )
@@ -251,7 +262,11 @@ fun CollapsingToolbar(
 private fun Description(
     scrollState: ScrollState,
     data: Product,
-    modifier: Modifier
+    addToWishlistStatus: UiState<Boolean>,
+    isWishlisted: Boolean,
+    modifier: Modifier,
+    addToWishlist: (Product, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit
 ) {
     Box(
         modifier = Modifier
@@ -271,12 +286,33 @@ private fun Description(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 PathVisualizer(category = betterCategoryTitle(data.category), brand = data.brand)
-                Row {
-                    IconButton(onClick = { /*TODO*/ }) {
-                        Icon(
-                            imageVector = CheapacIcons.FavoriteOutlined,
-                            contentDescription = "favorite"
-                        )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    if (addToWishlistStatus.isLoading) {
+                        CircularProgressIndicator()
+                    } else {
+                        addToWishlistStatus.message?.let {
+                            Icon(
+                                imageVector = CheapacIcons.Error,
+                                tint = MaterialTheme.colorScheme.error,
+                                contentDescription = "an error occurt while adding product to the wishlist"
+                            )
+                        } ?: run {
+                            if (!isWishlisted) {
+                                IconButton(onClick = { addToWishlist(data, "test") }) {
+                                    Icon(
+                                        imageVector = CheapacIcons.FavoriteOutlined,
+                                        contentDescription = "favorite"
+                                    )
+                                }
+                            } else {
+                                IconButton(onClick = { removeProductFromWishlist(data.id) }) {
+                                    Icon(
+                                        imageVector = CheapacIcons.Favorite,
+                                        contentDescription = "unfavorite"
+                                    )
+                                }
+                            }
+                        }
                     }
 
                     IconButton(onClick = { /*TODO*/ }) {

@@ -56,6 +56,11 @@ class LocalDataSource @Inject constructor(
             database.wishlistDao().getAll()
         }
 
+    suspend fun isWishlistItemExists(id: Int) =
+        withContext(Dispatchers.IO) {
+            database.wishlistDao().isExists(id = id)
+        }
+
     suspend fun addToWishlist(product: WishlistItem) =
         withContext(Dispatchers.IO) {
             database.wishlistDao().insertOne(product = product)
@@ -64,6 +69,11 @@ class LocalDataSource @Inject constructor(
     suspend fun deleteWishlistedProduct(product: WishlistItem) =
         withContext(Dispatchers.IO) {
             database.wishlistDao().deleteOne(product = product)
+        }
+
+    suspend fun deleteWishlistedProductById(id: Int) =
+        withContext(Dispatchers.IO) {
+            database.wishlistDao().deleteOneById(id = id)
         }
 
     suspend fun clearWishlist() =
