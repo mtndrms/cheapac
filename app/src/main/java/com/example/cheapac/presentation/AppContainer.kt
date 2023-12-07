@@ -21,8 +21,11 @@ import com.example.cheapac.presentation.feature.product_detail.productDetailScre
 import com.example.cheapac.presentation.feature.products.navigateToProductList
 import com.example.cheapac.presentation.feature.products.productsScreen
 import com.example.cheapac.presentation.feature.profile.profileScreen
+import com.example.cheapac.presentation.feature.purchase_history.navigateToPurchaseHistoryScreen
 import com.example.cheapac.presentation.feature.purchase_history.purchaseHistoryScreen
+import com.example.cheapac.presentation.feature.recently_viewed.navigateToRecentlyViewedScreen
 import com.example.cheapac.presentation.feature.recently_viewed.recentlyViewedScreen
+import com.example.cheapac.presentation.feature.wishlist.navigateToWishlistScreen
 import com.example.cheapac.presentation.feature.wishlist.wishlistScreen
 
 @Composable
@@ -62,14 +65,19 @@ fun AppContainer(
                     navigateToProductDetail = appState.navController::navigateToProductDetail
                 )
                 categoriesScreen(navigateToCategory = appState.navController::navigateToProductList)
-                profileScreen(goBack = appState.navController::popBackStack)
+                profileScreen(
+                    navigateToWishlistScreen = appState.navController::navigateToWishlistScreen,
+                    navigateToPurchaseHistoryScreen = appState.navController::navigateToPurchaseHistoryScreen,
+                    navigateToRecentlyViewedScreen = appState.navController::navigateToRecentlyViewedScreen,
+                    goBack = appState.navController::popBackStack
+                )
                 productsScreen(
                     navigateToProductDetail = appState.navController::navigateToProductDetail,
                     goBack = appState.navController::popBackStack
                 )
                 productDetailScreen(goBack = appState.navController::popBackStack)
                 cartScreen()
-                wishlistScreen()
+                wishlistScreen(goBack = appState.navController::popBackStack)
                 recentlyViewedScreen()
                 purchaseHistoryScreen()
             }

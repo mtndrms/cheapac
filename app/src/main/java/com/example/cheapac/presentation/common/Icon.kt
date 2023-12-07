@@ -4,6 +4,9 @@ import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowDropUp
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -45,6 +48,9 @@ object CheapacIcons {
     val Star: ImageVector = Icons.Default.Star
     val StarOutlined: ImageVector = Icons.Outlined.StarBorder
     val Error: ImageVector = Icons.Default.Error
+    val Delete: ImageVector = Icons.Default.Delete
+    val ArrowDropDown: ImageVector = Icons.Default.ArrowDropDown
+    val ArrowDropUp: ImageVector = Icons.Default.ArrowDropUp
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
     val Laptop: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_laptop)
     val Fragrances: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_fragrances)

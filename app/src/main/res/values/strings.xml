@@ -20,4 +20,5 @@
     <string name="out_of_stock">Out of stock</string>
     <string name="notify_me">Notify me when it\'s in stock</string>
     <string name="your_cart">Your cart</string>
+    <string name="you_havent_added_anything_to_your_wish_list_yet">You haven\'t added anything\nto your wish list yet.</string>
 </resources>

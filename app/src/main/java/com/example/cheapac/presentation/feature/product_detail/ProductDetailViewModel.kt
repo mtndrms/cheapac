@@ -6,9 +6,9 @@ import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
-import com.example.cheapac.domain.use_case.CheckProductIsWishlisted
+import com.example.cheapac.domain.use_case.CheckProductIsWishlistedUseCase
 import com.example.cheapac.domain.use_case.GetProductUseCase
-import com.example.cheapac.domain.use_case.RemoveProductFromWishlist
+import com.example.cheapac.domain.use_case.RemoveProductFromWishlistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +22,8 @@ import javax.inject.Inject
 class ProductDetailViewModel @Inject constructor(
     private val getProductUseCase: GetProductUseCase,
     private val addProductToWishlistUseCase: AddProductToWishlistUseCase,
-    private val checkProductIsWishlisted: CheckProductIsWishlisted,
-    private val removeProductFromWishlist: RemoveProductFromWishlist
+    private val checkProductIsWishlistedUseCase: CheckProductIsWishlistedUseCase,
+    private val removeProductFromWishlistUseCase: RemoveProductFromWishlistUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailUiState())
     val uiState = _uiState.asStateFlow()
@@ -85,7 +85,7 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     fun removeFromWishlist(id: Int) {
-        job = removeProductFromWishlist(id = id).onEach { result ->
+        job = removeProductFromWishlistUseCase(id = id).onEach { result ->
             if (result) {
                 _uiState.update {
                     it.copy(isWishlisted = false)
@@ -95,7 +95,7 @@ class ProductDetailViewModel @Inject constructor(
     }
 
     private fun checkIfProductWishlisted(id: Int) {
-        job = checkProductIsWishlisted(id = id).onEach { result ->
+        job = checkProductIsWishlistedUseCase(id = id).onEach { result ->
             when (result) {
                 is Resource.Loading,
                 is Resource.Error -> {

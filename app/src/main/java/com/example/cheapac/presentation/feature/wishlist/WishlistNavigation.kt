@@ -10,8 +10,8 @@ fun NavController.navigateToWishlistScreen(navOptions: NavOptions? = null) {
     this.navigate(Destination.WISHLIST.route, navOptions = navOptions)
 }
 
-fun NavGraphBuilder.wishlistScreen() {
+fun NavGraphBuilder.wishlistScreen(goBack: () -> Unit) {
     composable(route = Destination.WISHLIST.route) {
-        WishlistRoute()
+        WishlistRoute(goBack = goBack)
     }
 }

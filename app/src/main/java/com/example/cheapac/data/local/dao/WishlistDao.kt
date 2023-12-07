@@ -26,5 +26,5 @@ interface WishlistDao {
     fun deleteOneById(id: Int): Int
 
     @Query("DELETE FROM ${Table.WISHLIST}")
-    fun clear()
+    fun clear(): Int
 }

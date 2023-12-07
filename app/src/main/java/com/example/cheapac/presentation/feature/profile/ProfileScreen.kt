@@ -3,7 +3,6 @@ package com.example.cheapac.presentation.feature.profile
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,18 +26,37 @@ import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.feature.profile.component.UserInfoCard
-import com.example.cheapac.presentation.navigation.Destination
 
 @Composable
-internal fun ProfileRoute(goBack: () -> Unit, modifier: Modifier = Modifier) {
-    ProfileScreen(goBack, modifier)
+internal fun ProfileRoute(
+    navigateToWishlistScreen: () -> Unit,
+    navigateToPurchaseHistoryScreen: () -> Unit,
+    navigateToRecentlyViewedScreen: () -> Unit,
+    goBack: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    ProfileScreen(
+        navigateToWishlistScreen = navigateToWishlistScreen,
+        navigateToPurchaseHistoryScreen = navigateToPurchaseHistoryScreen,
+        navigateToRecentlyViewedScreen = navigateToRecentlyViewedScreen,
+        goBack = goBack,
+        modifier = modifier
+    )
 }
 
 @Composable
-internal fun ProfileScreen(goBack: () -> Unit, modifier: Modifier) {
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .background(MaterialTheme.colorScheme.background)) {
+internal fun ProfileScreen(
+    navigateToWishlistScreen: () -> Unit,
+    navigateToPurchaseHistoryScreen: () -> Unit,
+    navigateToRecentlyViewedScreen: () -> Unit,
+    goBack: () -> Unit,
+    modifier: Modifier
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth()
@@ -60,7 +78,7 @@ internal fun ProfileScreen(goBack: () -> Unit, modifier: Modifier) {
             OptionRow(
                 title = stringResource(id = R.string.wishlist),
                 imageVector = CheapacIcons.FavoriteOutlined,
-                onClick = {}
+                onClick = { navigateToWishlistScreen() }
             )
             OptionRow(
                 title = stringResource(R.string.your_coupons),
@@ -70,12 +88,12 @@ internal fun ProfileScreen(goBack: () -> Unit, modifier: Modifier) {
             OptionRow(
                 title = stringResource(id = R.string.purchase_history),
                 iconResId = CheapacIcons.History.id,
-                onClick = {}
+                onClick = { navigateToPurchaseHistoryScreen() }
             )
             OptionRow(
                 title = stringResource(id = R.string.recently_viewed),
                 iconResId = CheapacIcons.RecentlyViewed.id,
-                onClick = {}
+                onClick = { navigateToRecentlyViewedScreen() }
             )
             OptionRow(
                 title = stringResource(R.string.shipments),

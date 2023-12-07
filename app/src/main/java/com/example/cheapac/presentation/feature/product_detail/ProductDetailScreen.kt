@@ -1,6 +1,5 @@
 package com.example.cheapac.presentation.feature.product_detail
 
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.scaleIn

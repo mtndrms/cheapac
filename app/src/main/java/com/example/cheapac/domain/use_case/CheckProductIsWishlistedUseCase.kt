@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
-class CheckProductIsWishlisted @Inject constructor(private val wishlistRepository: WishlistRepository) {
+class CheckProductIsWishlistedUseCase @Inject constructor(private val wishlistRepository: WishlistRepository) {
     operator fun invoke(id: Int): Flow<Resource<Boolean>> = flow {
         try {
             emit(Resource.Loading())

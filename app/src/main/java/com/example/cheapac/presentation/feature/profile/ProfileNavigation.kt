@@ -7,12 +7,18 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import com.example.cheapac.presentation.navigation.TopLevelDestination
+import kotlin.reflect.KFunction1
 
 fun NavController.navigateToProfile(navOptions: NavOptions? = null) {
     this.navigate(TopLevelDestination.PROFILE.route, navOptions)
 }
 
-fun NavGraphBuilder.profileScreen(goBack: () -> Unit) {
+fun NavGraphBuilder.profileScreen(
+    navigateToWishlistScreen: () -> Unit,
+    navigateToPurchaseHistoryScreen: () -> Unit,
+    navigateToRecentlyViewedScreen: () -> Unit,
+    goBack: () -> Unit
+) {
     composable(
         route = TopLevelDestination.PROFILE.route,
         enterTransition = {
@@ -30,6 +36,10 @@ fun NavGraphBuilder.profileScreen(goBack: () -> Unit) {
             )
         }
     ) {
-        ProfileRoute(goBack)
+        ProfileRoute(
+            navigateToWishlistScreen = navigateToWishlistScreen,
+            navigateToPurchaseHistoryScreen = navigateToPurchaseHistoryScreen,
+            navigateToRecentlyViewedScreen = navigateToRecentlyViewedScreen,
+            goBack = goBack)
     }
 }

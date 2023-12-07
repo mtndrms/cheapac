@@ -61,13 +61,10 @@ fun HighlightsCarousel(
         }
 
         val timer = object : CountDownTimer(autoSwipeDuration, autoSwipeDuration) {
-            override fun onTick(millisUntilFinished: Long) {
-                Log.i("HighlightsCarousel", "onTick")
-            }
+            override fun onTick(millisUntilFinished: Long) {}
 
             override fun onFinish() {
                 timerJob = scope.launch {
-                    Log.i("HighlightsCarousel", "onFinish")
                     pagerState.animateScrollToPage(
                         page = if (pageIndex + 1 == pagerState.pageCount) 0 else pageIndex + 1,
                         pageOffsetFraction = 0f,
