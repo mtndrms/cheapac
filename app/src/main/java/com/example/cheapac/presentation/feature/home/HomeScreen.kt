@@ -41,7 +41,7 @@ internal fun HomeRoute(
 }
 
 @Composable
-internal fun HomeScreen(
+private fun HomeScreen(
     navigateToCategories: () -> Unit,
     navigateToCategory: (code: String, title: String) -> Unit,
     navigateToProductDetail: (Int) -> Unit,

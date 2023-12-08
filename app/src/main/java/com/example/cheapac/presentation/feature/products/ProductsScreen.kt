@@ -35,7 +35,7 @@ import com.example.cheapac.presentation.component.ProductCard
 import com.example.cheapac.utils.capitalize
 
 @Composable
-fun ProductsRoute(
+internal fun ProductsRoute(
     category: String?,
     title: String,
     goBack: () -> Unit,
@@ -57,7 +57,7 @@ fun ProductsRoute(
 }
 
 @Composable
-fun ProductsScreen(
+private fun ProductsScreen(
     modifier: Modifier,
     uiState: ProductsUiState,
     goBack: () -> Unit,
@@ -75,43 +75,56 @@ fun ProductsScreen(
         }
     }
 
-    uiState.products.data?.let { data ->
-        Column(modifier = Modifier.fillMaxSize()) {
-            Header(title = title, goBack = goBack)
-            LazyVerticalGrid(
-                columns = GridCells.Fixed(2),
-                contentPadding = PaddingValues(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(15.dp),
-                verticalArrangement = Arrangement.spacedBy(15.dp),
-                modifier = Modifier.fillMaxSize()
-            ) {
-                items(data) { product: Product ->
-                    ProductCard(
-                        id = product.id,
-                        title = product.title,
-                        price = product.price,
-                        imageUrl = product.thumbnail,
-                        discountRate = product.discountPercentage.toInt(),
-                        isInStock = product.stock != 0,
-                        navigateToProductDetail = navigateToProductDetail,
-                        addToWishlist = addToWishlist
-                    )
-                }
-            }
+    Column(modifier = Modifier.fillMaxSize()) {
+        Header(title = title, goBack = goBack)
+        uiState.products.data?.let { data ->
+            SuccesState(
+                data = data,
+                navigateToProductDetail = navigateToProductDetail,
+                addToWishlist = addToWishlist
+            )
         }
-    }
 
-    if (uiState.products.isLoading) {
-       LoadingState(modifier = modifier)
-    }
+        if (uiState.products.isLoading) {
+            LoadingState(modifier = modifier)
+        }
 
-    uiState.products.message?.let { message ->
-        ErrorState(message = message, modifier = modifier)
+        uiState.products.message?.let { message ->
+            ErrorState(message = message, modifier = modifier)
+        }
     }
 }
 
 @Composable
-fun LoadingState(modifier: Modifier) {
+private fun SuccesState(
+    data: List<Product>,
+    navigateToProductDetail: (Int) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(10.dp),
+        horizontalArrangement = Arrangement.spacedBy(15.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+        modifier = Modifier.fillMaxSize()
+    ) {
+        items(data) { product: Product ->
+            ProductCard(
+                id = product.id,
+                title = product.title,
+                price = product.price,
+                imageUrl = product.thumbnail,
+                discountRate = product.discountPercentage.toInt(),
+                isInStock = product.stock != 0,
+                navigateToProductDetail = navigateToProductDetail,
+                addToWishlist = addToWishlist
+            )
+        }
+    }
+}
+
+@Composable
+private fun LoadingState(modifier: Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -124,7 +137,7 @@ fun LoadingState(modifier: Modifier) {
 }
 
 @Composable
-fun ErrorState(message: String, modifier: Modifier) {
+private fun ErrorState(message: String, modifier: Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -137,7 +150,7 @@ fun ErrorState(message: String, modifier: Modifier) {
 }
 
 @Composable
-fun Header(title: String, goBack: () -> Unit) {
+private fun Header(title: String, goBack: () -> Unit) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(modifier = Modifier.height(10.dp))
         Row(

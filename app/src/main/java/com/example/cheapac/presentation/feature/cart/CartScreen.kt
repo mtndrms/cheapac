@@ -16,13 +16,13 @@ import com.example.cheapac.data.local.entity.CartItem
 import com.example.cheapac.domain.model.Product
 
 @Composable
-fun CartRoute(viewModel: CartViewModel = hiltViewModel()) {
+internal fun CartRoute(viewModel: CartViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     CartScreen(uiState = uiState)
 }
 
 @Composable
-fun CartScreen(uiState: CartUiState) {
+private fun CartScreen(uiState: CartUiState) {
     uiState.cart.data?.let { data ->
         SuccessState(data = data)
     }

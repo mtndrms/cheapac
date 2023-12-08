@@ -11,7 +11,6 @@ import com.example.cheapac.data.local.entity.CartItem
 import com.example.cheapac.data.local.entity.PurchaseHistoryItem
 import com.example.cheapac.data.local.entity.RecentlyViewedItem
 import com.example.cheapac.data.local.entity.WishlistItem
-import com.example.cheapac.utils.Converters
 
 @Database(
     entities = [

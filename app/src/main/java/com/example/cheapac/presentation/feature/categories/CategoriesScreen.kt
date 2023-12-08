@@ -45,7 +45,7 @@ internal fun CategoriesRoute(
 }
 
 @Composable
-internal fun CategoriesScreen(
+private fun CategoriesScreen(
     navigateToCategory: (code: String, title: String) -> Unit,
     modifier: Modifier,
     uiState: CategoriesUiState

@@ -1,4 +1,4 @@
-package com.example.cheapac.utils
+package com.example.cheapac.data.local
 
 import androidx.room.TypeConverter
 import com.squareup.moshi.JsonAdapter

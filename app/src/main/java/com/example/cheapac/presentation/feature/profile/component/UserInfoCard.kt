@@ -23,7 +23,7 @@ import com.example.cheapac.R
 import com.example.cheapac.presentation.common.CheapacIcons
 
 @Composable
-fun UserInfoCard(name: String, email: String) {
+internal fun UserInfoCard(name: String, email: String) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -51,6 +51,6 @@ fun UserInfoCard(name: String, email: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewUserInfoCard() {
+private fun PreviewUserInfoCard() {
     UserInfoCard(name = "John Doe", email = "johndoe@example.com")
 }

@@ -47,7 +47,7 @@ import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.utils.capitalize
 
 @Composable
-fun WishlistRoute(goBack: () -> Unit, viewModel: WishlistViewModel = hiltViewModel()) {
+internal fun WishlistRoute(goBack: () -> Unit, viewModel: WishlistViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     WishlistScreen(
         goBack = goBack,
@@ -57,7 +57,7 @@ fun WishlistRoute(goBack: () -> Unit, viewModel: WishlistViewModel = hiltViewMod
 }
 
 @Composable
-fun WishlistScreen(uiState: WishlistUiState, goBack: () -> Unit, clearAll: () -> Unit) {
+private fun WishlistScreen(uiState: WishlistUiState, goBack: () -> Unit, clearAll: () -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         Header(title = stringResource(id = R.string.wishlist), goBack = goBack, clearAll = clearAll)
         uiState.items.data?.let { data ->
@@ -125,7 +125,7 @@ private fun ErrorState(message: String, modifier: Modifier) {
 }
 
 @Composable
-fun Header(
+private fun Header(
     title: String,
     goBack: () -> Unit,
     clearAll: () -> Unit
@@ -173,7 +173,7 @@ fun Header(
 }
 
 @Composable
-fun WishlistItem(title: String, thumbnailUrl: String, note: String, date: String) {
+private fun WishlistItem(title: String, thumbnailUrl: String, note: String, date: String) {
     var isExpanded by remember { mutableStateOf(false) }
 
     Spacer(modifier = Modifier.height(10.dp))

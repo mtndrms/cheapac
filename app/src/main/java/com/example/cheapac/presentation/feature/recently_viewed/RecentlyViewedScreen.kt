@@ -43,13 +43,13 @@ import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.utils.capitalize
 
 @Composable
-fun RecentlyViewedRoute(goBack: () -> Unit, viewModel: RecentlyViewedViewModel = hiltViewModel()) {
+internal fun RecentlyViewedRoute(goBack: () -> Unit, viewModel: RecentlyViewedViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     RecentlyViewedScreen(goBack = goBack, clearAll = viewModel::clear, uiState = uiState)
 }
 
 @Composable
-fun RecentlyViewedScreen(goBack: () -> Unit, clearAll: () -> Unit, uiState: RecentlyViewedUiState) {
+private fun RecentlyViewedScreen(goBack: () -> Unit, clearAll: () -> Unit, uiState: RecentlyViewedUiState) {
     Column(modifier = Modifier.fillMaxSize()) {
         Header(
             title = stringResource(id = R.string.recently_viewed),
@@ -118,7 +118,7 @@ private fun ErrorState(message: String, modifier: Modifier) {
 }
 
 @Composable
-fun Header(
+private fun Header(
     title: String,
     goBack: () -> Unit,
     clearAll: () -> Unit
@@ -166,7 +166,7 @@ fun Header(
 }
 
 @Composable
-fun RecentlyViewedItem(title: String, thumbnailUrl: String, date: String) {
+private fun RecentlyViewedItem(title: String, thumbnailUrl: String, date: String) {
     Spacer(modifier = Modifier.height(10.dp))
     Card(
         colors = CardDefaults.cardColors(

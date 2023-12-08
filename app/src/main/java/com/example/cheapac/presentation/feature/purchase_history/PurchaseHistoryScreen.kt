@@ -15,7 +15,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cheapac.data.local.entity.PurchaseHistoryItem
 
 @Composable
-fun PurchaseHistoryRoute(viewModel: PurchaseHistoryViewModel = hiltViewModel()) {
+internal fun PurchaseHistoryRoute(viewModel: PurchaseHistoryViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     PurchaseHistoryScreen(
         uiState = uiState
@@ -23,7 +23,7 @@ fun PurchaseHistoryRoute(viewModel: PurchaseHistoryViewModel = hiltViewModel()) 
 }
 
 @Composable
-fun PurchaseHistoryScreen(uiState: PurchaseHistoryUiState) {
+private fun PurchaseHistoryScreen(uiState: PurchaseHistoryUiState) {
     uiState.items.data?.let { data ->
         SuccessState(data = data)
     }

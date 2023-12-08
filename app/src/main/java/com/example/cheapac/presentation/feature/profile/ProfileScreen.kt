@@ -45,7 +45,7 @@ internal fun ProfileRoute(
 }
 
 @Composable
-internal fun ProfileScreen(
+private fun ProfileScreen(
     navigateToWishlistScreen: () -> Unit,
     navigateToPurchaseHistoryScreen: () -> Unit,
     navigateToRecentlyViewedScreen: () -> Unit,

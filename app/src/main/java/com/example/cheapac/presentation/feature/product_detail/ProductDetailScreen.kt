@@ -80,7 +80,7 @@ internal fun ProductDetailRoute(
 }
 
 @Composable
-internal fun ProductDetailScreen(
+private fun ProductDetailScreen(
     id: Int?,
     uiState: ProductDetailUiState,
     getProduct: (Int) -> Unit,
@@ -154,7 +154,7 @@ internal fun ProductDetailScreen(
 }
 
 @Composable
-fun LoadingState() {
+private fun LoadingState() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -166,7 +166,7 @@ fun LoadingState() {
 }
 
 @Composable
-fun ErrorState(message: String) {
+private fun ErrorState(message: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -178,7 +178,7 @@ fun ErrorState(message: String) {
 }
 
 @Composable
-fun CollapsingToolbar(
+private fun CollapsingToolbar(
     data: Product,
     goBack: () -> Unit,
     visibilityState: MutableTransitionState<Boolean>,
@@ -339,12 +339,12 @@ private fun Description(
 }
 
 @Composable
-fun PathVisualizer(category: String, brand: String) {
+private fun PathVisualizer(category: String, brand: String) {
     Text(text = "$category > $brand", style = MaterialTheme.typography.titleSmall)
 }
 
 @Composable
-fun BottomBarProductDetail(
+private fun BottomBarProductDetail(
     price: Int,
     discountRate: Int,
     isInStock: Boolean,
