@@ -14,7 +14,6 @@ import com.example.cheapac.presentation.common.TopBar
 import com.example.cheapac.presentation.feature.cart.cartScreen
 import com.example.cheapac.presentation.feature.categories.categoriesScreen
 import com.example.cheapac.presentation.feature.categories.navigateToCategories
-import com.example.cheapac.presentation.navigation.TopLevelDestination
 import com.example.cheapac.presentation.feature.home.homeScreen
 import com.example.cheapac.presentation.feature.product_detail.navigateToProductDetail
 import com.example.cheapac.presentation.feature.product_detail.productDetailScreen
@@ -27,6 +26,7 @@ import com.example.cheapac.presentation.feature.recently_viewed.navigateToRecent
 import com.example.cheapac.presentation.feature.recently_viewed.recentlyViewedScreen
 import com.example.cheapac.presentation.feature.wishlist.navigateToWishlistScreen
 import com.example.cheapac.presentation.feature.wishlist.wishlistScreen
+import com.example.cheapac.presentation.navigation.TopLevelDestination
 
 @Composable
 fun AppContainer(
@@ -34,7 +34,7 @@ fun AppContainer(
     appState: AppState = rememberAppState(windowSizeClass = windowSizeClass)
 ) {
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
     ) {
         Scaffold(
             topBar = {
@@ -51,9 +51,9 @@ fun AppContainer(
                 }
             },
             modifier = Modifier.fillMaxSize()
-        ) { innerPadding ->
+        ) { paddingValues ->
             NavHost(
-                modifier = Modifier.padding(innerPadding),
+                modifier = Modifier.padding(paddingValues),
                 enterTransition = { EnterTransition.None },
                 exitTransition = { ExitTransition.None },
                 navController = appState.navController,

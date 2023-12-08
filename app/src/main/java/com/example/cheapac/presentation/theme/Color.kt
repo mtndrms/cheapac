@@ -2,10 +2,10 @@ package com.example.cheapac.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-val light_primary = Color(0xFF006397)
+val light_primary = Color(0xFF404040)
 val light_onPrimary = Color(0xFFFFFFFF)
-val light_primaryContainer = Color(0xFFCCE5FF)
-val light_onPrimaryContainer = Color(0xFF001D31)
+val light_primaryContainer = Color(0xFFE0E0E0)
+val light_onPrimaryContainer = Color(0xFF050505)
 val light_secondary = Color(0xFF006D37)
 val light_onSecondary = Color(0xFFFFFFFF)
 val light_secondaryContainer = Color(0xFF6BFE9C)
@@ -33,10 +33,10 @@ val light_surfaceTint = Color(0xFF006397)
 val light_outlineVariant = Color(0xFFC2C7CE)
 val light_scrim = Color(0xFF000000)
 
-val dark_primary = Color(0xFF92CCFF)
-val dark_onPrimary = Color(0xFF003351)
-val dark_primaryContainer = Color(0xFF004B73)
-val dark_onPrimaryContainer = Color(0xFFCCE5FF)
+val dark_primary = Color(0xFFC0C0C0)
+val dark_onPrimary = Color(0xFF141414)
+val dark_primaryContainer = Color(0xFF404040)
+val dark_onPrimaryContainer = Color(0xFFF0F0F0)
 val dark_secondary = Color(0xFF4AE183)
 val dark_onSecondary = Color(0xFF003919)
 val dark_secondaryContainer = Color(0xFF005228)
