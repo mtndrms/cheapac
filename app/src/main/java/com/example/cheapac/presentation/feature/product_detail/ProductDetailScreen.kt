@@ -84,7 +84,7 @@ internal fun ProductDetailScreen(
     id: Int?,
     uiState: ProductDetailUiState,
     getProduct: (Int) -> Unit,
-    addToWishlist: (Product, String) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     goBack: () -> Unit,
 ) {
@@ -264,7 +264,7 @@ private fun Description(
     addToWishlistStatus: UiState<Boolean>,
     isWishlisted: Boolean,
     modifier: Modifier,
-    addToWishlist: (Product, String) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit
 ) {
     Box(
@@ -297,7 +297,14 @@ private fun Description(
                             )
                         } ?: run {
                             if (!isWishlisted) {
-                                IconButton(onClick = { addToWishlist(data, "test") }) {
+                                IconButton(onClick = {
+                                    addToWishlist(
+                                        data.id,
+                                        data.title,
+                                        data.thumbnail,
+                                        "test"
+                                    )
+                                }) {
                                     Icon(
                                         imageVector = CheapacIcons.FavoriteOutlined,
                                         contentDescription = "favorite"

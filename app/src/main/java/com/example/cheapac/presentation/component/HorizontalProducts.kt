@@ -26,6 +26,7 @@ import com.example.cheapac.data.UiState
 fun HorizontalProducts(
     products: UiState<List<Product>>,
     navigateToProductDetail: (Int) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit,
     modifier: Modifier
 ) {
     Text(
@@ -59,7 +60,8 @@ fun HorizontalProducts(
                     imageUrl = product.thumbnail,
                     discountRate = product.discountPercentage.toInt(),
                     isInStock = product.stock != 0,
-                    navigateToProductDetail = navigateToProductDetail
+                    navigateToProductDetail = navigateToProductDetail,
+                    addToWishlist = addToWishlist
                 )
 
                 if (index == data.size - 1) {

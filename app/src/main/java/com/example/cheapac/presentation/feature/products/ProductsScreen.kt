@@ -49,6 +49,7 @@ fun ProductsRoute(
         uiState = uiState,
         goBack = goBack,
         navigateToProductDetail = navigateToProductDetail,
+        addToWishlist = viewModel::addToWishlist,
         fetchData = viewModel::getProductsOfCategory,
         category = category,
         title = title
@@ -61,6 +62,7 @@ fun ProductsScreen(
     uiState: ProductsUiState,
     goBack: () -> Unit,
     navigateToProductDetail: (Int) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit,
     fetchData: (String) -> Unit,
     category: String?,
     title: String
@@ -91,7 +93,8 @@ fun ProductsScreen(
                         imageUrl = product.thumbnail,
                         discountRate = product.discountPercentage.toInt(),
                         isInStock = product.stock != 0,
-                        navigateToProductDetail = navigateToProductDetail
+                        navigateToProductDetail = navigateToProductDetail,
+                        addToWishlist = addToWishlist
                     )
                 }
             }

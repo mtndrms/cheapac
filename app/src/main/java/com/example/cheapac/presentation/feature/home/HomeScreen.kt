@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.component.CategoriesCatalog
 import com.example.cheapac.presentation.component.HighlightsCarousel
 import com.example.cheapac.presentation.component.HorizontalProducts
@@ -34,6 +35,7 @@ internal fun HomeRoute(
         navigateToCategories = navigateToCategories,
         navigateToCategory = navigateToCategory,
         navigateToProductDetail = navigateToProductDetail,
+        addToWishlist = viewModel::addToWishlist,
         modifier = modifier
     )
 }
@@ -43,6 +45,7 @@ internal fun HomeScreen(
     navigateToCategories: () -> Unit,
     navigateToCategory: (code: String, title: String) -> Unit,
     navigateToProductDetail: (Int) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
 ) {
@@ -79,6 +82,7 @@ internal fun HomeScreen(
             HorizontalProducts(
                 products = uiState.highlights,
                 navigateToProductDetail = navigateToProductDetail,
+                addToWishlist = addToWishlist,
                 modifier = Modifier
             )
         }

@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
+import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.applyDiscount
 
@@ -48,7 +49,8 @@ fun ProductCard(
     imageUrl: String,
     discountRate: Int,
     isInStock: Boolean = true,
-    navigateToProductDetail: (Int) -> Unit
+    navigateToProductDetail: (Int) -> Unit,
+    addToWishlist: (Int, String, String, String) -> Unit
 ) {
     Surface(
         shadowElevation = 1.dp,
@@ -88,7 +90,7 @@ fun ProductCard(
                 )
 
                 IconButton(
-                    onClick = { },
+                    onClick = { addToWishlist(id, title, imageUrl, "") },
                     modifier = Modifier
                         .padding(5.dp)
                         .align(Alignment.TopEnd)

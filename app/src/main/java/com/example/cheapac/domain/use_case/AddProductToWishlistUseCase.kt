@@ -9,17 +9,10 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class AddProductToWishlistUseCase @Inject constructor(private val wishlistRepository: WishlistRepository) {
-    operator fun invoke(product: Product, note: String): Flow<Resource<Boolean>> = flow {
+    operator fun invoke(product: WishlistItem, note: String): Flow<Resource<Boolean>> = flow {
         try {
             emit(Resource.Loading())
-            wishlistRepository.insert(
-                product = WishlistItem(
-                    product.id,
-                    product.title,
-                    product.thumbnail,
-                    note = note
-                )
-            )
+            wishlistRepository.insert(product = product)
             emit(Resource.Success(data = true))
         } catch (exception: Exception) {
             emit(Resource.Error(message = exception.message ?: ""))
