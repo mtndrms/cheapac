@@ -7,6 +7,7 @@ import com.example.cheapac.data.UiState
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
 import com.example.cheapac.domain.use_case.CheckProductIsWishlistedUseCase
+import com.example.cheapac.domain.use_case.CreateRecentlyViewedProductRecordUseCase
 import com.example.cheapac.domain.use_case.GetProductUseCase
 import com.example.cheapac.domain.use_case.RemoveProductFromWishlistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,7 +24,8 @@ class ProductDetailViewModel @Inject constructor(
     private val getProductUseCase: GetProductUseCase,
     private val addProductToWishlistUseCase: AddProductToWishlistUseCase,
     private val checkProductIsWishlistedUseCase: CheckProductIsWishlistedUseCase,
-    private val removeProductFromWishlistUseCase: RemoveProductFromWishlistUseCase
+    private val removeProductFromWishlistUseCase: RemoveProductFromWishlistUseCase,
+    private val createRecentlyViewedProductRecordUseCase: CreateRecentlyViewedProductRecordUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductDetailUiState())
     val uiState = _uiState.asStateFlow()
@@ -51,6 +53,11 @@ class ProductDetailViewModel @Inject constructor(
                             it.copy(product = UiState(data = data))
                         }
                         checkIfProductWishlisted(data.id)
+                        createRecentlyViewedProductRecord(
+                            id = data.id,
+                            title = data.title,
+                            thumbnailUrl = data.thumbnail
+                        )
                     }
                 }
             }
@@ -110,6 +117,15 @@ class ProductDetailViewModel @Inject constructor(
                     }
                 }
             }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun createRecentlyViewedProductRecord(id: Int, title: String, thumbnailUrl: String) {
+        job = createRecentlyViewedProductRecordUseCase(
+            id = id,
+            title = title,
+            thumbnailUrl = thumbnailUrl
+        ).onEach {
         }.launchIn(viewModelScope)
     }
 }

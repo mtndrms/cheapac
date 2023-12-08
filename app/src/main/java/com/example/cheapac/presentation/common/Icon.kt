@@ -9,6 +9,7 @@ import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
@@ -51,6 +52,7 @@ object CheapacIcons {
     val Delete: ImageVector = Icons.Default.Delete
     val ArrowDropDown: ImageVector = Icons.Default.ArrowDropDown
     val ArrowDropUp: ImageVector = Icons.Default.ArrowDropUp
+    val History: ImageVector = Icons.Default.History
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
     val Laptop: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_laptop)
     val Fragrances: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_fragrances)
@@ -73,7 +75,6 @@ object CheapacIcons {
     val Lighting: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_lighting)
     val RecentlyViewed: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_recently_viewed)
     val Box: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_box)
-    val History: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_history)
     val ProductPackage: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_product_package)
     val Shipment: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_shipment)
     val Refund: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_refund)

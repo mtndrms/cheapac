@@ -10,8 +10,8 @@ fun NavController.navigateToRecentlyViewedScreen(navOptions: NavOptions? = null)
     this.navigate(Destination.RECENTLY_VIEWED.route, navOptions = navOptions)
 }
 
-fun NavGraphBuilder.recentlyViewedScreen() {
+fun NavGraphBuilder.recentlyViewedScreen(goBack: () -> Unit) {
     composable(route = Destination.RECENTLY_VIEWED.route) {
-        RecentlyViewedRoute()
+        RecentlyViewedRoute(goBack = goBack)
     }
 }

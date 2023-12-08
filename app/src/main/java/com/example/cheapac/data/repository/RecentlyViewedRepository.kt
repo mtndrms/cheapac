@@ -8,5 +8,6 @@ class RecentlyViewedRepository @Inject constructor(private val localDataSource: 
     suspend fun getAll(): List<RecentlyViewedItem> = localDataSource.getRecentlyViewedItems()
     suspend fun insert(product: RecentlyViewedItem) = localDataSource.insertRecentlyViewdItem(product = product)
     suspend fun delete(product: RecentlyViewedItem) = localDataSource.deleteRecentlyViewedItem(product = product)
+    suspend fun deleteOneById(id: Int) = localDataSource.deleteRecentlyViewedItemById(id = id)
     suspend fun clear() = localDataSource.clearRecentlyViewedItems()
 }

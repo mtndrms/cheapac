@@ -1,11 +1,6 @@
 package com.example.cheapac.presentation.feature.wishlist
 
 import androidx.compose.animation.animateContentSize
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,7 +22,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,19 +30,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
 import com.example.cheapac.data.local.entity.WishlistItem
 import com.example.cheapac.presentation.common.CheapacIcons
+import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.utils.capitalize
 
 @Composable
@@ -94,7 +89,11 @@ private fun SuccessState(data: List<WishlistItem>) {
                 }
             }
         } else {
-            NothingToListState()
+            NothingToListState(
+                imageVector = CheapacIcons.Favorite,
+                label = stringResource(id = R.string.you_havent_added_anything_to_your_wish_list_yet),
+                contentDescription = stringResource(id = R.string.you_havent_added_anything_to_your_wish_list_yet)
+            )
         }
     }
 }
@@ -150,6 +149,7 @@ fun Header(
                 text = title.capitalize(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
+                fontSize = 20.sp,
                 modifier = Modifier
             )
 
@@ -168,49 +168,6 @@ fun Header(
             modifier = Modifier
                 .fillMaxWidth()
                 .alpha(0.15f)
-        )
-    }
-}
-
-@Composable
-fun NothingToListState() {
-    var rotated by remember { mutableStateOf(false) }
-
-    val infiniteTransition = rememberInfiniteTransition(label = "")
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = keyframes {
-                durationMillis = 5000
-            },
-            repeatMode = RepeatMode.Restart
-        ), label = ""
-    )
-
-    LaunchedEffect(true) {
-        rotated = rotated.not()
-    }
-
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Icon(
-            imageVector = CheapacIcons.Favorite,
-            contentDescription = "favorite",
-            modifier = Modifier
-                .size(200.dp)
-                .alpha(0.1f)
-                .graphicsLayer(rotationY = if (rotated) rotation else 0f)
-        )
-        Spacer(modifier = Modifier.height(10.dp))
-        Text(
-            text = stringResource(R.string.you_havent_added_anything_to_your_wish_list_yet),
-            style = MaterialTheme.typography.titleMedium,
-            textAlign = TextAlign.Center,
-            modifier = Modifier.alpha(0.2f)
         )
     }
 }

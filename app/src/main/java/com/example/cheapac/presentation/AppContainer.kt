@@ -78,7 +78,7 @@ fun AppContainer(
                 productDetailScreen(goBack = appState.navController::popBackStack)
                 cartScreen()
                 wishlistScreen(goBack = appState.navController::popBackStack)
-                recentlyViewedScreen()
+                recentlyViewedScreen(goBack = appState.navController::popBackStack)
                 purchaseHistoryScreen()
             }
         }

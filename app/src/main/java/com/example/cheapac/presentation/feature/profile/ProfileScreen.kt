@@ -87,7 +87,7 @@ internal fun ProfileScreen(
             )
             OptionRow(
                 title = stringResource(id = R.string.purchase_history),
-                iconResId = CheapacIcons.History.id,
+                imageVector = CheapacIcons.History,
                 onClick = { navigateToPurchaseHistoryScreen() }
             )
             OptionRow(

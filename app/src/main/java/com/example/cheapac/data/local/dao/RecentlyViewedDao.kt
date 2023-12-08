@@ -19,6 +19,9 @@ interface RecentlyViewedDao {
     @Delete
     fun deleteOne(product: RecentlyViewedItem)
 
+    @Query("DELETE FROM ${Table.RECENTLY_VIEWED} WHERE id = :id")
+    fun deleteOneById(id: Int): Int
+
     @Query("DELETE FROM ${Table.RECENTLY_VIEWED}")
-    fun clear()
+    fun clear(): Int
 }

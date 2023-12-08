@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cheapac.domain.model.Product
@@ -153,6 +154,7 @@ fun Header(title: String, goBack: () -> Unit) {
                 text = title.capitalize(),
                 textAlign = TextAlign.Center,
                 style = MaterialTheme.typography.titleLarge,
+                fontSize = 20.sp,
                 modifier = Modifier
             )
 

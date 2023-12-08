@@ -46,6 +46,11 @@ class LocalDataSource @Inject constructor(
             database.recentlyViewedDao().deleteOne(product = product)
         }
 
+    suspend fun deleteRecentlyViewedItemById(id: Int) =
+        withContext(Dispatchers.IO) {
+            database.recentlyViewedDao().deleteOneById(id = id)
+        }
+
     suspend fun clearRecentlyViewedItems() =
         withContext(Dispatchers.IO) {
             database.recentlyViewedDao().clear()
