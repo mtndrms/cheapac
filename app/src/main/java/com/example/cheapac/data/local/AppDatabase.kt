@@ -19,7 +19,7 @@ import com.example.cheapac.data.local.entity.WishlistItem
         RecentlyViewedItem::class,
         PurchaseHistoryItem::class
     ],
-    version = 1
+    version = 2
 )
 @TypeConverters(Converters::class)
 abstract class AppDatabase : RoomDatabase() {

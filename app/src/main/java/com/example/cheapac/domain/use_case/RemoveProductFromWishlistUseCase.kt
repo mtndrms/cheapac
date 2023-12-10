@@ -1,5 +1,6 @@
 package com.example.cheapac.domain.use_case
 
+import android.util.Log
 import com.example.cheapac.data.repository.WishlistRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -13,6 +14,5 @@ class RemoveProductFromWishlistUseCase @Inject constructor(private val wishlistR
         } catch (exception: Exception) {
             emit(false)
         }
-
     }
 }

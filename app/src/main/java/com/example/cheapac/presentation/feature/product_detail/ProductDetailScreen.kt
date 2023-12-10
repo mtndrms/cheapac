@@ -1,5 +1,6 @@
 package com.example.cheapac.presentation.feature.product_detail
 
+import android.content.Context
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.scaleIn
@@ -43,6 +44,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.IntSize
@@ -59,6 +61,7 @@ import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.RatingBar
 import com.example.cheapac.utils.applyDiscount
 import com.example.cheapac.utils.capitalize
+import com.example.cheapac.utils.handleShareProductClick
 
 private const val BOTTOM_BAR_HEIGHT = 96
 
@@ -84,7 +87,7 @@ private fun ProductDetailScreen(
     id: Int?,
     uiState: ProductDetailUiState,
     getProduct: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String) -> Unit,
+    addToWishlist: (Int, String, String, String, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     goBack: () -> Unit,
 ) {
@@ -114,7 +117,7 @@ private fun ProductDetailScreen(
             Box(modifier = Modifier.weight(weight = 1f, fill = true)) {
                 Column(modifier = Modifier.fillMaxSize()) {
                     CollapsingToolbar(
-                        data = data,
+                        product = data,
                         goBack = goBack,
                         visibilityState = state,
                         modifier = Modifier
@@ -125,12 +128,13 @@ private fun ProductDetailScreen(
                     )
 
                     Description(
+                        context = LocalContext.current,
                         scrollState = scrollState,
                         addToWishlist = addToWishlist,
                         removeProductFromWishlist = removeProductFromWishlist,
                         addToWishlistStatus = uiState.addToWishlistStatus,
                         isWishlisted = uiState.isWishlisted,
-                        data = data,
+                        product = data,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -179,7 +183,7 @@ private fun ErrorState(message: String) {
 
 @Composable
 private fun CollapsingToolbar(
-    data: Product,
+    product: Product,
     goBack: () -> Unit,
     visibilityState: MutableTransitionState<Boolean>,
     modifier: Modifier
@@ -217,7 +221,7 @@ private fun CollapsingToolbar(
                 .padding(10.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(
-                    if (data.stock != 0) {
+                    if (product.stock != 0) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.error
@@ -226,12 +230,12 @@ private fun CollapsingToolbar(
                 .padding(vertical = 5.dp, horizontal = 10.dp)
         ) {
             Text(
-                text = if (data.stock != 0) {
-                    stringResource(R.string.x_in_stock, data.stock)
+                text = if (product.stock != 0) {
+                    stringResource(R.string.x_in_stock, product.stock)
                 } else {
                     stringResource(id = R.string.out_of_stock)
                 },
-                color = if (data.stock != 0) {
+                color = if (product.stock != 0) {
                     MaterialTheme.colorScheme.onPrimary
                 } else {
                     MaterialTheme.colorScheme.onError
@@ -240,8 +244,8 @@ private fun CollapsingToolbar(
         }
 
         SubcomposeAsyncImage(
-            model = data.thumbnail,
-            contentDescription = data.title,
+            model = product.thumbnail,
+            contentDescription = product.title,
             contentScale = ContentScale.Crop,
             loading = {
                 Column(
@@ -259,12 +263,13 @@ private fun CollapsingToolbar(
 
 @Composable
 private fun Description(
+    context: Context,
     scrollState: ScrollState,
-    data: Product,
+    product: Product,
     addToWishlistStatus: UiState<Boolean>,
     isWishlisted: Boolean,
     modifier: Modifier,
-    addToWishlist: (Int, String, String, String) -> Unit,
+    addToWishlist: (Int, String, String, String, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit
 ) {
     Box(
@@ -284,7 +289,7 @@ private fun Description(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                PathVisualizer(category = betterCategoryTitle(data.category), brand = data.brand)
+                PathVisualizer(category = betterCategoryTitle(product.category), brand = product.brand)
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (addToWishlistStatus.isLoading) {
                         CircularProgressIndicator()
@@ -299,9 +304,10 @@ private fun Description(
                             if (!isWishlisted) {
                                 IconButton(onClick = {
                                     addToWishlist(
-                                        data.id,
-                                        data.title,
-                                        data.thumbnail,
+                                        product.id,
+                                        product.title,
+                                        product.thumbnail,
+                                        product.category,
                                         "test"
                                     )
                                 }) {
@@ -311,7 +317,7 @@ private fun Description(
                                     )
                                 }
                             } else {
-                                IconButton(onClick = { removeProductFromWishlist(data.id) }) {
+                                IconButton(onClick = { removeProductFromWishlist(product.id) }) {
                                     Icon(
                                         imageVector = CheapacIcons.Favorite,
                                         contentDescription = "unfavorite"
@@ -321,7 +327,11 @@ private fun Description(
                         }
                     }
 
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(
+                        onClick = {
+                            handleShareProductClick(context = context, title = product.title)
+                        }
+                    ) {
                         Icon(
                             imageVector = CheapacIcons.Share,
                             contentDescription = "share"
@@ -329,11 +339,11 @@ private fun Description(
                     }
                 }
             }
-            Text(text = data.title, style = MaterialTheme.typography.titleLarge)
+            Text(text = product.title, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(5.dp))
-            RatingBar(rating = data.rating)
+            RatingBar(rating = product.rating)
             Spacer(modifier = Modifier.height(10.dp))
-            Text(text = data.description.capitalize().repeat(10))
+            Text(text = product.description.capitalize().repeat(10))
         }
     }
 }

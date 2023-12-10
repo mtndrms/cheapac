@@ -13,6 +13,9 @@ interface WishlistDao {
     @Query("SELECT * FROM ${Table.WISHLIST}")
     fun getAll(): List<WishlistItem>
 
+    @Query("SELECT id FROM ${Table.WISHLIST} WHERE category = :category")
+    fun getByCategory(category: String): List<Int>
+
     @Query("SELECT EXISTS(SELECT * FROM ${Table.WISHLIST} WHERE id = :id)")
     fun isExists(id: Int): Boolean
 

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -64,11 +65,18 @@ class ProductDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addToWishlist(id: Int, title: String, thumbnailUrl: String, note: String) {
+    fun addToWishlist(
+        id: Int,
+        title: String,
+        thumbnailUrl: String,
+        note: String,
+        category: String
+    ) {
         val wishlistItem = WishlistItem(
             id = id,
             title = title,
             thumbnailUrl = thumbnailUrl,
+            category = category,
             note = note
         )
         job = addProductToWishlistUseCase(product = wishlistItem, note).onEach { result ->
@@ -109,29 +117,17 @@ class ProductDetailViewModel @Inject constructor(
 
     private fun checkIfProductWishlisted(id: Int) {
         job = checkProductIsWishlistedUseCase(id = id).onEach { result ->
-            when (result) {
-                is Resource.Loading,
-                is Resource.Error -> {
-                    _uiState.update {
-                        it.copy(isWishlisted = false)
-                    }
-                }
-
-                is Resource.Success -> {
-                    _uiState.update {
-                        it.copy(isWishlisted = result.data ?: false)
-                    }
-                }
+            _uiState.update {
+                it.copy(isWishlisted = result)
             }
         }.launchIn(viewModelScope)
     }
 
     private fun createRecentlyViewedProductRecord(id: Int, title: String, thumbnailUrl: String) {
-        job = createRecentlyViewedProductRecordUseCase(
+        createRecentlyViewedProductRecordUseCase(
             id = id,
             title = title,
             thumbnailUrl = thumbnailUrl
-        ).onEach {
-        }.launchIn(viewModelScope)
+        ).launchIn(viewModelScope)
     }
 }

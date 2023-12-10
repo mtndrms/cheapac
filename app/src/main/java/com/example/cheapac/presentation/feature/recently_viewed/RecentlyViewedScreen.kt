@@ -1,6 +1,7 @@
 package com.example.cheapac.presentation.feature.recently_viewed
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,24 +11,33 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedButton
+import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -40,17 +50,30 @@ import com.example.cheapac.R
 import com.example.cheapac.data.local.entity.RecentlyViewedItem
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.NothingToListState
+import com.example.cheapac.utils.DateTimeUtils
 import com.example.cheapac.utils.capitalize
+import com.example.cheapac.utils.handleShareProductClick
 
 @Composable
-internal fun RecentlyViewedRoute(goBack: () -> Unit, viewModel: RecentlyViewedViewModel = hiltViewModel()) {
+internal fun RecentlyViewedRoute(
+    goBack: () -> Unit,
+    viewModel: RecentlyViewedViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     RecentlyViewedScreen(goBack = goBack, clearAll = viewModel::clear, uiState = uiState)
 }
 
 @Composable
-private fun RecentlyViewedScreen(goBack: () -> Unit, clearAll: () -> Unit, uiState: RecentlyViewedUiState) {
-    Column(modifier = Modifier.fillMaxSize()) {
+private fun RecentlyViewedScreen(
+    goBack: () -> Unit,
+    clearAll: () -> Unit,
+    uiState: RecentlyViewedUiState
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Header(
             title = stringResource(id = R.string.recently_viewed),
             goBack = goBack,
@@ -165,23 +188,28 @@ private fun Header(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RecentlyViewedItem(title: String, thumbnailUrl: String, date: String) {
+    var isExpanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
+
     Spacer(modifier = Modifier.height(10.dp))
-    Card(
+    ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
-            .height(100.dp)
-            .padding(horizontal = 10.dp)
+            .height(if (!isExpanded) 100.dp else 125.dp)
+            .padding(horizontal = 10.dp),
+        onClick = {
+            isExpanded = isExpanded.not()
+        }
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
         ) {
             SubcomposeAsyncImage(
                 model = thumbnailUrl,
@@ -197,12 +225,17 @@ private fun RecentlyViewedItem(title: String, thumbnailUrl: String, date: String
                     }
                 },
                 modifier = Modifier
-                    .padding(horizontal = 10.dp)
-                    .size(75.dp)
-                    .clip(shape = CircleShape)
+                    .animateContentSize()
+                    .size(if (!isExpanded) 100.dp else 125.dp)
             )
-
-            Column(modifier = Modifier.weight(1f)) {
+            Spacer(modifier = Modifier.width(10.dp))
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 12.5.dp),
+                verticalArrangement = Arrangement.Center
+            ) {
+                Spacer(modifier = Modifier.height(5.dp))
                 Text(
                     text = title,
                     style = MaterialTheme.typography.titleSmall,
@@ -211,11 +244,23 @@ private fun RecentlyViewedItem(title: String, thumbnailUrl: String, date: String
                 )
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(
-                    text = date,
+                    text = DateTimeUtils.convertStringToDate(input = date),
                     style = MaterialTheme.typography.titleSmall,
                     overflow = TextOverflow.Ellipsis,
                     maxLines = 2
                 )
+
+                if (isExpanded) {
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Button(
+                        onClick = { handleShareProductClick(context = context, title = title) },
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(end = 12.5.dp)
+                    ) {
+                        Text(text = stringResource(id = R.string.share))
+                    }
+                }
             }
         }
     }

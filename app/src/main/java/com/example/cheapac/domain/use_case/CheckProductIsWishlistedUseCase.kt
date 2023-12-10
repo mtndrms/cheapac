@@ -7,13 +7,13 @@ import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class CheckProductIsWishlistedUseCase @Inject constructor(private val wishlistRepository: WishlistRepository) {
-    operator fun invoke(id: Int): Flow<Resource<Boolean>> = flow {
+    operator fun invoke(id: Int): Flow<Boolean> = flow {
         try {
-            emit(Resource.Loading())
+            emit(false)
             val isExists = wishlistRepository.isExists(id = id)
-            emit(Resource.Success(data = isExists))
+            emit(isExists)
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(false)
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cheapac.presentation.feature.products
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,7 +51,9 @@ internal fun ProductsRoute(
         goBack = goBack,
         navigateToProductDetail = navigateToProductDetail,
         addToWishlist = viewModel::addToWishlist,
-        fetchData = viewModel::getProductsOfCategory,
+        removeProductFromWishlist = viewModel::removeProductFromWishlist,
+        getWishlistByCategory = viewModel::getWishlistByCategory,
+        getProductsOfCategory = viewModel::getProductsOfCategory,
         category = category,
         title = title
     )
@@ -62,26 +65,35 @@ private fun ProductsScreen(
     uiState: ProductsUiState,
     goBack: () -> Unit,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String) -> Unit,
-    fetchData: (String) -> Unit,
+    addToWishlist: (Int, String, String, String, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit,
+    getWishlistByCategory: (String) -> Unit,
+    getProductsOfCategory: (String) -> Unit,
     category: String?,
     title: String
 ) {
     category?.let {
         LaunchedEffect(true) {
             if (uiState.products.data == null) {
-                fetchData(it)
+                getProductsOfCategory(it)
             }
+
+            getWishlistByCategory(it)
         }
     }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(modifier = Modifier
+        .fillMaxSize()
+        .background(MaterialTheme.colorScheme.background)
+    ) {
         Header(title = title, goBack = goBack)
         uiState.products.data?.let { data ->
             SuccesState(
-                data = data,
+                products = data,
+                wishlistedProductIDs = uiState.wishlistedProductIDs,
                 navigateToProductDetail = navigateToProductDetail,
-                addToWishlist = addToWishlist
+                addToWishlist = addToWishlist,
+                removeProductFromWishlist = removeProductFromWishlist
             )
         }
 
@@ -97,9 +109,11 @@ private fun ProductsScreen(
 
 @Composable
 private fun SuccesState(
-    data: List<Product>,
+    products: List<Product>,
+    wishlistedProductIDs: List<Int>,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String) -> Unit
+    addToWishlist: (Int, String, String, String, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -108,16 +122,21 @@ private fun SuccesState(
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier.fillMaxSize()
     ) {
-        items(data) { product: Product ->
+        items(products) { product: Product ->
+            val isInWishlist = wishlistedProductIDs.contains(product.id)
+
             ProductCard(
                 id = product.id,
                 title = product.title,
                 price = product.price,
                 imageUrl = product.thumbnail,
+                category = product.category,
                 discountRate = product.discountPercentage.toInt(),
                 isInStock = product.stock != 0,
+                isWishlisted = isInWishlist,
                 navigateToProductDetail = navigateToProductDetail,
-                addToWishlist = addToWishlist
+                addToWishlist = addToWishlist,
+                removeProductFromWishlist = removeProductFromWishlist
             )
         }
     }

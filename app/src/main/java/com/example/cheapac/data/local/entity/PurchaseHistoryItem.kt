@@ -3,11 +3,12 @@ package com.example.cheapac.data.local.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.example.cheapac.data.local.Table
 import com.example.cheapac.data.local.entity.superclass.Product
 import java.util.Calendar
 import java.util.Date
 
-@Entity(tableName = "purchase_history")
+@Entity(tableName = Table.PURCHASE_HISTORY)
 data class PurchaseHistoryItem(
     @PrimaryKey override val id: Int,
     @ColumnInfo(name = "title") override val title: String,

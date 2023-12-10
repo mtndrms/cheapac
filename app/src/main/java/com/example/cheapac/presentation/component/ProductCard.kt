@@ -1,7 +1,8 @@
 package com.example.cheapac.presentation.component
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,18 +19,27 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
@@ -37,28 +47,43 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
-import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.applyDiscount
+import com.example.cheapac.utils.handleShareProductClick
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductCard(
     id: Int,
     title: String,
     price: Int,
     imageUrl: String,
+    category: String,
     discountRate: Int,
-    isInStock: Boolean = true,
+    isInStock: Boolean,
+    isWishlisted: Boolean,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String) -> Unit
+    addToWishlist: (Int, String, String, String, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit
 ) {
+    val context = LocalContext.current
+    var expanded by remember { mutableStateOf(false) }
+    val haptics = LocalHapticFeedback.current
+    var isWishlistedState by remember { mutableStateOf(isWishlisted) }
+
     Surface(
         shadowElevation = 1.dp,
         shape = RoundedCornerShape(5.dp),
         modifier = Modifier
-            .clickable {
-                navigateToProductDetail(id)
-            }
+            .combinedClickable(
+                onClick = {
+                    navigateToProductDetail(id)
+                },
+                onLongClick = {
+                    haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                    expanded = expanded.not()
+                }
+            )
     ) {
         Column(
             modifier = Modifier
@@ -66,6 +91,25 @@ fun ProductCard(
                 .height(300.dp)
                 .background(color = MaterialTheme.colorScheme.primaryContainer)
         ) {
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                DropdownMenuItem(
+                    text = { Text(stringResource(R.string.share)) },
+                    onClick = {
+                        handleShareProductClick(context = context, title = title)
+                        expanded = false
+                    },
+                    leadingIcon = {
+                        Icon(
+                            CheapacIcons.Share,
+                            contentDescription = null
+                        )
+                    }
+                )
+            }
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -89,22 +133,46 @@ fun ProductCard(
                         .fillMaxSize()
                 )
 
-                IconButton(
-                    onClick = { addToWishlist(id, title, imageUrl, "") },
-                    modifier = Modifier
-                        .padding(5.dp)
-                        .align(Alignment.TopEnd)
-                        .alpha(0.8f)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
-                        .size(36.dp)
-                ) {
-                    Icon(
-                        imageVector = CheapacIcons.FavoriteOutlined,
-                        contentDescription = "favorite",
-                        tint = Color.White,
-                        modifier = Modifier.padding(3.dp)
-                    )
+                if (!isWishlistedState) {
+                    IconButton(
+                        onClick = {
+                            isWishlistedState = true
+                            addToWishlist(id, title, imageUrl, category, "test")
+                        },
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .align(Alignment.TopEnd)
+                            .alpha(0.8f)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .size(36.dp)
+                    ) {
+                        Icon(
+                            imageVector = CheapacIcons.FavoriteOutlined,
+                            contentDescription = "favorite",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = {
+                            isWishlistedState = false
+                            removeProductFromWishlist(id)
+                        },
+                        modifier = Modifier
+                            .padding(3.dp)
+                            .align(Alignment.TopEnd)
+                            .alpha(0.8f)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.primary)
+                            .size(36.dp)
+                    ) {
+                        Icon(
+                            imageVector = CheapacIcons.Favorite,
+                            contentDescription = "unfavorite",
+                            tint = MaterialTheme.colorScheme.onPrimary
+                        )
+                    }
                 }
             }
 

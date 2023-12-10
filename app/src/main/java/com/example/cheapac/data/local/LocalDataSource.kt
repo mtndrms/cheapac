@@ -61,6 +61,11 @@ class LocalDataSource @Inject constructor(
             database.wishlistDao().getAll()
         }
 
+    suspend fun getWishlistByCategory(category: String) =
+        withContext(Dispatchers.IO) {
+            database.wishlistDao().getByCategory(category = category)
+        }
+
     suspend fun isWishlistItemExists(id: Int) =
         withContext(Dispatchers.IO) {
             database.wishlistDao().isExists(id = id)

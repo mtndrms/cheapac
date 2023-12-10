@@ -21,12 +21,15 @@ import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.data.UiState
+import com.example.cheapac.data.local.entity.WishlistItem
 
 @Composable
 fun HorizontalProducts(
     products: UiState<List<Product>>,
+    wishlistedProducts: List<WishlistItem>,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String) -> Unit,
+    addToWishlist: (Int, String, String, String, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit,
     modifier: Modifier
 ) {
     Text(
@@ -53,15 +56,19 @@ fun HorizontalProducts(
                     Spacer(modifier = Modifier.width(20.dp))
                 }
 
+                val isInWishlist = wishlistedProducts.find { it.id == product.id} != null
                 ProductCard(
                     id = product.id,
                     title = product.title,
                     price = product.price,
                     imageUrl = product.thumbnail,
+                    category = product.category,
                     discountRate = product.discountPercentage.toInt(),
                     isInStock = product.stock != 0,
+                    isWishlisted = isInWishlist,
                     navigateToProductDetail = navigateToProductDetail,
-                    addToWishlist = addToWishlist
+                    addToWishlist = addToWishlist,
+                    removeProductFromWishlist = removeProductFromWishlist
                 )
 
                 if (index == data.size - 1) {

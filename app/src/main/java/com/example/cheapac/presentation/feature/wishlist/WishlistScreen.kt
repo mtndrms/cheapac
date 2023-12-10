@@ -1,6 +1,7 @@
 package com.example.cheapac.presentation.feature.wishlist
 
 import androidx.compose.animation.animateContentSize
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,17 +11,21 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Card
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,8 +34,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -45,6 +50,7 @@ import com.example.cheapac.data.local.entity.WishlistItem
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.utils.capitalize
+import com.example.cheapac.utils.handleShareProductClick
 
 @Composable
 internal fun WishlistRoute(goBack: () -> Unit, viewModel: WishlistViewModel = hiltViewModel()) {
@@ -58,7 +64,11 @@ internal fun WishlistRoute(goBack: () -> Unit, viewModel: WishlistViewModel = hi
 
 @Composable
 private fun WishlistScreen(uiState: WishlistUiState, goBack: () -> Unit, clearAll: () -> Unit) {
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
         Header(title = stringResource(id = R.string.wishlist), goBack = goBack, clearAll = clearAll)
         uiState.items.data?.let { data ->
             SuccessState(data = data)
@@ -118,6 +128,7 @@ private fun ErrorState(message: String, modifier: Modifier) {
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .then(modifier)
     ) {
         Text(text = message, color = MaterialTheme.colorScheme.error)
@@ -175,16 +186,17 @@ private fun Header(
 @Composable
 private fun WishlistItem(title: String, thumbnailUrl: String, note: String, date: String) {
     var isExpanded by remember { mutableStateOf(false) }
+    val context = LocalContext.current
 
     Spacer(modifier = Modifier.height(10.dp))
-    Card(
+    ElevatedCard(
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant,
         ),
         modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
-            .height(if (!isExpanded) 100.dp else 200.dp)
+            .height(if (!isExpanded) 100.dp else 255.dp)
             .padding(horizontal = 10.dp)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -208,10 +220,7 @@ private fun WishlistItem(title: String, thumbnailUrl: String, note: String, date
                             CircularProgressIndicator()
                         }
                     },
-                    modifier = Modifier
-                        .padding(horizontal = 10.dp)
-                        .size(75.dp)
-                        .clip(shape = CircleShape)
+                    modifier = Modifier.size(100.dp)
                 )
 
                 Column(
@@ -255,12 +264,27 @@ private fun WishlistItem(title: String, thumbnailUrl: String, note: String, date
                 }
             }
 
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = note.repeat(100),
                 overflow = TextOverflow.Ellipsis,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(horizontal = 10.dp)
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier
+                    .padding(horizontal = 10.dp)
+                    .height(90.dp)
             )
+
+            Row(modifier = Modifier.align(Alignment.End)) {
+                TextButton(onClick = { }) {
+                    Text(text = stringResource(R.string.remove))
+                }
+                Spacer(modifier = Modifier.width(5.dp))
+                Button(onClick = { handleShareProductClick(context = context, title = title) }) {
+                    Text(text = stringResource(id = R.string.share))
+                }
+                Spacer(modifier = Modifier.width(10.dp))
+            }
+            Spacer(modifier = Modifier.height(10.dp))
         }
     }
 }

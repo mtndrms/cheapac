@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -35,7 +36,8 @@ internal fun HomeRoute(
         navigateToCategories = navigateToCategories,
         navigateToCategory = navigateToCategory,
         navigateToProductDetail = navigateToProductDetail,
-        addToWishlist = viewModel::addToWishlist,
+        addToWishlist = viewModel::addProductToWishlist,
+        removeProductFromWishlist = viewModel::removeProductFromWishlist,
         modifier = modifier
     )
 }
@@ -45,7 +47,8 @@ private fun HomeScreen(
     navigateToCategories: () -> Unit,
     navigateToCategory: (code: String, title: String) -> Unit,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String) -> Unit,
+    addToWishlist: (Int, String, String, String, String) -> Unit,
+    removeProductFromWishlist: (Int) -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
 ) {
@@ -82,8 +85,10 @@ private fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             HorizontalProducts(
                 products = uiState.highlights,
+                wishlistedProducts = uiState.wishlistedProducts,
                 navigateToProductDetail = navigateToProductDetail,
                 addToWishlist = addToWishlist,
+                removeProductFromWishlist = removeProductFromWishlist,
                 modifier = Modifier
             )
         }
