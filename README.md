@@ -19,3 +19,8 @@ No screenshots available currently.
 
 The **Cheapac** app follows the
 [official architecture guidance](https://developer.android.com/topic/architecture) from Android.
+
+## Licence
+
+See the
+[license](LICENSE) for more information.
