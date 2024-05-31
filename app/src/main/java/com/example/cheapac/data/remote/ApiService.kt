@@ -1,5 +1,6 @@
 package com.example.cheapac.data.remote
 
+import com.example.cheapac.data.remote.dto.CategoryDto
 import com.example.cheapac.data.remote.dto.GetAllProductsResponse
 import com.example.cheapac.data.remote.dto.product.ProductDto
 import retrofit2.http.GET
@@ -19,7 +20,7 @@ interface ApiService {
     suspend fun getOneProductById(@Path(value = "id") id: Int): ProductDto
 
     @GET(value = "$endpoint/categories")
-    suspend fun getAllCategories(): List<String>
+    suspend fun getAllCategories(): List<CategoryDto>
 
     @GET(value = "$endpoint/category/{category}")
     suspend fun getProductsOfCategory(

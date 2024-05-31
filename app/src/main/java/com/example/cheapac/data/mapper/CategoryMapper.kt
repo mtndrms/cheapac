@@ -1,15 +1,20 @@
 package com.example.cheapac.data.mapper
 
+import com.example.cheapac.data.remote.dto.CategoryDto
 import com.example.cheapac.domain.model.Category
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.capitalize
 
-fun stringtoCategory(category: String): Category {
+fun CategoryDto.toCategory(): Category {
     return Category(
-        code = category,
-        title = betterCategoryTitle(category),
-        iconId = pickCategoryIcon(category)
+        code = slug,
+        title = name,
+        iconId = pickCategoryIcon(slug)
     )
+}
+
+fun List<CategoryDto>.toCategoryList(): List<Category> {
+    return this.map { it.toCategory() }
 }
 
 fun betterCategoryTitle(category: String): String {

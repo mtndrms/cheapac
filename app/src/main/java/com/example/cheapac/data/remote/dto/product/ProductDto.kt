@@ -5,7 +5,7 @@ data class ProductDto(
     val id: Int,
     val title: String,
     val description: String,
-    val price: Int,
+    val price: Float,
     val discountPercentage: Float,
     val rating: Float,
     val stock: Int,

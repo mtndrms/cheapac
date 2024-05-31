@@ -1,5 +1,6 @@
 package com.example.cheapac.data.remote
 
+import com.example.cheapac.data.remote.dto.CategoryDto
 import com.example.cheapac.data.remote.dto.GetAllProductsResponse
 import com.example.cheapac.data.remote.dto.product.ProductDto
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +20,7 @@ class RemoteDataSource @Inject constructor(
             api.getOneProductById(id)
         }
 
-    suspend fun getAllCategories(): List<String> =
+    suspend fun getAllCategories(): List<CategoryDto> =
         withContext(Dispatchers.IO) {
             api.getAllCategories()
         }
