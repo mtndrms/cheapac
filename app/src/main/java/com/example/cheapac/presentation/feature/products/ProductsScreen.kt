@@ -45,6 +45,7 @@ internal fun ProductsRoute(
     viewModel: ProductsViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     ProductsScreen(
         modifier = modifier,
         uiState = uiState,
@@ -52,6 +53,7 @@ internal fun ProductsRoute(
         navigateToProductDetail = navigateToProductDetail,
         addToWishlist = viewModel::addToWishlist,
         removeProductFromWishlist = viewModel::removeProductFromWishlist,
+        addToCart = viewModel::addToCart,
         getWishlistByCategory = viewModel::getWishlistByCategory,
         getProductsOfCategory = viewModel::getProductsOfCategory,
         category = category,
@@ -65,8 +67,9 @@ private fun ProductsScreen(
     uiState: ProductsUiState,
     goBack: () -> Unit,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String, String) -> Unit,
+    addToWishlist: (Product, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
+    addToCart: (Product) -> Unit,
     getWishlistByCategory: (String) -> Unit,
     getProductsOfCategory: (String) -> Unit,
     category: String?,
@@ -93,7 +96,8 @@ private fun ProductsScreen(
                 wishlistedProductIDs = uiState.wishlistedProductIDs,
                 navigateToProductDetail = navigateToProductDetail,
                 addToWishlist = addToWishlist,
-                removeProductFromWishlist = removeProductFromWishlist
+                removeProductFromWishlist = removeProductFromWishlist,
+                addToCart = addToCart,
             )
         }
 
@@ -112,8 +116,9 @@ private fun SuccesState(
     products: List<Product>,
     wishlistedProductIDs: List<Int>,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String, String) -> Unit,
+    addToWishlist: (Product, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
+    addToCart: (Product) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
@@ -126,17 +131,14 @@ private fun SuccesState(
             val isInWishlist = wishlistedProductIDs.contains(product.id)
 
             ProductCard(
-                id = product.id,
-                title = product.title,
-                price = product.price,
-                imageUrl = product.thumbnail,
-                category = product.category,
+                product = product,
                 discountRate = product.discountPercentage.toInt(),
                 isInStock = product.stock != 0,
                 isWishlisted = isInWishlist,
                 navigateToProductDetail = navigateToProductDetail,
                 addToWishlist = addToWishlist,
-                removeProductFromWishlist = removeProductFromWishlist
+                removeProductFromWishlist = removeProductFromWishlist,
+                addToCart = addToCart,
             )
         }
     }

@@ -47,6 +47,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
+import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.applyDiscount
 import com.example.cheapac.utils.handleShareProductClick
@@ -54,16 +55,13 @@ import com.example.cheapac.utils.handleShareProductClick
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductCard(
-    id: Int,
-    title: String,
-    price: Int,
-    imageUrl: String,
-    category: String,
+    product: Product,
     discountRate: Int,
     isInStock: Boolean,
     isWishlisted: Boolean,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String, String) -> Unit,
+    addToWishlist: (Product, String) -> Unit,
+    addToCart: (Product) -> Unit,
     removeProductFromWishlist: (Int) -> Unit
 ) {
     val context = LocalContext.current
@@ -77,7 +75,7 @@ fun ProductCard(
         modifier = Modifier
             .combinedClickable(
                 onClick = {
-                    navigateToProductDetail(id)
+                    navigateToProductDetail(product.id)
                 },
                 onLongClick = {
                     haptics.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -98,7 +96,7 @@ fun ProductCard(
                 DropdownMenuItem(
                     text = { Text(stringResource(R.string.share)) },
                     onClick = {
-                        handleShareProductClick(context = context, title = title)
+                        handleShareProductClick(context = context, title = product.title)
                         expanded = false
                     },
                     leadingIcon = {
@@ -117,8 +115,8 @@ fun ProductCard(
                     .padding(horizontal = 10.dp, vertical = 10.dp)
             ) {
                 SubcomposeAsyncImage(
-                    model = imageUrl,
-                    contentDescription = title,
+                    model = product.thumbnail,
+                    contentDescription = product.title,
                     contentScale = ContentScale.FillBounds,
                     loading = {
                         Column(
@@ -137,7 +135,7 @@ fun ProductCard(
                     IconButton(
                         onClick = {
                             isWishlistedState = true
-                            addToWishlist(id, title, imageUrl, category, "test")
+                            addToWishlist(product, "test")
                         },
                         modifier = Modifier
                             .padding(3.dp)
@@ -157,7 +155,7 @@ fun ProductCard(
                     IconButton(
                         onClick = {
                             isWishlistedState = false
-                            removeProductFromWishlist(id)
+                            removeProductFromWishlist(product.id)
                         },
                         modifier = Modifier
                             .padding(3.dp)
@@ -189,7 +187,7 @@ fun ProductCard(
                         .padding(start = 15.dp)
                 ) {
                     Text(
-                        text = title,
+                        text = product.title,
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                         style = MaterialTheme.typography.titleSmall,
@@ -199,7 +197,7 @@ fun ProductCard(
                     Spacer(modifier = Modifier.height(5.dp))
                     Row {
                         Text(
-                            text = "$$price",
+                            text = "$${product.price}",
                             textDecoration = if (discountRate > 0) TextDecoration.LineThrough else TextDecoration.None,
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = if (discountRate > 0) 16.sp else 18.sp
@@ -222,7 +220,7 @@ fun ProductCard(
 
                     if (discountRate > 0) {
                         Text(
-                            text = "$${price.applyDiscount(discountRate).toInt()}",
+                            text = "$${product.price.applyDiscount(discountRate).toInt()}",
                             style = MaterialTheme.typography.labelSmall,
                             fontSize = 18.sp
                         )
@@ -230,7 +228,7 @@ fun ProductCard(
                 }
 
                 Button(
-                    onClick = {},
+                    onClick = { addToCart(product) },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = if (isInStock) {
                             MaterialTheme.colorScheme.primary

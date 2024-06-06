@@ -31,6 +31,16 @@ class LocalDataSource @Inject constructor(
             database.cartDao().clear()
         }
 
+    suspend fun incrementQuantity(cartItem: CartItem) =
+        withContext(Dispatchers.IO) {
+            database.cartDao().incrementQuantity(cartItem = cartItem)
+        }
+
+    suspend fun decrementQuantity(cartItem: CartItem) =
+        withContext(Dispatchers.IO) {
+            database.cartDao().decrementQuantity(cartItem = cartItem)
+        }
+
     suspend fun getRecentlyViewedItems() =
         withContext(Dispatchers.IO) {
             database.recentlyViewedDao().getAll()

@@ -10,8 +10,8 @@ fun NavController.navigateToCartScreen(navOptions: NavOptions? = null) {
     this.navigate(Destination.CART.route, navOptions = navOptions)
 }
 
-fun NavGraphBuilder.cartScreen() {
+fun NavGraphBuilder.cartScreen(goBack: () -> Unit) {
     composable(route = Destination.CART.route) {
-        CartRoute()
+        CartRoute(goBack = goBack)
     }
 }

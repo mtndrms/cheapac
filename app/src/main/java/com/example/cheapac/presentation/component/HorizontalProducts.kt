@@ -28,7 +28,8 @@ fun HorizontalProducts(
     products: UiState<List<Product>>,
     wishlistedProducts: List<WishlistItem>,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String, String) -> Unit,
+    addToWishlist: (Product, String) -> Unit,
+    addToCart: (Product) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     modifier: Modifier
 ) {
@@ -58,16 +59,13 @@ fun HorizontalProducts(
 
                 val isInWishlist = wishlistedProducts.find { it.id == product.id} != null
                 ProductCard(
-                    id = product.id,
-                    title = product.title,
-                    price = product.price,
-                    imageUrl = product.thumbnail,
-                    category = product.category,
+                    product = product,
                     discountRate = product.discountPercentage.toInt(),
                     isInStock = product.stock != 0,
                     isWishlisted = isInWishlist,
                     navigateToProductDetail = navigateToProductDetail,
                     addToWishlist = addToWishlist,
+                    addToCart = addToCart,
                     removeProductFromWishlist = removeProductFromWishlist
                 )
 

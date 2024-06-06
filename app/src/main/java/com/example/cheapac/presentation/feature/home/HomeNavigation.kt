@@ -13,13 +13,17 @@ fun NavController.navigateToHome(navOptions: NavOptions? = null) {
 fun NavGraphBuilder.homeScreen(
     navigateToCategories: () -> Unit,
     navigateToCategory: (code: String, title: String) -> Unit,
-    navigateToProductDetail: (Int) -> Unit
+    navigateToProductDetail: (Int) -> Unit,
+    navigateToProfile: (TopLevelDestination) -> Unit,
+    navigateToCartScreen: () -> Unit,
 ) {
     composable(route = TopLevelDestination.HOME.route) {
         HomeRoute(
             navigateToCategories = navigateToCategories,
             navigateToCategory = navigateToCategory,
-            navigateToProductDetail = navigateToProductDetail
+            navigateToProductDetail = navigateToProductDetail,
+            navigateToProfile = navigateToProfile,
+            navigateToCartScreen = navigateToCartScreen,
         )
     }
 }

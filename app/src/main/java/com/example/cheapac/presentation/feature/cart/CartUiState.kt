@@ -4,5 +4,8 @@ import com.example.cheapac.data.UiState
 import com.example.cheapac.data.local.entity.CartItem
 
 data class CartUiState(
-    val cart: UiState<CartItem> = UiState(isLoading = true)
-)
+    val cart: UiState<List<CartItem>> = UiState(isLoading = true),
+) {
+    val total: Int
+        get() = cart.data?.sumOf { it.price * it.quantity } ?: 0
+}

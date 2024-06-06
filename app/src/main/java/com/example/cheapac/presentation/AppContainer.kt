@@ -12,9 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import com.example.cheapac.presentation.common.TopBar
 import com.example.cheapac.presentation.feature.cart.cartScreen
+import com.example.cheapac.presentation.feature.cart.navigateToCartScreen
 import com.example.cheapac.presentation.feature.categories.categoriesScreen
 import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.feature.home.homeScreen
+import com.example.cheapac.presentation.feature.home.navigateToHome
 import com.example.cheapac.presentation.feature.product_detail.navigateToProductDetail
 import com.example.cheapac.presentation.feature.product_detail.productDetailScreen
 import com.example.cheapac.presentation.feature.products.navigateToProductList
@@ -36,22 +38,7 @@ fun AppContainer(
     Surface(
         modifier = Modifier
     ) {
-        Scaffold(
-            topBar = {
-                if (appState.shouldShowTopBar) {
-                    TopBar(
-                        currentScreenTitle = appState.currentDestinationTitle,
-                        navigateToProfile = {
-                            appState.navigateToTopLevelDestination(
-                                TopLevelDestination.PROFILE
-                            )
-                        },
-                        onTitleClick = { appState.navigateToTopLevelDestination(TopLevelDestination.HOME) }
-                    )
-                }
-            },
-            modifier = Modifier.fillMaxSize()
-        ) { paddingValues ->
+        Scaffold(modifier = Modifier.fillMaxSize()) { paddingValues ->
             NavHost(
                 modifier = Modifier.padding(paddingValues),
                 enterTransition = { EnterTransition.None },
@@ -62,9 +49,14 @@ fun AppContainer(
                 homeScreen(
                     navigateToCategories = appState.navController::navigateToCategories,
                     navigateToCategory = appState.navController::navigateToProductList,
-                    navigateToProductDetail = appState.navController::navigateToProductDetail
+                    navigateToProductDetail = appState.navController::navigateToProductDetail,
+                    navigateToProfile = appState::navigateToTopLevelDestination,
+                    navigateToCartScreen = appState.navController::navigateToCartScreen
                 )
-                categoriesScreen(navigateToCategory = appState.navController::navigateToProductList)
+                categoriesScreen(
+                    goBack = appState.navController::popBackStack,
+                    navigateToCategory = appState.navController::navigateToProductList
+                )
                 profileScreen(
                     navigateToWishlistScreen = appState.navController::navigateToWishlistScreen,
                     navigateToPurchaseHistoryScreen = appState.navController::navigateToPurchaseHistoryScreen,
@@ -76,7 +68,7 @@ fun AppContainer(
                     goBack = appState.navController::popBackStack
                 )
                 productDetailScreen(goBack = appState.navController::popBackStack)
-                cartScreen()
+                cartScreen(goBack = appState.navController::popBackStack)
                 wishlistScreen(goBack = appState.navController::popBackStack)
                 recentlyViewedScreen(goBack = appState.navController::popBackStack)
                 purchaseHistoryScreen()

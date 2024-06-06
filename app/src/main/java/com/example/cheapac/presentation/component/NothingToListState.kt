@@ -35,7 +35,6 @@ fun NothingToListState(
     imageVector: ImageVector? = null,
     @DrawableRes iconResId: Int? = null,
     label: String,
-    contentDescription: String,
     enableRotation: Boolean = false
 ) {
     var rotated by remember { mutableStateOf(false) }
@@ -66,7 +65,7 @@ fun NothingToListState(
         imageVector?.let {
             Icon(
                 imageVector = it,
-                contentDescription = contentDescription,
+                contentDescription = label,
                 modifier = Modifier
                     .size(200.dp)
                     .alpha(0.1f)
@@ -77,7 +76,7 @@ fun NothingToListState(
         iconResId?.let { resId ->
             Icon(
                 painter = painterResource(id = resId),
-                contentDescription = contentDescription,
+                contentDescription = label,
                 modifier = Modifier
                     .size(200.dp)
                     .alpha(0.1f)

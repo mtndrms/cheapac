@@ -102,7 +102,6 @@ private fun SuccessState(data: List<WishlistItem>) {
             NothingToListState(
                 imageVector = CheapacIcons.Favorite,
                 label = stringResource(id = R.string.you_havent_added_anything_to_your_wish_list_yet),
-                contentDescription = stringResource(id = R.string.you_havent_added_anything_to_your_wish_list_yet)
             )
         }
     }

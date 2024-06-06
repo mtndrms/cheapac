@@ -1,14 +1,17 @@
 package com.example.cheapac.presentation.feature.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
-import com.example.cheapac.data.local.entity.WishlistItem
+import com.example.cheapac.data.mapper.toCartItem
+import com.example.cheapac.data.mapper.toWishlistItem
+import com.example.cheapac.domain.model.Product
+import com.example.cheapac.domain.use_case.AddProductToCartUseCase
 import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
 import com.example.cheapac.domain.use_case.GetAllCategoriesUseCase
 import com.example.cheapac.domain.use_case.GetAllProductsUseCase
+import com.example.cheapac.domain.use_case.GetCartUseCase
 import com.example.cheapac.domain.use_case.GetHighlightsUseCase
 import com.example.cheapac.domain.use_case.GetWishlistUseCase
 import com.example.cheapac.domain.use_case.RemoveProductFromWishlistUseCase
@@ -16,11 +19,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.processNextEventInCurrentThread
+import java.security.PrivilegedExceptionAction
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,7 +33,9 @@ class HomeViewModel @Inject constructor(
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase,
     private val removeProductFromWishlistUseCase: RemoveProductFromWishlistUseCase,
     private val addProductToWishlistUseCase: AddProductToWishlistUseCase,
-    private val getWishlistUseCase: GetWishlistUseCase
+    private val getWishlistUseCase: GetWishlistUseCase,
+    private val addProductToCartUseCase: AddProductToCartUseCase,
+    private val getCartUseCase: GetCartUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState = _uiState.asStateFlow()
@@ -42,6 +47,7 @@ class HomeViewModel @Inject constructor(
         getAllCategories()
 //        getAllProducts()
         getWishlist()
+        getCart()
     }
 
     private fun getHighlights() {
@@ -123,32 +129,24 @@ class HomeViewModel @Inject constructor(
     }
 
     fun addProductToWishlist(
-        id: Int,
-        title: String,
-        thumbnailUrl: String,
-        category: String,
+        item: Product,
         note: String
     ) {
-        val item = WishlistItem(
-            id = id,
-            title = title,
-            note = note,
-            category = category,
-            thumbnailUrl = thumbnailUrl
-        )
+        val wishlistItem = item.toWishlistItem(note)
 
-        job = addProductToWishlistUseCase(product = item, note = note).onEach { result ->
+        job = addProductToWishlistUseCase(
+            product = wishlistItem,
+            note = note
+        ).onEach { result ->
             when (result) {
-                is Resource.Error -> {}
                 is Resource.Loading -> {}
+                is Resource.Error -> {}
                 is Resource.Success -> {
-                    _uiState.value.wishlistedProducts.add(item)
+                    val wishlistedProducts = _uiState.value.wishlistedProducts.toMutableList()
+                    wishlistedProducts.add(wishlistItem)
+
                     _uiState.update {
-                        Log.i(
-                            "HomeViewModel",
-                            it.wishlistedProducts.first { it.id == item.id }.toString()
-                        )
-                        it.copy(wishlistedProducts = it.wishlistedProducts)
+                        it.copy(wishlistedProducts = wishlistedProducts)
                     }
                 }
             }
@@ -187,6 +185,39 @@ class HomeViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(wishlistedProducts = data.toMutableList())
                         }
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun addToCart(product: Product) {
+        job = addProductToCartUseCase(product).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {}
+                is Resource.Error -> {}
+                is Resource.Success -> {
+                    val cart = _uiState.value.cart.toMutableList()
+                    cart.add(product.toCartItem())
+
+                    _uiState.update {
+                        it.copy(
+                            cart = cart
+                        )
+                    }
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    private fun getCart() {
+        job = getCartUseCase().onEach { result ->
+            when (result) {
+                is Resource.Loading -> {}
+                is Resource.Error -> {}
+                is Resource.Success -> {
+                    result.data?.let { data ->
+                        _uiState.update { it.copy(cart = data.toMutableList()) }
                     }
                 }
             }

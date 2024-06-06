@@ -20,8 +20,9 @@
     <string name="out_of_stock">Out of stock</string>
     <string name="notify_me">Notify me when it\'s in stock</string>
     <string name="your_cart">Your cart</string>
-    <string name="you_havent_added_anything_to_your_wish_list_yet">You haven\'t added anything\nto your wish list yet.</string>
-    <string name="you_havent_see_any_product_yet">You haven\'t see any product yet.</string>
     <string name="share">Share</string>
     <string name="remove">Remove</string>
+    <string name="you_havent_added_anything_to_your_wish_list_yet">You haven\'t added anything\nto your wish list yet.</string>
+    <string name="you_havent_see_any_product_yet">You haven\'t see any product yet.</string>
+    <string name="you_havent_add_anything_to_your_cart_yet">You haven\'t add anything to\nyour cart yet.</string>
 </resources>

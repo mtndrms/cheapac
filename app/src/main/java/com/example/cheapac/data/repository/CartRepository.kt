@@ -9,4 +9,6 @@ class CartRepository @Inject constructor(private val localDataSource: LocalDataS
     suspend fun insert(product: CartItem) = localDataSource.addToCart(product = product)
     suspend fun delete(product: CartItem) = localDataSource.deleteProductFromCart(product = product)
     suspend fun clear() = localDataSource.clearCart()
+    suspend fun incrementQuantity(cartItem: CartItem) = localDataSource.incrementQuantity(cartItem = cartItem)
+    suspend fun decrementQuantity(cartItem: CartItem) = localDataSource.decrementQuantity(cartItem = cartItem)
 }

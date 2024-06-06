@@ -7,6 +7,9 @@ import com.example.cheapac.domain.use_case.GetProductsOfCategoryUseCase
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
 import com.example.cheapac.data.local.entity.WishlistItem
+import com.example.cheapac.data.mapper.toWishlistItem
+import com.example.cheapac.domain.model.Product
+import com.example.cheapac.domain.use_case.AddProductToCartUseCase
 import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
 import com.example.cheapac.domain.use_case.CheckProductIsWishlistedUseCase
 import com.example.cheapac.domain.use_case.GetWishlistByCategoryUseCase
@@ -26,7 +29,8 @@ class ProductsViewModel @Inject constructor(
     private val getProductsOfCategoryUseCase: GetProductsOfCategoryUseCase,
     private val addProductToWishlistUseCase: AddProductToWishlistUseCase,
     private val removeProductFromWishlistUseCase: RemoveProductFromWishlistUseCase,
-    private val getWishlistByCategoryUseCase: GetWishlistByCategoryUseCase
+    private val getWishlistByCategoryUseCase: GetWishlistByCategoryUseCase,
+    private val getAddProductToCartUseCase: AddProductToCartUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(ProductsUiState())
     val uiState = _uiState.asStateFlow()
@@ -60,21 +64,10 @@ class ProductsViewModel @Inject constructor(
     }
 
     fun addToWishlist(
-        id: Int,
-        title: String,
-        thumbnailUrl: String,
-        category: String,
+        item: Product,
         note: String
     ) {
-        val item = WishlistItem(
-            id = id,
-            title = title,
-            note = note,
-            category = category,
-            thumbnailUrl = thumbnailUrl
-        )
-
-        job = addProductToWishlistUseCase(product = item, note = note).onEach { result ->
+        job = addProductToWishlistUseCase(product = item.toWishlistItem(note), note = note).onEach { result ->
             when (result) {
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
@@ -98,6 +91,16 @@ class ProductsViewModel @Inject constructor(
         job = getWishlistByCategoryUseCase(category = category).onEach { result ->
             _uiState.update {
                 it.copy(wishlistedProductIDs = result.toMutableList())
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun addToCart(product: Product) {
+        job = getAddProductToCartUseCase(product).onEach { result ->
+            when (result) {
+                is Resource.Loading -> {}
+                is Resource.Error -> {}
+                is Resource.Success -> {}
             }
         }.launchIn(viewModelScope)
     }

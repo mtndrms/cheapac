@@ -42,7 +42,7 @@ class AppState(
     val coroutineScope: CoroutineScope,
     val windowSizeClass: WindowSizeClass
 ) {
-    val currentDestination: NavDestination?
+    private val currentDestination: NavDestination?
         @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 
     val currentDestinationTitle: String

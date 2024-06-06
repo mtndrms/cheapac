@@ -11,5 +11,6 @@ data class CartItem(
     @PrimaryKey override val id: Int,
     @ColumnInfo(name = "title") override val title: String,
     @ColumnInfo(name = "thumbnail_url") override val thumbnailUrl: String,
+    @ColumnInfo(name = "price") val price: Int,
     @ColumnInfo(name = "quantity") val quantity: Int
 ): Product()

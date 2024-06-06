@@ -3,7 +3,6 @@ package com.example.cheapac.presentation.feature.categories
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +16,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -36,33 +36,51 @@ import com.example.cheapac.presentation.common.CheapacIcons
 
 @Composable
 internal fun CategoriesRoute(
+    goBack: () -> Unit,
     navigateToCategory: (code: String, title: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CategoriesViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    CategoriesScreen(navigateToCategory, modifier, uiState)
+
+    CategoriesScreen(goBack, navigateToCategory, modifier, uiState)
 }
 
 @Composable
 private fun CategoriesScreen(
+    goBack: () -> Unit,
     navigateToCategory: (code: String, title: String) -> Unit,
     modifier: Modifier,
     uiState: CategoriesUiState
 ) {
     uiState.categories.data?.let { data ->
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            items(data) {
-                CategoriesRow(category = it, navigateToCategory = navigateToCategory)
-                Divider(
-                    thickness = 1.dp,
-                    color = MaterialTheme.colorScheme.tertiary,
-                    modifier = Modifier
-                        .padding(start = 64.dp, end = 10.dp)
-                        .alpha(0.2f)
+        Column {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                IconButton(onClick = goBack) {
+                    Icon(imageVector = CheapacIcons.ArrowBack, contentDescription = "go back")
+                }
+                Spacer(modifier = Modifier.width(15.dp))
+                Text(
+                    text = stringResource(id = R.string.categories),
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.fillMaxWidth()
                 )
+            }
+
+            LazyColumn(modifier = Modifier.fillMaxSize()) {
+                items(data) {
+                    CategoriesRow(category = it, navigateToCategory = navigateToCategory)
+                    Divider(
+                        thickness = 1.dp,
+                        color = MaterialTheme.colorScheme.tertiary,
+                        modifier = Modifier
+                            .padding(start = 64.dp, end = 10.dp)
+                            .alpha(0.2f)
+                    )
+                }
             }
         }
     }

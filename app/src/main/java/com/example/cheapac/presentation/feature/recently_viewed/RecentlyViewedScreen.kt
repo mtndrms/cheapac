@@ -109,7 +109,6 @@ private fun SuccessState(data: List<RecentlyViewedItem>) {
         NothingToListState(
             imageVector = CheapacIcons.History,
             label = stringResource(R.string.you_havent_see_any_product_yet),
-            contentDescription = stringResource(R.string.you_havent_see_any_product_yet)
         )
     }
 }
