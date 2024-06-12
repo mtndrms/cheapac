@@ -4,6 +4,7 @@ import com.example.cheapac.data.remote.dto.CategoryDto
 import com.example.cheapac.domain.model.Category
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.capitalize
+import okhttp3.internal.canParseAsIpAddress
 
 fun CategoryDto.toCategory(): Category {
     return Category(
@@ -18,42 +19,40 @@ fun List<CategoryDto>.toCategoryList(): List<Category> {
 }
 
 fun betterCategoryTitle(category: String): String {
-    return when (category) {
-        "home-decoration" -> "Home decoration"
-        "womens-dresses" -> "Women's dresses"
-        "womens-shoes" -> "Women's shoes"
-        "mens-shirts" -> "Men's shirts"
-        "mens-shoes" -> "Men's shoes"
-        "mens-watches" -> "Men's watches"
-        "womens-watches" -> "Women's watches"
-        "womens-bags" -> "Women's bags"
-        "womens-jewellery" -> "Women's jewellery"
-        else -> category.capitalize()
+    val capitalized = category.capitalize()
+    return if (capitalized.contains("-")) {
+        capitalized.replace("-", " ")
+    } else {
+        capitalized
     }
 }
 
 private fun pickCategoryIcon(category: String): Int {
     return when (category) {
-        "smartphones" -> CheapacIcons.Smartphone
-        "laptops" -> CheapacIcons.Laptop
+        "beauty" -> CheapacIcons.Beauty
         "fragrances" -> CheapacIcons.Fragrances
-        "skincare" -> CheapacIcons.Skincare
+        "furniture" -> CheapacIcons.Furniture
         "groceries" -> CheapacIcons.Groceries
         "home-decoration" -> CheapacIcons.HomeDecoration
-        "furniture" -> CheapacIcons.Furniture
-        "tops" -> CheapacIcons.Tops
-        "womens-dresses" -> CheapacIcons.WomenDresses
-        "womens-shoes" -> CheapacIcons.WomenShoes
+        "kitchen-accessories" -> CheapacIcons.KitchenAccessories
+        "laptops" -> CheapacIcons.Laptop
         "mens-shirts" -> CheapacIcons.MenShirts
         "mens-shoes" -> CheapacIcons.MenShoes
         "mens-watches" -> CheapacIcons.MenWatches
-        "womens-watches" -> CheapacIcons.WomenWatches
-        "womens-bags" -> CheapacIcons.WomenBags
-        "womens-jewellery" -> CheapacIcons.WomenJewellery
-        "sunglasses" -> CheapacIcons.Sunglasses
-        "automotive" -> CheapacIcons.Automotive
+        "mobile-accessories" -> CheapacIcons.MobileAccessories
         "motorcycle" -> CheapacIcons.Motorcycle
-        "lighting" -> CheapacIcons.Lighting
-        else -> CheapacIcons.Smartphone
+        "skin-care" -> CheapacIcons.Skincare
+        "smartphones" -> CheapacIcons.Smartphone
+        "sports-accessories" -> CheapacIcons.SportsAccessories
+        "sunglasses" -> CheapacIcons.Sunglasses
+        "tablets" -> CheapacIcons.Tablet
+        "tops" -> CheapacIcons.Tops
+        "vehicle" -> CheapacIcons.Automotive
+        "womens-bags" -> CheapacIcons.WomenBags
+        "womens-dresses" -> CheapacIcons.WomenDresses
+        "womens-jewellery" -> CheapacIcons.WomenJewellery
+        "womens-shoes" -> CheapacIcons.WomenShoes
+        "womens-watches" -> CheapacIcons.WomenWatches
+        else -> CheapacIcons.UnknownCategory
     }.id
 }

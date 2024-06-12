@@ -58,6 +58,12 @@ object CheapacIcons {
     val History: ImageVector = Icons.Default.History
     val Done: ImageVector = Icons.Default.Done
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
+    val Beauty: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_beauty)
+    val KitchenAccessories: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_kitchen_accessories)
+    val MobileAccessories: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_mobile_accessories)
+    val SportsAccessories: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_sports_accessories)
+    val Tablet: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_tablet)
+    val UnknownCategory: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_unknown_category)
     val Laptop: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_laptop)
     val Fragrances: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_fragrances)
     val Skincare: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_skincare)
