@@ -8,7 +8,7 @@ import com.example.cheapac.domain.model.Product
 fun ProductDto.toProduct(): Product {
     return Product(
         id = id,
-        brand = "",
+        brand = brand ?: "",
         title = title,
         price = price.toInt(),
         discountPercentage = discountPercentage,

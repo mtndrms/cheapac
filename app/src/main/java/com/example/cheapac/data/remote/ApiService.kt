@@ -1,7 +1,7 @@
 package com.example.cheapac.data.remote
 
 import com.example.cheapac.data.remote.dto.CategoryDto
-import com.example.cheapac.data.remote.dto.GetAllProductsResponse
+import com.example.cheapac.data.remote.response.GetAllProductsResponse
 import com.example.cheapac.data.remote.dto.product.ProductDto
 import retrofit2.http.GET
 import retrofit2.http.Path

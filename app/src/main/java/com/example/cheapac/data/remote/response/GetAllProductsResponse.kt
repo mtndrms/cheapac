@@ -1,4 +1,4 @@
-package com.example.cheapac.data.remote.dto
+package com.example.cheapac.data.remote.response
 
 import com.example.cheapac.data.remote.dto.product.ProductDto
 

@@ -1,7 +1,7 @@
 package com.example.cheapac.data.repository
 
 import com.example.cheapac.data.remote.RemoteDataSource
-import com.example.cheapac.data.remote.dto.GetAllProductsResponse
+import com.example.cheapac.data.remote.response.GetAllProductsResponse
 import com.example.cheapac.data.remote.dto.product.ProductDto
 import javax.inject.Inject
 
