@@ -198,12 +198,5 @@ private fun Header(title: String, goBack: () -> Unit) {
             Spacer(modifier = Modifier.size(48.dp))
         }
         Spacer(modifier = Modifier.height(10.dp))
-        Divider(
-            thickness = 2.dp,
-            color = MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .alpha(0.15f)
-        )
     }
 }

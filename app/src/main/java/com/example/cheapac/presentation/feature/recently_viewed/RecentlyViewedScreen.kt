@@ -177,13 +177,6 @@ private fun Header(
             }
         }
         Spacer(modifier = Modifier.height(5.dp))
-        Divider(
-            thickness = 2.dp,
-            color = MaterialTheme.colorScheme.tertiary,
-            modifier = Modifier
-                .fillMaxWidth()
-                .alpha(0.15f)
-        )
     }
 }
 
