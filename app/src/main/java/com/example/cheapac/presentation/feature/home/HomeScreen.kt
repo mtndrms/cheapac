@@ -88,7 +88,6 @@ private fun HomeScreen(
             )
             HighlightsCarousel(
                 highlights = uiState.highlights,
-                autoSwipeDuration = 5000,
                 modifier = Modifier.height(128.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
@@ -101,7 +100,6 @@ private fun HomeScreen(
             Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(
                 highlights = uiState.highlights,
-                autoSwipeDuration = 5000,
                 modifier = Modifier.height(192.dp)
             )
             Spacer(modifier = Modifier.height(20.dp))
