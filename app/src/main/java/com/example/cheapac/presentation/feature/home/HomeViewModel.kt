@@ -22,8 +22,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.processNextEventInCurrentThread
-import java.security.PrivilegedExceptionAction
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,7 +43,6 @@ class HomeViewModel @Inject constructor(
     init {
         getHighlights()
         getAllCategories()
-//        getAllProducts()
         getWishlist()
         getCart()
     }
@@ -55,20 +52,29 @@ class HomeViewModel @Inject constructor(
             when (result) {
                 is Resource.Loading -> {
                     _uiState.update {
-                        it.copy(highlights = UiState(isLoading = true))
+                        it.copy(
+                            mainHighlights = UiState(isLoading = true),
+                            subHighlights = UiState(isLoading = true)
+                        )
                     }
                 }
 
                 is Resource.Error -> {
                     _uiState.update {
-                        it.copy(highlights = UiState(message = result.message))
+                        it.copy(
+                            mainHighlights = UiState(message = result.message),
+                            subHighlights = UiState(message = result.message)
+                        )
                     }
                 }
 
                 is Resource.Success -> {
                     result.data?.let { data ->
                         _uiState.update {
-                            it.copy(highlights = UiState(data = data))
+                            it.copy(
+                                mainHighlights = UiState(data = data[0]),
+                                subHighlights = UiState(data = data[1])
+                            )
                         }
                     }
                 }

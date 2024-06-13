@@ -9,7 +9,8 @@ import com.example.cheapac.data.local.entity.WishlistItem
 data class HomeUiState(
     val isSignedIn: Boolean = false,
     val isPremium: Boolean = false,
-    val highlights: UiState<List<Product>> = UiState(isLoading = true),
+    val mainHighlights: UiState<List<Product>> = UiState(isLoading = true),
+    val subHighlights: UiState<List<Product>> = UiState(isLoading = true),
     val categories: UiState<List<Category>> = UiState(isLoading = true),
     val products: UiState<List<Product>> = UiState(isLoading = true),
     val wishlistedProducts: MutableList<WishlistItem> = mutableListOf(),

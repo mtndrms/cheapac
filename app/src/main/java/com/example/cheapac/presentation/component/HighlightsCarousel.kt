@@ -2,6 +2,7 @@ package com.example.cheapac.presentation.component
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,11 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -29,34 +25,22 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import com.example.cheapac.domain.model.Product
 import com.example.cheapac.data.UiState
+import com.example.cheapac.domain.model.Product
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HighlightsCarousel(
     highlights: UiState<List<Product>>,
+    navigateToProductDetail: (Int) -> Unit,
     modifier: Modifier
 ) {
-    var pageIndex by remember { mutableIntStateOf(0) }
-
     highlights.data?.let { data ->
         val pagerState = rememberPagerState(
             initialPage = 0,
             initialPageOffsetFraction = 0f
         ) {
             data.size
-        }
-
-        LaunchedEffect(key1 = pagerState.settledPage) {
-            // scrolling forward
-            pageIndex = if (pageIndex < pagerState.settledPage) {
-                pageIndex.inc()
-            } else if (pagerState.settledPage < pageIndex) {
-                if (pagerState.settledPage != 0) {
-                    pageIndex.dec()
-                } else 0
-            } else 0
         }
 
         Surface(
@@ -71,11 +55,17 @@ fun HighlightsCarousel(
                     .clip(RoundedCornerShape(5.dp))
             ) {
                 HorizontalPager(state = pagerState) {
-                    Box(modifier = Modifier.fillMaxSize()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .clickable {
+                                navigateToProductDetail(data[pagerState.settledPage].id)
+                            }
+                    ) {
                         SubcomposeAsyncImage(
-                            model = data[pageIndex].thumbnail,
+                            model = data[pagerState.settledPage].thumbnail,
                             contentDescription = "highlights",
-                            contentScale = ContentScale.FillBounds,
+                            contentScale = ContentScale.Fit,
                             loading = {
                                 Column(
                                     modifier = Modifier.fillMaxSize(),
@@ -92,7 +82,7 @@ fun HighlightsCarousel(
 
                 Indicator(
                     modifier = Modifier.align(Alignment.BottomEnd),
-                    pageIndex = pageIndex + 1,
+                    pageIndex = pagerState.settledPage + 1,
                     size = data.size
                 )
             }
