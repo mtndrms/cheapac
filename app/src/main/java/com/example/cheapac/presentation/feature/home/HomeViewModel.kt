@@ -1,5 +1,6 @@
 package com.example.cheapac.presentation.feature.home
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheapac.data.Resource
@@ -44,7 +45,6 @@ class HomeViewModel @Inject constructor(
         getHighlights()
         getAllCategories()
         getWishlist()
-        getCart()
     }
 
     private fun getHighlights() {
@@ -207,16 +207,14 @@ class HomeViewModel @Inject constructor(
                     cart.add(product.toCartItem())
 
                     _uiState.update {
-                        it.copy(
-                            cart = cart
-                        )
+                        it.copy(cart = cart)
                     }
                 }
             }
         }.launchIn(viewModelScope)
     }
 
-    private fun getCart() {
+    fun getCart() {
         job = getCartUseCase().onEach { result ->
             when (result) {
                 is Resource.Loading -> {}

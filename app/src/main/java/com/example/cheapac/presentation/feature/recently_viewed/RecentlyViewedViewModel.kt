@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
-import com.example.cheapac.domain.use_case.ClearRecentlyViewedItems
+import com.example.cheapac.domain.use_case.ClearRecentlyViewedItemsUseCase
 import com.example.cheapac.domain.use_case.GetAllRecentlyViewedItems
 import com.example.cheapac.domain.use_case.RemoveRecentlyViewedProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,7 +20,7 @@ import javax.inject.Inject
 class RecentlyViewedViewModel @Inject constructor(
     private val removeRecentlyViewedProductUseCase: RemoveRecentlyViewedProductUseCase,
     private val getAllRecentlyViewedItems: GetAllRecentlyViewedItems,
-    private val clearRecentlyViewedItems: ClearRecentlyViewedItems
+    private val clearRecentlyViewedItemsUseCase: ClearRecentlyViewedItemsUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(RecentlyViewedUiState())
     val uiState = _uiState.asStateFlow()
@@ -63,7 +63,7 @@ class RecentlyViewedViewModel @Inject constructor(
     }
 
     fun clear() {
-        job = clearRecentlyViewedItems().onEach { result ->
+        job = clearRecentlyViewedItemsUseCase().onEach { result ->
             if (result) {
                 _uiState.update {
                     it.copy(items = UiState(data = emptyList()))

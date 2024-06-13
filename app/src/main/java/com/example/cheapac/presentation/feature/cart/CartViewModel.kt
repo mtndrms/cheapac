@@ -2,18 +2,16 @@ package com.example.cheapac.presentation.feature.cart
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
 import com.example.cheapac.data.local.entity.CartItem
 import com.example.cheapac.data.repository.CartRepository
-import com.example.cheapac.domain.model.Product
+import com.example.cheapac.domain.use_case.ClearCartUseCase
 import com.example.cheapac.domain.use_case.GetCartUseCase
 import com.example.cheapac.domain.use_case.GetProductUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -24,7 +22,8 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     private val cartRepository: CartRepository,
     private val getCartUseCase: GetCartUseCase,
-    private val getProductUseCase: GetProductUseCase
+    private val getProductUseCase: GetProductUseCase,
+    private val clearCartUseCase: ClearCartUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(CartUiState())
     val uiState = _uiState.asStateFlow()
@@ -55,7 +54,6 @@ class CartViewModel @Inject constructor(
 
     fun incrementQuantity(cartItem: CartItem) {
         viewModelScope.launch {
-
             val items = (uiState.value.cart.data ?: emptyList()).toMutableList()
             if (items.isNotEmpty()) {
                 val index = items.indexOf(cartItem)
@@ -88,5 +86,15 @@ class CartViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun clear() {
+        clearCartUseCase().map { result ->
+            if (result) {
+                _uiState.update {
+                    it.copy(cart = UiState(data = emptyList()))
+                }
+            }
+        }.launchIn(viewModelScope)
     }
 }

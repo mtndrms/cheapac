@@ -11,6 +11,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,6 +48,7 @@ internal fun HomeRoute(
         addToWishlist = viewModel::addProductToWishlist,
         removeProductFromWishlist = viewModel::removeProductFromWishlist,
         addToCart = viewModel::addToCart,
+        getCart = viewModel::getCart,
         uiState = uiState,
         modifier = modifier
     )
@@ -62,9 +64,14 @@ private fun HomeScreen(
     addToWishlist: (Product, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     addToCart: (Product) -> Unit,
+    getCart: () -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
 ) {
+    LaunchedEffect(key1 = true) {
+        getCart()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()

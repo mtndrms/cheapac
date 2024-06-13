@@ -21,7 +21,7 @@ interface CartDao {
     suspend fun deleteOne(product: CartItem)
 
     @Query("DELETE FROM ${Table.CART}")
-    suspend fun clear()
+    suspend fun clear(): Int
 
     @Update(CartItem::class)
     suspend fun incrementQuantity(cartItem: CartItem)

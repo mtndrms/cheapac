@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -34,11 +35,15 @@ import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.presentation.feature.cart.component.CartItem
 
 @Composable
-internal fun CartRoute(goBack: () -> Unit, viewModel: CartViewModel = hiltViewModel()) {
+internal fun CartRoute(
+    goBack: () -> Unit,
+    viewModel: CartViewModel = hiltViewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     CartScreen(
         goBack = goBack,
+        clear = viewModel::clear,
         uiState = uiState,
         incrementQuantity = viewModel::incrementQuantity,
         decrementQuantity = viewModel::decrementQuantity
@@ -48,6 +53,7 @@ internal fun CartRoute(goBack: () -> Unit, viewModel: CartViewModel = hiltViewMo
 @Composable
 private fun CartScreen(
     goBack: () -> Unit,
+    clear: () -> Unit,
     uiState: CartUiState,
     incrementQuantity: (CartItem) -> Unit,
     decrementQuantity: (CartItem) -> Unit
@@ -68,8 +74,12 @@ private fun CartScreen(
             Text(
                 text = stringResource(id = R.string.your_cart),
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.weight(1f)
             )
+            IconButton(onClick = clear) {
+                Icon(imageVector = CheapacIcons.Delete, contentDescription = "clear")
+            }
+            Spacer(modifier = Modifier.width(10.dp))
         }
 
         uiState.cart.data?.let { data ->
@@ -126,7 +136,7 @@ private fun SuccessState(
                         )
 
                         if (index < data.lastIndex) {
-                            Divider()
+                            HorizontalDivider()
                         }
                     }
                 }
