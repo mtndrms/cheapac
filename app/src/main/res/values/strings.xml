@@ -26,4 +26,5 @@
     <string name="you_havent_see_any_product_yet">You haven\'t see any product yet.</string>
     <string name="you_havent_add_anything_to_your_cart_yet">You haven\'t add anything to\nyour cart yet.</string>
     <string name="search">Search</string>
+    <string name="search_box_hint">Search for product, category or brand</string>
 </resources>

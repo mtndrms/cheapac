@@ -16,6 +16,7 @@ fun NavGraphBuilder.homeScreen(
     navigateToProductDetail: (Int) -> Unit,
     navigateToProfile: (TopLevelDestination) -> Unit,
     navigateToCartScreen: () -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
 ) {
     composable(route = TopLevelDestination.HOME.route) {
         HomeRoute(
@@ -24,6 +25,7 @@ fun NavGraphBuilder.homeScreen(
             navigateToProductDetail = navigateToProductDetail,
             navigateToProfile = navigateToProfile,
             navigateToCartScreen = navigateToCartScreen,
+            navigateToSearchResultScreen = navigateToSearchResultScreen
         )
     }
 }

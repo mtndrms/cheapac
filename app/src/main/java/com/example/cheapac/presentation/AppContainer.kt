@@ -53,7 +53,8 @@ fun AppContainer(
                     navigateToCategory = appState.navController::navigateToProductList,
                     navigateToProductDetail = appState.navController::navigateToProductDetail,
                     navigateToProfile = appState::navigateToTopLevelDestination,
-                    navigateToCartScreen = appState.navController::navigateToCartScreen
+                    navigateToCartScreen = appState.navController::navigateToCartScreen,
+                    navigateToSearchResultScreen = appState.navController::navigateToSearchResultScreen
                 )
                 categoriesScreen(
                     goBack = appState.navController::popBackStack,

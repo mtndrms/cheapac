@@ -33,6 +33,7 @@ import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarBorder
+import androidx.compose.material.icons.rounded.Search
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.cheapac.R
 
@@ -65,6 +66,7 @@ object CheapacIcons {
     val ArrowChevronRight: ImageVector = Icons.Default.ChevronRight
     val History: ImageVector = Icons.Default.History
     val Done: ImageVector = Icons.Default.Done
+    val Search: ImageVector = Icons.Rounded.Search
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
     val Beauty: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_beauty)
     val KitchenAccessories: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_kitchen_accessories)

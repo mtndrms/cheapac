@@ -25,6 +25,7 @@ import com.example.cheapac.presentation.common.TopBar
 import com.example.cheapac.presentation.component.CategoriesCatalog
 import com.example.cheapac.presentation.component.HighlightsCarousel
 import com.example.cheapac.presentation.component.HorizontalProducts
+import com.example.cheapac.presentation.component.SearchBar
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 
 @Composable
@@ -34,6 +35,7 @@ internal fun HomeRoute(
     navigateToProductDetail: (Int) -> Unit,
     navigateToProfile: (TopLevelDestination) -> Unit,
     navigateToCartScreen: () -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -45,6 +47,7 @@ internal fun HomeRoute(
         navigateToProductDetail = navigateToProductDetail,
         navigateToProfile = navigateToProfile,
         navigateToCartScreen = navigateToCartScreen,
+        navigateToSearchResultScreen = navigateToSearchResultScreen,
         addToWishlist = viewModel::addProductToWishlist,
         removeProductFromWishlist = viewModel::removeProductFromWishlist,
         addToCart = viewModel::addToCart,
@@ -61,6 +64,7 @@ private fun HomeScreen(
     navigateToProductDetail: (Int) -> Unit,
     navigateToProfile: (TopLevelDestination) -> Unit,
     navigateToCartScreen: () -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
     addToWishlist: (Product, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     addToCart: (Product) -> Unit,
@@ -93,6 +97,8 @@ private fun HomeScreen(
                 onTitleClick = { },
                 cartSize = uiState.cart.size
             )
+            SearchBar(onSearchClick = navigateToSearchResultScreen)
+            Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(
                 highlights = uiState.mainHighlights,
                 navigateToProductDetail = navigateToProductDetail,
