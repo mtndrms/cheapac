@@ -67,7 +67,10 @@ fun AppContainer(
                     navigateToProductDetail = appState.navController::navigateToProductDetail,
                     goBack = appState.navController::popBackStack
                 )
-                productDetailScreen(goBack = appState.navController::popBackStack)
+                productDetailScreen(
+                    navigateToProductList = appState.navController::navigateToProductList,
+                    goBack = appState.navController::popBackStack
+                )
                 cartScreen(goBack = appState.navController::popBackStack)
                 wishlistScreen(goBack = appState.navController::popBackStack)
                 recentlyViewedScreen(goBack = appState.navController::popBackStack)

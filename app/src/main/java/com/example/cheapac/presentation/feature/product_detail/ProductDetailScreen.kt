@@ -7,6 +7,7 @@ import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -69,6 +70,7 @@ private const val BOTTOM_BAR_HEIGHT = 96
 internal fun ProductDetailRoute(
     id: Int?,
     goBack: () -> Unit,
+    navigateToProductList: (String, String) -> Unit,
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -78,6 +80,7 @@ internal fun ProductDetailRoute(
         getProduct = viewModel::getProduct,
         addToWishlist = viewModel::addToWishlist,
         removeProductFromWishlist = viewModel::removeFromWishlist,
+        navigateToProductList = navigateToProductList,
         goBack = goBack
     )
 }
@@ -90,6 +93,7 @@ private fun ProductDetailScreen(
     addToWishlist: (Int, String, String, String, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     goBack: () -> Unit,
+    navigateToProductList: (String, String) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     var topBoxSize by remember { mutableStateOf(IntSize(1, 1)) }
@@ -133,6 +137,7 @@ private fun ProductDetailScreen(
                         addToWishlist = addToWishlist,
                         removeProductFromWishlist = removeProductFromWishlist,
                         addToWishlistStatus = uiState.addToWishlistStatus,
+                        navigateToProductList = navigateToProductList,
                         isWishlisted = uiState.isWishlisted,
                         product = data,
                         modifier = Modifier.weight(1f)
@@ -270,7 +275,8 @@ private fun Description(
     isWishlisted: Boolean,
     modifier: Modifier,
     addToWishlist: (Int, String, String, String, String) -> Unit,
-    removeProductFromWishlist: (Int) -> Unit
+    removeProductFromWishlist: (Int) -> Unit,
+    navigateToProductList: (String, String) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -289,7 +295,11 @@ private fun Description(
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                PathVisualizer(category = betterCategoryTitle(product.category), brand = product.brand)
+                PathVisualizer(
+                    category = product.category,
+                    brand = product.brand,
+                    navigateToProductList = navigateToProductList,
+                )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (addToWishlistStatus.isLoading) {
                         CircularProgressIndicator()
@@ -349,8 +359,26 @@ private fun Description(
 }
 
 @Composable
-private fun PathVisualizer(category: String, brand: String) {
-    Text(text = "$category > $brand", style = MaterialTheme.typography.titleSmall)
+private fun PathVisualizer(
+    category: String,
+    brand: String,
+    navigateToProductList: (String, String) -> Unit
+) {
+    Row {
+        Text(
+            text = betterCategoryTitle(category),
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.clickable { navigateToProductList(category, betterCategoryTitle(category)) })
+        Text(
+            ">",
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.padding(horizontal = 5.dp)
+        )
+        Text(
+            text = brand,
+            style = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.clickable { })
+    }
 }
 
 @Composable
