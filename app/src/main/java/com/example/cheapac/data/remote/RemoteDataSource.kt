@@ -33,4 +33,9 @@ class RemoteDataSource @Inject constructor(
         withContext(Dispatchers.IO) {
             api.getProductsOfCategory(category = category, limit = limit, skip = skip)
         }
+
+    suspend fun searchForProduct(query: String): GetAllProductsResponse =
+        withContext(Dispatchers.IO) {
+            api.searchForProduct(query = query)
+        }
 }

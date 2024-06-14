@@ -71,6 +71,7 @@ internal fun ProductDetailRoute(
     id: Int?,
     goBack: () -> Unit,
     navigateToProductList: (String, String) -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -81,6 +82,7 @@ internal fun ProductDetailRoute(
         addToWishlist = viewModel::addToWishlist,
         removeProductFromWishlist = viewModel::removeFromWishlist,
         navigateToProductList = navigateToProductList,
+        navigateToSearchResultScreen = navigateToSearchResultScreen,
         goBack = goBack
     )
 }
@@ -94,6 +96,7 @@ private fun ProductDetailScreen(
     removeProductFromWishlist: (Int) -> Unit,
     goBack: () -> Unit,
     navigateToProductList: (String, String) -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     var topBoxSize by remember { mutableStateOf(IntSize(1, 1)) }
@@ -138,6 +141,7 @@ private fun ProductDetailScreen(
                         removeProductFromWishlist = removeProductFromWishlist,
                         addToWishlistStatus = uiState.addToWishlistStatus,
                         navigateToProductList = navigateToProductList,
+                        navigateToSearchResultScreen = navigateToSearchResultScreen,
                         isWishlisted = uiState.isWishlisted,
                         product = data,
                         modifier = Modifier.weight(1f)
@@ -277,6 +281,7 @@ private fun Description(
     addToWishlist: (Int, String, String, String, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     navigateToProductList: (String, String) -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -299,6 +304,7 @@ private fun Description(
                     category = product.category,
                     brand = product.brand,
                     navigateToProductList = navigateToProductList,
+                    navigateToSearchResultScreen = navigateToSearchResultScreen,
                 )
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     if (addToWishlistStatus.isLoading) {
@@ -362,13 +368,19 @@ private fun Description(
 private fun PathVisualizer(
     category: String,
     brand: String,
-    navigateToProductList: (String, String) -> Unit
+    navigateToProductList: (String, String) -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
 ) {
     Row {
         Text(
             text = betterCategoryTitle(category),
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.clickable { navigateToProductList(category, betterCategoryTitle(category)) })
+            modifier = Modifier.clickable {
+                navigateToProductList(
+                    category,
+                    betterCategoryTitle(category)
+                )
+            })
         Text(
             ">",
             style = MaterialTheme.typography.titleSmall,
@@ -377,7 +389,7 @@ private fun PathVisualizer(
         Text(
             text = brand,
             style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.clickable { })
+            modifier = Modifier.clickable { navigateToSearchResultScreen(brand) })
     }
 }
 

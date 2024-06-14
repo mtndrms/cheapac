@@ -17,4 +17,7 @@ class ProductRepository @Inject constructor(private val remoteDataSource: Remote
         skip: Int? = null
     ): GetAllProductsResponse =
         remoteDataSource.getProductsOfCategory(category = category, limit = limit, skip = skip)
+
+    suspend fun searchForProduct(query: String): GetAllProductsResponse =
+        remoteDataSource.searchForProduct(query = query)
 }

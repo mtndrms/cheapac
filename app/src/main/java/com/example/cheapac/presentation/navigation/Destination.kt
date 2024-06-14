@@ -33,5 +33,9 @@ enum class Destination(
     RECENTLY_VIEWED(
         titleTextResId = R.string.recently_viewed,
         route = "recently_viewed"
+    ),
+    SEARCH(
+        titleTextResId = R.string.search,
+        route = "search_result"
     )
 }

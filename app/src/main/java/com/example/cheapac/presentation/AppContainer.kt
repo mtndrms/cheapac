@@ -26,6 +26,8 @@ import com.example.cheapac.presentation.feature.purchase_history.navigateToPurch
 import com.example.cheapac.presentation.feature.purchase_history.purchaseHistoryScreen
 import com.example.cheapac.presentation.feature.recently_viewed.navigateToRecentlyViewedScreen
 import com.example.cheapac.presentation.feature.recently_viewed.recentlyViewedScreen
+import com.example.cheapac.presentation.feature.search.result.navigateToSearchResultScreen
+import com.example.cheapac.presentation.feature.search.result.searchResultScreen
 import com.example.cheapac.presentation.feature.wishlist.navigateToWishlistScreen
 import com.example.cheapac.presentation.feature.wishlist.wishlistScreen
 import com.example.cheapac.presentation.navigation.TopLevelDestination
@@ -69,12 +71,17 @@ fun AppContainer(
                 )
                 productDetailScreen(
                     navigateToProductList = appState.navController::navigateToProductList,
+                    navigateToSearchResultScreen = appState.navController::navigateToSearchResultScreen,
                     goBack = appState.navController::popBackStack
                 )
                 cartScreen(goBack = appState.navController::popBackStack)
                 wishlistScreen(goBack = appState.navController::popBackStack)
                 recentlyViewedScreen(goBack = appState.navController::popBackStack)
                 purchaseHistoryScreen()
+                searchResultScreen(
+                    navigateToProductDetail = appState.navController::navigateToProductDetail,
+                    goBack = appState.navController::popBackStack
+                )
             }
         }
     }

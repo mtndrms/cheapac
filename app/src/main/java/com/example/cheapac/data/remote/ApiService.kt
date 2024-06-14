@@ -28,4 +28,7 @@ interface ApiService {
         @Query(value = "limit") limit: Int? = null,
         @Query(value = "skip") skip: Int? = null
     ): GetAllProductsResponse
+
+    @GET(value = "$endpoint/search")
+    suspend fun searchForProduct(@Query(value = "q") query: String): GetAllProductsResponse
 }

@@ -14,6 +14,7 @@ fun NavController.navigateToProductDetail(id: Int, navOptions: NavOptions? = nul
 
 fun NavGraphBuilder.productDetailScreen(
     navigateToProductList: (String, String) -> Unit,
+    navigateToSearchResultScreen: (String) -> Unit,
     goBack: () -> Unit
 ) {
     composable(
@@ -24,6 +25,7 @@ fun NavGraphBuilder.productDetailScreen(
         ProductDetailRoute(
             id = id,
             navigateToProductList = navigateToProductList,
+            navigateToSearchResultScreen = navigateToSearchResultScreen,
             goBack = goBack
         )
     }
