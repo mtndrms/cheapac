@@ -14,10 +14,13 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -27,6 +30,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.data.UiState
 import com.example.cheapac.domain.model.Product
+import com.example.cheapac.presentation.common.CheapacIcons
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -35,6 +40,8 @@ fun HighlightsCarousel(
     navigateToProductDetail: (Int) -> Unit,
     modifier: Modifier
 ) {
+    val coroutineScope = rememberCoroutineScope()
+
     highlights.data?.let { data ->
         val pagerState = rememberPagerState(
             initialPage = 0,
@@ -78,6 +85,36 @@ fun HighlightsCarousel(
                             modifier = Modifier.fillMaxSize()
                         )
                     }
+                }
+
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(pagerState.settledPage - 1)
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
+                    Icon(
+                        imageVector = CheapacIcons.ArrowChevronLeft,
+                        contentDescription = "left",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
+                }
+
+                IconButton(
+                    onClick = {
+                        coroutineScope.launch {
+                            pagerState.scrollToPage(pagerState.settledPage + 1)
+                        }
+                    },
+                    modifier = Modifier.align(Alignment.CenterEnd)
+                ) {
+                    Icon(
+                        imageVector = CheapacIcons.ArrowChevronRight,
+                        contentDescription = "right",
+                        tint = MaterialTheme.colorScheme.onSurface
+                    )
                 }
 
                 Indicator(

@@ -2,11 +2,16 @@ package com.example.cheapac.presentation.common
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.ArrowLeft
+import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
 import androidx.compose.material.icons.filled.ArrowLeft
+import androidx.compose.material.icons.filled.ChevronLeft
+import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Error
@@ -54,7 +59,10 @@ object CheapacIcons {
     val Delete: ImageVector = Icons.Default.Delete
     val ArrowDropDown: ImageVector = Icons.Default.ArrowDropDown
     val ArrowDropUp: ImageVector = Icons.Default.ArrowDropUp
-    val ArrowLeft: ImageVector = Icons.Default.ArrowLeft
+    val ArrowLeft: ImageVector = Icons.AutoMirrored.Rounded.ArrowLeft
+    val ArrowRight: ImageVector = Icons.AutoMirrored.Rounded.ArrowRight
+    val ArrowChevronLeft: ImageVector = Icons.Default.ChevronLeft
+    val ArrowChevronRight: ImageVector = Icons.Default.ChevronRight
     val History: ImageVector = Icons.Default.History
     val Done: ImageVector = Icons.Default.Done
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
