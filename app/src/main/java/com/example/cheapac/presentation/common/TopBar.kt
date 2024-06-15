@@ -76,12 +76,14 @@ fun TopBar(
                         )
                     }
 
-                    Text(
-                        text = cartSize.toString(),
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .align(Alignment.BottomStart)
-                    )
+                    if (cartSize > 0) {
+                        Text(
+                            text = cartSize.toString(),
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .align(Alignment.BottomStart)
+                        )
+                    }
                 }
 
                 IconButton(onClick = navigateToProfile) {
