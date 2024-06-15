@@ -97,7 +97,7 @@ private fun HomeScreen(
                 onTitleClick = { },
                 cartSize = uiState.cart.size
             )
-            SearchBar(onSearchClick = navigateToSearchResultScreen)
+            SearchBar(onSearchClick = navigateToSearchResultScreen, modifier = Modifier.padding(horizontal = 20.dp))
             Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(
                 highlights = uiState.mainHighlights,
