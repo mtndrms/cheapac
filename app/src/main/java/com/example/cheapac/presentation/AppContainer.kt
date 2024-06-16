@@ -10,13 +10,11 @@ import androidx.compose.material3.windowsizeclass.WindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import com.example.cheapac.presentation.common.TopBar
 import com.example.cheapac.presentation.feature.cart.cartScreen
 import com.example.cheapac.presentation.feature.cart.navigateToCartScreen
 import com.example.cheapac.presentation.feature.categories.categoriesScreen
 import com.example.cheapac.presentation.feature.categories.navigateToCategories
 import com.example.cheapac.presentation.feature.home.homeScreen
-import com.example.cheapac.presentation.feature.home.navigateToHome
 import com.example.cheapac.presentation.feature.product_detail.navigateToProductDetail
 import com.example.cheapac.presentation.feature.product_detail.productDetailScreen
 import com.example.cheapac.presentation.feature.products.navigateToProductList

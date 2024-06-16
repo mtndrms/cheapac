@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +24,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
 import com.example.cheapac.presentation.common.CheapacIcons
+import com.example.cheapac.presentation.component.top_bar.TopBar
+import com.example.cheapac.presentation.component.top_bar.TopBarButtonOpts
 import com.example.cheapac.presentation.feature.profile.component.UserInfoCard
 
 @Composable
@@ -39,8 +40,7 @@ internal fun ProfileRoute(
         navigateToWishlistScreen = navigateToWishlistScreen,
         navigateToPurchaseHistoryScreen = navigateToPurchaseHistoryScreen,
         navigateToRecentlyViewedScreen = navigateToRecentlyViewedScreen,
-        goBack = goBack,
-        modifier = modifier
+        goBack = goBack
     )
 }
 
@@ -50,27 +50,20 @@ private fun ProfileScreen(
     navigateToPurchaseHistoryScreen: () -> Unit,
     navigateToRecentlyViewedScreen: () -> Unit,
     goBack: () -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            IconButton(onClick = goBack) {
-                Icon(imageVector = CheapacIcons.ArrowBack, contentDescription = "go back")
-            }
-            Spacer(modifier = Modifier.width(15.dp))
-            Text(
-                text = stringResource(id = R.string.profile),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.fillMaxWidth()
+        TopBar(
+            title = stringResource(id = R.string.profile),
+            navigationButtonOpts = TopBarButtonOpts(
+                icon = CheapacIcons.ArrowBack,
+                onClick = goBack
             )
-        }
+        )
         Spacer(modifier = Modifier.height(5.dp))
         UserInfoCard(name = "John Doe", email = "johndoe@example.com")
         Spacer(modifier = Modifier.height(5.dp))

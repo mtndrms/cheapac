@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,11 +12,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,6 +29,8 @@ import com.example.cheapac.R
 import com.example.cheapac.data.local.entity.CartItem
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.NothingToListState
+import com.example.cheapac.presentation.component.top_bar.TopBar
+import com.example.cheapac.presentation.component.top_bar.TopBarButtonOpts
 import com.example.cheapac.presentation.feature.cart.component.CartItem
 
 @Composable
@@ -63,26 +62,19 @@ private fun CartScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            IconButton(onClick = goBack) {
-                Icon(imageVector = CheapacIcons.ArrowBack, contentDescription = "go back")
-            }
-            Spacer(modifier = Modifier.width(15.dp))
-            Text(
-                text = stringResource(id = R.string.your_cart),
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.weight(1f)
-            )
-            IconButton(onClick = clear) {
-                Icon(imageVector = CheapacIcons.Delete, contentDescription = "clear")
-            }
-            Spacer(modifier = Modifier.width(10.dp))
-        }
-
         uiState.cart.data?.let { data ->
+            TopBar(
+                title = stringResource(id = R.string.your_cart),
+                navigationButtonOpts = TopBarButtonOpts(
+                    icon = CheapacIcons.ArrowBack,
+                    onClick = goBack
+                ),
+                primaryButtonOpts = TopBarButtonOpts(
+                    icon = CheapacIcons.DeleteOutlined,
+                    onClick = clear,
+                    shouldHideButton = data.isEmpty(),
+                )
+            )
             SuccessState(
                 total = uiState.total,
                 data = data,

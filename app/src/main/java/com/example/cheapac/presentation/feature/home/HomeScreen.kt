@@ -21,11 +21,13 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cheapac.R
 import com.example.cheapac.domain.model.Product
-import com.example.cheapac.presentation.common.TopBar
+import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.CategoriesCatalog
 import com.example.cheapac.presentation.component.HighlightsCarousel
 import com.example.cheapac.presentation.component.HorizontalProducts
 import com.example.cheapac.presentation.component.SearchBar
+import com.example.cheapac.presentation.component.top_bar.TopBar
+import com.example.cheapac.presentation.component.top_bar.TopBarButtonOpts
 import com.example.cheapac.presentation.navigation.TopLevelDestination
 
 @Composable
@@ -81,7 +83,7 @@ private fun HomeScreen(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
             .verticalScroll(rememberScrollState())
-            .padding(vertical = 10.dp)
+            .padding(bottom = 10.dp)
             .then(modifier)
     ) {
         Column(
@@ -89,15 +91,22 @@ private fun HomeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TopBar(
-                currentScreenTitle = stringResource(id = R.string.app_name),
-                navigateToProfile = {
-                    navigateToProfile(TopLevelDestination.PROFILE)
-                },
-                navigateToCartScreen = navigateToCartScreen,
-                onTitleClick = { },
-                cartSize = uiState.cart.size
+                title = stringResource(id = R.string.app_name),
+                primaryButtonOpts = TopBarButtonOpts(
+                    icon = CheapacIcons.CartOutlined,
+                    onClick = navigateToCartScreen,
+                    badgeLabel = uiState.cart.size.toString(),
+                    shouldShowBadge = uiState.cart.isNotEmpty(),
+                ),
+                secondaryButtonOpts = TopBarButtonOpts(
+                    icon = CheapacIcons.ProfileOutlined,
+                    onClick = { navigateToProfile(TopLevelDestination.PROFILE) }
+                ),
             )
-            SearchBar(onSearchClick = navigateToSearchResultScreen, modifier = Modifier.padding(horizontal = 20.dp))
+            SearchBar(
+                onSearchClick = navigateToSearchResultScreen,
+                modifier = Modifier.padding(horizontal = 20.dp)
+            )
             Spacer(modifier = Modifier.height(20.dp))
             HighlightsCarousel(
                 highlights = uiState.mainHighlights,

@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
@@ -59,6 +60,7 @@ object CheapacIcons {
     val StarOutlined: ImageVector = Icons.Outlined.StarBorder
     val Error: ImageVector = Icons.Default.Error
     val Delete: ImageVector = Icons.Default.Delete
+    val DeleteOutlined: ImageVector = Icons.Outlined.DeleteOutline
     val ArrowDropDown: ImageVector = Icons.Default.ArrowDropDown
     val ArrowDropUp: ImageVector = Icons.Default.ArrowDropUp
     val ArrowLeft: ImageVector = Icons.AutoMirrored.Rounded.ArrowLeft

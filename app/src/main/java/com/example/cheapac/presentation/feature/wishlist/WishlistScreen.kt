@@ -19,7 +19,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -33,23 +32,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
 import com.example.cheapac.data.local.entity.WishlistItem
 import com.example.cheapac.presentation.common.CheapacIcons
+import com.example.cheapac.presentation.component.top_bar.TopBar
 import com.example.cheapac.presentation.component.NothingToListState
-import com.example.cheapac.utils.capitalize
+import com.example.cheapac.presentation.component.top_bar.TopBarButtonOpts
 import com.example.cheapac.utils.handleShareProductClick
 
 @Composable
@@ -69,8 +66,19 @@ private fun WishlistScreen(uiState: WishlistUiState, goBack: () -> Unit, clearAl
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        Header(title = stringResource(id = R.string.wishlist), goBack = goBack, clearAll = clearAll)
         uiState.items.data?.let { data ->
+            TopBar(
+                title = stringResource(id = R.string.wishlist),
+                navigationButtonOpts = TopBarButtonOpts(
+                    icon = CheapacIcons.ArrowBack,
+                    onClick = goBack
+                ),
+                primaryButtonOpts = TopBarButtonOpts(
+                    icon = CheapacIcons.DeleteOutlined,
+                    onClick = clearAll,
+                    shouldHideButton = data.isEmpty()
+                ),
+            )
             SuccessState(data = data)
         }
 
@@ -93,8 +101,7 @@ private fun SuccessState(data: List<WishlistItem>) {
                     WishlistItem(
                         title = item.title,
                         thumbnailUrl = item.thumbnailUrl,
-                        note = item.note,
-                        date = item.dateAdded.toString()
+                        note = item.note
                     )
                 }
             }
@@ -135,48 +142,7 @@ private fun ErrorState(message: String, modifier: Modifier) {
 }
 
 @Composable
-private fun Header(
-    title: String,
-    goBack: () -> Unit,
-    clearAll: () -> Unit
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(modifier = Modifier.height(10.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            IconButton(onClick = goBack) {
-                Icon(
-                    imageVector = CheapacIcons.ArrowBack,
-                    contentDescription = "go back",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-
-            Text(
-                text = title.capitalize(),
-                textAlign = TextAlign.Center,
-                style = MaterialTheme.typography.titleLarge,
-                fontSize = 20.sp,
-                modifier = Modifier
-            )
-
-            IconButton(onClick = clearAll) {
-                Icon(
-                    imageVector = CheapacIcons.Delete,
-                    contentDescription = "clear wishlist",
-                    modifier = Modifier.size(32.dp)
-                )
-            }
-        }
-        Spacer(modifier = Modifier.height(5.dp))
-    }
-}
-
-@Composable
-private fun WishlistItem(title: String, thumbnailUrl: String, note: String, date: String) {
+private fun WishlistItem(title: String, thumbnailUrl: String, note: String) {
     var isExpanded by remember { mutableStateOf(false) }
     val context = LocalContext.current
 
@@ -284,5 +250,9 @@ private fun WishlistItem(title: String, thumbnailUrl: String, note: String, date
 @Preview(showBackground = true)
 @Composable
 private fun WishlistItemPreview() {
-    WishlistItem(title = "iPhone X", "", "Lorem ipsum".repeat(100), "01/01/2024")
+    WishlistItem(
+        title = "iPhone X",
+        "",
+        "Lorem ipsum".repeat(100)
+    )
 }
