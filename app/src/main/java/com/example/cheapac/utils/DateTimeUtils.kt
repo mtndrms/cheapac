@@ -6,6 +6,12 @@ import java.util.Locale
 import java.util.TimeZone
 
 object DateTimeUtils {
+    fun now(): String {
+        val currentDate = Date()
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
+        return formatter.format(currentDate)
+    }
+
     fun convertStringToDate(input: String, desiredFormat: String? = null): String {
         val inputFormat = SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.US)
         inputFormat.timeZone = TimeZone.getTimeZone("GMT")

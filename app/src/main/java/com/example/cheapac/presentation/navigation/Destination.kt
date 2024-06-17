@@ -37,5 +37,9 @@ enum class Destination(
     SEARCH(
         titleTextResId = R.string.search,
         route = "search_result"
-    )
+    ),
+    REVIEW(
+        titleTextResId = R.string.reviews,
+        route = "product_reviews"
+    ),
 }

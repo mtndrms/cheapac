@@ -27,4 +27,8 @@
     <string name="you_havent_add_anything_to_your_cart_yet">You haven\'t add anything to\nyour cart yet.</string>
     <string name="search">Search</string>
     <string name="search_box_hint">Search for product, category or brand</string>
+    <string name="reviews">Reviews</string>
+    <string name="product_detail_review_label">%1$s in %2$s reviews</string>
+    <string name="review_input_field_label">Your review...</string>
+    <string name="nothing_to_list_review_screen">There are no reviews for this product.</string>
 </resources>

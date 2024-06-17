@@ -6,6 +6,7 @@ import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.cheapac.data.remote.dto.product.Review
 import com.example.cheapac.presentation.navigation.Destination
 
 fun NavController.navigateToProductDetail(id: Int, navOptions: NavOptions? = null) {
@@ -15,6 +16,7 @@ fun NavController.navigateToProductDetail(id: Int, navOptions: NavOptions? = nul
 fun NavGraphBuilder.productDetailScreen(
     navigateToProductList: (String, String) -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
+    navigateToReviewsScreen: (List<Review>) -> Unit,
     goBack: () -> Unit
 ) {
     composable(
@@ -26,6 +28,7 @@ fun NavGraphBuilder.productDetailScreen(
             id = id,
             navigateToProductList = navigateToProductList,
             navigateToSearchResultScreen = navigateToSearchResultScreen,
+            navigateToReviewsScreen = navigateToReviewsScreen,
             goBack = goBack
         )
     }

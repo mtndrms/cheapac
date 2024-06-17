@@ -57,6 +57,7 @@ import coil.compose.SubcomposeAsyncImage
 import com.example.cheapac.R
 import com.example.cheapac.data.UiState
 import com.example.cheapac.data.mapper.betterCategoryTitle
+import com.example.cheapac.data.remote.dto.product.Review
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.RatingBar
@@ -72,9 +73,11 @@ internal fun ProductDetailRoute(
     goBack: () -> Unit,
     navigateToProductList: (String, String) -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
+    navigateToReviewsScreen: (List<Review>) -> Unit,
     viewModel: ProductDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     ProductDetailScreen(
         id = id,
         uiState = uiState,
@@ -83,6 +86,7 @@ internal fun ProductDetailRoute(
         removeProductFromWishlist = viewModel::removeFromWishlist,
         navigateToProductList = navigateToProductList,
         navigateToSearchResultScreen = navigateToSearchResultScreen,
+        navigateToReviewsScreen = navigateToReviewsScreen,
         goBack = goBack
     )
 }
@@ -97,6 +101,7 @@ private fun ProductDetailScreen(
     goBack: () -> Unit,
     navigateToProductList: (String, String) -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
+    navigateToReviewsScreen: (List<Review>) -> Unit,
 ) {
     val scrollState = rememberScrollState()
     var topBoxSize by remember { mutableStateOf(IntSize(1, 1)) }
@@ -142,6 +147,7 @@ private fun ProductDetailScreen(
                         addToWishlistStatus = uiState.addToWishlistStatus,
                         navigateToProductList = navigateToProductList,
                         navigateToSearchResultScreen = navigateToSearchResultScreen,
+                        navigateToReviewsScreen = navigateToReviewsScreen,
                         isWishlisted = uiState.isWishlisted,
                         product = data,
                         modifier = Modifier.weight(1f)
@@ -171,8 +177,7 @@ private fun LoadingState() {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         CircularProgressIndicator()
     }
@@ -183,8 +188,7 @@ private fun ErrorState(message: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier
-            .fillMaxSize()
+        modifier = Modifier.fillMaxSize()
     ) {
         Text(text = message, color = MaterialTheme.colorScheme.error)
     }
@@ -282,6 +286,7 @@ private fun Description(
     removeProductFromWishlist: (Int) -> Unit,
     navigateToProductList: (String, String) -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
+    navigateToReviewsScreen: (List<Review>) -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -357,7 +362,24 @@ private fun Description(
             }
             Text(text = product.title, style = MaterialTheme.typography.titleLarge)
             Spacer(modifier = Modifier.height(5.dp))
-            RatingBar(rating = product.rating)
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable {
+                        navigateToReviewsScreen(product.reviews)
+                    },
+            ) {
+                RatingBar(rating = product.reviews.sumOf { it.rating } / product.reviews.size)
+                Spacer(modifier = Modifier.width(10.dp))
+                Text(
+                    text = stringResource(
+                        R.string.product_detail_review_label,
+                        product.reviews.sumOf { it.rating } / product.reviews.size,
+                        product.reviews.size
+                    )
+                )
+            }
             Spacer(modifier = Modifier.height(10.dp))
             Text(text = product.description.capitalize().repeat(10))
         }

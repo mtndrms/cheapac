@@ -3,8 +3,10 @@ package com.example.cheapac.presentation.common
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowLeft
+import androidx.compose.material.icons.automirrored.outlined.Send
 import androidx.compose.material.icons.automirrored.rounded.ArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
+import androidx.compose.material.icons.automirrored.rounded.Send
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -35,7 +37,10 @@ import androidx.compose.material.icons.outlined.ShoppingCart
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.RateReview
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.icons.rounded.Send
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.cheapac.R
 
@@ -71,6 +76,9 @@ object CheapacIcons {
     val Done: ImageVector = Icons.Default.Done
     val Search: ImageVector = Icons.Rounded.Search
     val Clear: ImageVector = Icons.Rounded.Clear
+    val Review: ImageVector = Icons.Rounded.RateReview
+    val Close: ImageVector = Icons.Rounded.Close
+    val Send: ImageVector = Icons.AutoMirrored.Rounded.Send
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
     val Beauty: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_beauty)
     val KitchenAccessories: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_kitchen_accessories)

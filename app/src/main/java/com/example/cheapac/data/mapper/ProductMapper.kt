@@ -12,7 +12,7 @@ fun ProductDto.toProduct(): Product {
         title = title,
         price = price.toInt(),
         discountPercentage = discountPercentage,
-        rating = rating,
+        reviews = reviews,
         category = category,
         stock = stock,
         description = description,
