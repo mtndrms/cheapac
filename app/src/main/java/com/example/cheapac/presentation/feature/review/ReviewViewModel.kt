@@ -1,6 +1,5 @@
 package com.example.cheapac.presentation.feature.review
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.cheapac.data.remote.dto.product.Review
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,20 +13,30 @@ class ReviewViewModel @Inject constructor() : ViewModel() {
     private val _uiState = MutableStateFlow(ReviewUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun updateReviews(reviews: List<Review>) {
+    private fun updateReviews(reviews: List<Review>) {
         _uiState.update {
             it.copy(reviews = reviews)
         }
     }
 
-    fun submitReview(review: Review) {
+    private fun submitReview(review: Review) {
         val current = _uiState.value.reviews.toMutableList()
         current.add(review)
 
         _uiState.update {
-            Log.i("ReviewViewModel", "${current.size}")
             it.copy(reviews = current)
         }
-        Log.i("ReviewViewModel", "${uiState.value.reviews.size}")
+    }
+
+    fun onEvent(event: ReviewEvent) {
+        when (event) {
+            is ReviewEvent.InitialFetch -> {
+                updateReviews(reviews = event.reviews)
+            }
+
+            is ReviewEvent.SubmitReview -> {
+                submitReview(review = event.review)
+            }
+        }
     }
 }

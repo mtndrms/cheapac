@@ -15,7 +15,7 @@ class AddProductToCartUseCase @Inject constructor(private val cartRepository: Ca
             cartRepository.insert(product = product.toCartItem())
             emit(Resource.Success(data = true))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

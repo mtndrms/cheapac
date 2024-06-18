@@ -55,8 +55,7 @@ internal fun ReviewRoute(
     ReviewScreen(
         uiState = uiState,
         reviews = reviews,
-        submitReview = viewModel::submitReview,
-        updateReviews = viewModel::updateReviews,
+        onEvent = viewModel::onEvent,
         goBack = goBack
     )
 }
@@ -65,12 +64,11 @@ internal fun ReviewRoute(
 private fun ReviewScreen(
     uiState: ReviewUiState,
     reviews: List<Review>,
-    submitReview: (Review) -> Unit,
-    updateReviews: (List<Review>) -> Unit,
+    onEvent: (ReviewEvent) -> Unit,
     goBack: () -> Unit
 ) {
-    LaunchedEffect(key1 = true) {
-        updateReviews(reviews)
+    LaunchedEffect(key1 = Unit) {
+        onEvent(ReviewEvent.InitialFetch(reviews = reviews))
     }
 
     Column(
@@ -87,7 +85,7 @@ private fun ReviewScreen(
         Spacer(modifier = Modifier.height(16.dp))
         SubmitReview(
             onSubmit = { review ->
-                submitReview(review)
+                onEvent(ReviewEvent.SubmitReview(review = review))
             }
         )
         Spacer(modifier = Modifier.height(16.dp))

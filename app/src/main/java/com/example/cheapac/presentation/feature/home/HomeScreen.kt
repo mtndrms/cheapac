@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cheapac.R
-import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.CategoriesCatalog
 import com.example.cheapac.presentation.component.HighlightsCarousel
@@ -50,10 +49,7 @@ internal fun HomeRoute(
         navigateToProfile = navigateToProfile,
         navigateToCartScreen = navigateToCartScreen,
         navigateToSearchResultScreen = navigateToSearchResultScreen,
-        addToWishlist = viewModel::addProductToWishlist,
-        removeProductFromWishlist = viewModel::removeProductFromWishlist,
-        addToCart = viewModel::addToCart,
-        getCart = viewModel::getCart,
+        onEvent = viewModel::onEvent,
         uiState = uiState,
         modifier = modifier
     )
@@ -67,15 +63,12 @@ private fun HomeScreen(
     navigateToProfile: (TopLevelDestination) -> Unit,
     navigateToCartScreen: () -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
-    addToWishlist: (Product, String) -> Unit,
-    removeProductFromWishlist: (Int) -> Unit,
-    addToCart: (Product) -> Unit,
-    getCart: () -> Unit,
+    onEvent: (HomeEvent) -> Unit,
     uiState: HomeUiState,
     modifier: Modifier
 ) {
     LaunchedEffect(key1 = true) {
-        getCart()
+        onEvent(HomeEvent.InitialFetch)
     }
 
     Box(
@@ -131,9 +124,20 @@ private fun HomeScreen(
                 products = uiState.mainHighlights,
                 wishlistedProducts = uiState.wishlistedProducts,
                 navigateToProductDetail = navigateToProductDetail,
-                addToWishlist = addToWishlist,
-                removeProductFromWishlist = removeProductFromWishlist,
-                addToCart = addToCart,
+                addProductToWishlist = { product, note ->
+                    onEvent(
+                        HomeEvent.AddProductToWishlist(
+                            product = product,
+                            note = note
+                        )
+                    )
+                },
+                removeProductFromWishlist = { id ->
+                    onEvent(HomeEvent.RemoveProductFromWishlist(id = id))
+                },
+                addProductToCart = { product ->
+                    onEvent(HomeEvent.AddProductToCart(product = product))
+                },
                 modifier = Modifier
             )
         }

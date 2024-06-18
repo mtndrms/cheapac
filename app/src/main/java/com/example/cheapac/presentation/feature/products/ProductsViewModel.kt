@@ -1,17 +1,14 @@
 package com.example.cheapac.presentation.feature.products
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheapac.domain.use_case.GetProductsOfCategoryUseCase
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
-import com.example.cheapac.data.local.entity.WishlistItem
 import com.example.cheapac.data.mapper.toWishlistItem
 import com.example.cheapac.domain.model.Product
 import com.example.cheapac.domain.use_case.AddProductToCartUseCase
 import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
-import com.example.cheapac.domain.use_case.CheckProductIsWishlistedUseCase
 import com.example.cheapac.domain.use_case.GetWishlistByCategoryUseCase
 import com.example.cheapac.domain.use_case.RemoveProductFromWishlistUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +33,7 @@ class ProductsViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    fun getProductsOfCategory(category: String) {
+    private fun getProductsOfCategory(category: String) {
         job = getProductsOfCategoryUseCase(category).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -63,11 +59,14 @@ class ProductsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addToWishlist(
+    private fun addProductToWishlist(
         item: Product,
         note: String
     ) {
-        job = addProductToWishlistUseCase(product = item.toWishlistItem(note), note = note).onEach { result ->
+        job = addProductToWishlistUseCase(
+            product = item.toWishlistItem(note),
+            note = note
+        ).onEach { result ->
             when (result) {
                 is Resource.Error -> {}
                 is Resource.Loading -> {}
@@ -76,7 +75,7 @@ class ProductsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun removeProductFromWishlist(id: Int) {
+    private fun removeProductFromWishlist(id: Int) {
         job = removeProductFromWishlistUseCase(id = id).onEach { result ->
             if (result) {
                 _uiState.value.wishlistedProductIDs.remove(element = id)
@@ -87,7 +86,7 @@ class ProductsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun getWishlistByCategory(category: String) {
+    private fun getWishlistByCategory(category: String) {
         job = getWishlistByCategoryUseCase(category = category).onEach { result ->
             _uiState.update {
                 it.copy(wishlistedProductIDs = result.toMutableList())
@@ -95,7 +94,7 @@ class ProductsViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addToCart(product: Product) {
+    private fun addProductToCart(product: Product) {
         job = getAddProductToCartUseCase(product).onEach { result ->
             when (result) {
                 is Resource.Loading -> {}
@@ -103,5 +102,29 @@ class ProductsViewModel @Inject constructor(
                 is Resource.Success -> {}
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: ProductsEvent) {
+        when (event) {
+            is ProductsEvent.InitialFetch -> {
+                if (uiState.value.products.data == null) {
+                    getProductsOfCategory(category = event.category)
+                }
+
+                getWishlistByCategory(category = event.category)
+            }
+
+            is ProductsEvent.AddProductToCart -> {
+                addProductToCart(product = event.product)
+            }
+
+            is ProductsEvent.AddProductToWishlist -> {
+                addProductToWishlist(item = event.product, note = event.note)
+            }
+
+            is ProductsEvent.RemoveProductFromWishlist -> {
+                removeProductFromWishlist(id = event.id)
+            }
+        }
     }
 }

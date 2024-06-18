@@ -16,7 +16,7 @@ class SearchForProductUseCase @Inject constructor(private val repository: Produc
             val searchResult = repository.searchForProduct(query).products.toProductList()
             emit(Resource.Success(data = searchResult))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

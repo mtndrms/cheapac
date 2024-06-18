@@ -21,6 +21,7 @@ import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,15 +51,24 @@ internal fun RecentlyViewedRoute(
     viewModel: RecentlyViewedViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    RecentlyViewedScreen(goBack = goBack, clearAll = viewModel::clear, uiState = uiState)
+
+    RecentlyViewedScreen(
+        goBack = goBack,
+        onEvent = viewModel::onEvent,
+        uiState = uiState
+    )
 }
 
 @Composable
 private fun RecentlyViewedScreen(
     goBack: () -> Unit,
-    clearAll: () -> Unit,
+    onEvent: (RecentlyViewedEvent) -> Unit,
     uiState: RecentlyViewedUiState
 ) {
+    LaunchedEffect(key1 = Unit) {
+        onEvent(RecentlyViewedEvent.InitialFetch)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -73,7 +83,9 @@ private fun RecentlyViewedScreen(
                 ),
                 primaryButtonOpts = TopBarButtonOpts(
                     icon = CheapacIcons.DeleteOutlined,
-                    onClick = clearAll,
+                    onClick = {
+                        onEvent(RecentlyViewedEvent.Clear)
+                    },
                     shouldHideButton = data.isEmpty()
                 ),
             )

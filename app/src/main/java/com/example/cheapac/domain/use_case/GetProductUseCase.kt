@@ -15,7 +15,7 @@ class GetProductUseCase @Inject constructor(private val repository: ProductRepos
             val product = repository.getOneById(id = id).toProduct()
             emit(Resource.Success(data = product))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

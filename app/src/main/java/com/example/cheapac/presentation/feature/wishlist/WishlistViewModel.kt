@@ -25,10 +25,6 @@ class WishlistViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    init {
-        getWishlist()
-    }
-
     private fun getWishlist() {
         job = getWishlistUseCase().onEach { result ->
             when (result) {
@@ -53,7 +49,7 @@ class WishlistViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun clearAll() {
+    private fun clear() {
         job = clearWishlistUseCase().onEach { result ->
             if (result) {
                 _uiState.update {
@@ -61,5 +57,17 @@ class WishlistViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: WishlistEvent) {
+        when (event) {
+            is WishlistEvent.InitialFetch -> {
+                getWishlist()
+            }
+
+            is WishlistEvent.Clear -> {
+                clear()
+            }
+        }
     }
 }

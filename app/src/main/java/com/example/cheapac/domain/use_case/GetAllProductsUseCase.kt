@@ -15,7 +15,7 @@ class GetAllProductsUseCase @Inject constructor(private val productRepository: P
             val products = productRepository.getAll().products.toProductList()
             emit(Resource.Success(data = products))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.cheapac.presentation.feature.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cheapac.data.Resource
@@ -42,9 +41,6 @@ class HomeViewModel @Inject constructor(
     private var job: Job? = null
 
     init {
-        getHighlights()
-        getAllCategories()
-        getWishlist()
     }
 
     private fun getHighlights() {
@@ -134,7 +130,7 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addProductToWishlist(
+    private fun addProductToWishlist(
         item: Product,
         note: String
     ) {
@@ -159,7 +155,7 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun removeProductFromWishlist(id: Int) {
+    private fun removeProductFromWishlist(id: Int) {
         job = removeProductFromWishlistUseCase(id = id).onEach { result ->
             if (result) {
                 val removed = _uiState.value.wishlistedProducts.find { it.id == id }
@@ -197,7 +193,7 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addToCart(product: Product) {
+    private fun addProductToCart(product: Product) {
         job = addProductToCartUseCase(product).onEach { result ->
             when (result) {
                 is Resource.Loading -> {}
@@ -214,7 +210,7 @@ class HomeViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun getCart() {
+    private fun getCart() {
         job = getCartUseCase().onEach { result ->
             when (result) {
                 is Resource.Loading -> {}
@@ -226,5 +222,31 @@ class HomeViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: HomeEvent) {
+        when (event) {
+            is HomeEvent.InitialFetch -> {
+                getHighlights()
+                getAllCategories()
+                getWishlist()
+                getCart()
+            }
+
+            is HomeEvent.AddProductToCart -> {
+                addProductToCart(product = event.product)
+            }
+
+            is HomeEvent.AddProductToWishlist -> {
+                addProductToWishlist(
+                    item = event.product,
+                    note = event.note
+                )
+            }
+
+            is HomeEvent.RemoveProductFromWishlist -> {
+                removeProductFromWishlist(id = event.id)
+            }
+        }
     }
 }

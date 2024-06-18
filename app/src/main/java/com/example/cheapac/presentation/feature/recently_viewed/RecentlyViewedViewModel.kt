@@ -27,11 +27,7 @@ class RecentlyViewedViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    init {
-        getAll()
-    }
-
-    fun getAll() {
+    private fun getAll() {
         job = getAllRecentlyViewedItems().onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -55,14 +51,14 @@ class RecentlyViewedViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun deleteById(id: Int) {
+    private fun deleteById(id: Int) {
         job = removeRecentlyViewedProductUseCase(id = id).onEach { result ->
             if (result) {
             }
         }.launchIn(viewModelScope)
     }
 
-    fun clear() {
+    private fun clear() {
         job = clearRecentlyViewedItemsUseCase().onEach { result ->
             if (result) {
                 _uiState.update {
@@ -70,5 +66,17 @@ class RecentlyViewedViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: RecentlyViewedEvent) {
+        when (event) {
+            is RecentlyViewedEvent.InitialFetch -> {
+                getAll()
+            }
+
+            is RecentlyViewedEvent.Clear -> {
+                clear()
+            }
+        }
     }
 }

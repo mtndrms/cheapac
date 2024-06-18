@@ -15,7 +15,7 @@ class AddProductToWishlistUseCase @Inject constructor(private val wishlistReposi
             wishlistRepository.insert(product = product)
             emit(Resource.Success(data = true))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

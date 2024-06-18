@@ -18,14 +18,12 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import com.example.cheapac.presentation.component.SearchBar
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -36,6 +34,7 @@ import com.example.cheapac.domain.model.Product
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.presentation.component.ProductCard
+import com.example.cheapac.presentation.component.SearchBar
 import com.example.cheapac.presentation.navigation.Destination
 import com.example.cheapac.utils.capitalize
 
@@ -50,30 +49,24 @@ fun SearchResultRoute(
 
     SearchResultScreen(
         query = query,
-        search = viewModel::searchForProduct,
         uiState = uiState,
         navigateToProductDetail = navigateToProductDetail,
-        addToCart = viewModel::addToCart,
-        addToWishlist = viewModel::addToWishlist,
-        removeProductFromWishlist = viewModel::removeProductFromWishlist,
-        goBack = goBack
+        onEvent = viewModel::onEvent,
+        goBack = goBack,
     )
 }
 
 @Composable
 private fun SearchResultScreen(
     query: String?,
-    search: (String) -> Unit,
     uiState: SearchResultUiState,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Product, String) -> Unit,
-    removeProductFromWishlist: (Int) -> Unit,
-    addToCart: (Product) -> Unit,
+    onEvent: (SearchResultEvent) -> Unit,
     goBack: () -> Unit,
 ) {
     query?.let {
-        LaunchedEffect(key1 = true) {
-            search(it.lowercase())
+        LaunchedEffect(key1 = Unit) {
+            onEvent(SearchResultEvent.InitialFetch(query = it.lowercase()))
         }
     }
 
@@ -84,8 +77,10 @@ private fun SearchResultScreen(
     ) {
         Header(title = stringResource(id = Destination.SEARCH.titleTextResId), goBack = goBack)
         SearchBar(
-            query = query ?: "",
-            onSearchClick = search,
+            query = query.orEmpty(),
+            onSearchClick = { query ->
+                onEvent(SearchResultEvent.Search(query = query))
+            },
             modifier = Modifier.padding(horizontal = 10.dp)
         )
         Spacer(modifier = Modifier.height(10.dp))
@@ -94,9 +89,20 @@ private fun SearchResultScreen(
                 products = products,
                 wishlistedProductIDs = uiState.wishlistedProductIDs,
                 navigateToProductDetail = navigateToProductDetail,
-                addToWishlist = addToWishlist,
-                removeProductFromWishlist = removeProductFromWishlist,
-                addToCart = addToCart,
+                addToWishlist = { product, note ->
+                    onEvent(
+                        SearchResultEvent.AddProductToWishlist(
+                            product = product,
+                            note = note
+                        )
+                    )
+                },
+                removeProductFromWishlist = { id ->
+                    onEvent(SearchResultEvent.RemoveProductFromWishlist(id = id))
+                },
+                addToCart = { product ->
+                    onEvent(SearchResultEvent.AddProductToCart(product = product))
+                },
             )
         }
 

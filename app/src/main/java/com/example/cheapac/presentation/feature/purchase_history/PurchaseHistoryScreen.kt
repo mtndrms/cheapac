@@ -17,6 +17,7 @@ import com.example.cheapac.data.local.entity.PurchaseHistoryItem
 @Composable
 internal fun PurchaseHistoryRoute(viewModel: PurchaseHistoryViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
     PurchaseHistoryScreen(
         uiState = uiState
     )

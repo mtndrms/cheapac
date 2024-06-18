@@ -14,7 +14,7 @@ class GetCartUseCase @Inject constructor(private val cartRepository: CartReposit
             val cartItems = cartRepository.getAll()
             emit(Resource.Success(data = cartItems))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

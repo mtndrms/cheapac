@@ -40,12 +40,8 @@ internal fun ProductsRoute(
         modifier = modifier,
         uiState = uiState,
         goBack = goBack,
+        onEvent = viewModel::onEvent,
         navigateToProductDetail = navigateToProductDetail,
-        addToWishlist = viewModel::addToWishlist,
-        removeProductFromWishlist = viewModel::removeProductFromWishlist,
-        addToCart = viewModel::addToCart,
-        getWishlistByCategory = viewModel::getWishlistByCategory,
-        getProductsOfCategory = viewModel::getProductsOfCategory,
         category = category,
         title = title
     )
@@ -56,22 +52,14 @@ private fun ProductsScreen(
     modifier: Modifier,
     uiState: ProductsUiState,
     goBack: () -> Unit,
+    onEvent: (ProductsEvent) -> Unit,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Product, String) -> Unit,
-    removeProductFromWishlist: (Int) -> Unit,
-    addToCart: (Product) -> Unit,
-    getWishlistByCategory: (String) -> Unit,
-    getProductsOfCategory: (String) -> Unit,
     category: String?,
     title: String
 ) {
     category?.let {
-        LaunchedEffect(true) {
-            if (uiState.products.data == null) {
-                getProductsOfCategory(it)
-            }
-
-            getWishlistByCategory(it)
+        LaunchedEffect(key1 = Unit) {
+            onEvent(ProductsEvent.InitialFetch(category = it))
         }
     }
 
@@ -93,9 +81,15 @@ private fun ProductsScreen(
                 products = data,
                 wishlistedProductIDs = uiState.wishlistedProductIDs,
                 navigateToProductDetail = navigateToProductDetail,
-                addToWishlist = addToWishlist,
-                removeProductFromWishlist = removeProductFromWishlist,
-                addToCart = addToCart,
+                addProductToWishlist = { product, note ->
+                    onEvent(ProductsEvent.AddProductToWishlist(product = product, note = note))
+                },
+                removeProductFromWishlist = { id ->
+                    onEvent(ProductsEvent.RemoveProductFromWishlist(id = id))
+                },
+                addProductToCart = { product ->
+                    onEvent(ProductsEvent.AddProductToCart(product = product))
+                },
             )
         }
 
@@ -114,9 +108,9 @@ private fun SuccesState(
     products: List<Product>,
     wishlistedProductIDs: List<Int>,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Product, String) -> Unit,
+    addProductToWishlist: (Product, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
-    addToCart: (Product) -> Unit,
+    addProductToCart: (Product) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyVerticalGrid(
@@ -137,9 +131,9 @@ private fun SuccesState(
                 isInStock = product.stock != 0,
                 isWishlisted = isInWishlist,
                 navigateToProductDetail = navigateToProductDetail,
-                addToWishlist = addToWishlist,
+                addToWishlist = addProductToWishlist,
                 removeProductFromWishlist = removeProductFromWishlist,
-                addToCart = addToCart,
+                addToCart = addProductToCart,
             )
         }
     }

@@ -28,8 +28,8 @@ fun HorizontalProducts(
     products: UiState<List<Product>>,
     wishlistedProducts: List<WishlistItem>,
     navigateToProductDetail: (Int) -> Unit,
-    addToWishlist: (Product, String) -> Unit,
-    addToCart: (Product) -> Unit,
+    addProductToWishlist: (product: Product, note: String) -> Unit,
+    addProductToCart: (Product) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     modifier: Modifier
 ) {
@@ -64,8 +64,8 @@ fun HorizontalProducts(
                     isInStock = product.stock != 0,
                     isWishlisted = isInWishlist,
                     navigateToProductDetail = navigateToProductDetail,
-                    addToWishlist = addToWishlist,
-                    addToCart = addToCart,
+                    addToWishlist = addProductToWishlist,
+                    addToCart = addProductToCart,
                     removeProductFromWishlist = removeProductFromWishlist
                 )
 

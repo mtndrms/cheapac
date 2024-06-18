@@ -21,7 +21,7 @@ class GetHighlightsUseCase @Inject constructor(private val productRepository: Pr
 
             emit(Resource.Success(data = highlights))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

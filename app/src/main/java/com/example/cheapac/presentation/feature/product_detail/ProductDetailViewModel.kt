@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cheapac.data.Resource
 import com.example.cheapac.data.UiState
 import com.example.cheapac.data.local.entity.WishlistItem
+import com.example.cheapac.domain.model.Product
 import com.example.cheapac.domain.use_case.AddProductToWishlistUseCase
 import com.example.cheapac.domain.use_case.CheckProductIsWishlistedUseCase
 import com.example.cheapac.domain.use_case.CreateRecentlyViewedProductRecordUseCase
@@ -17,7 +18,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +33,7 @@ class ProductDetailViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    fun getProduct(id: Int) {
+    private fun getProduct(id: Int) {
         job = getProductUseCase(id = id).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -65,20 +65,18 @@ class ProductDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun addToWishlist(
-        id: Int,
-        title: String,
-        thumbnailUrl: String,
+    private fun addProductToWishlist(
+        product: Product,
         note: String,
-        category: String
     ) {
         val wishlistItem = WishlistItem(
-            id = id,
-            title = title,
-            thumbnailUrl = thumbnailUrl,
-            category = category,
+            id = product.id,
+            title = product.title,
+            thumbnailUrl = product.thumbnail,
+            category = product.category,
             note = note
         )
+
         job = addProductToWishlistUseCase(product = wishlistItem, note).onEach { result ->
             when (result) {
                 is Resource.Loading -> {
@@ -105,7 +103,7 @@ class ProductDetailViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun removeFromWishlist(id: Int) {
+    private fun removeProductFromWishlist(id: Int) {
         job = removeProductFromWishlistUseCase(id = id).onEach { result ->
             if (result) {
                 _uiState.update {
@@ -129,5 +127,21 @@ class ProductDetailViewModel @Inject constructor(
             title = title,
             thumbnailUrl = thumbnailUrl
         ).launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: ProductDetailEvent) {
+        when (event) {
+            is ProductDetailEvent.InitialFetch -> {
+                getProduct(id = event.id)
+            }
+
+            is ProductDetailEvent.AddProductToWishlist -> {
+                addProductToWishlist(product = event.product, note = event.note)
+            }
+
+            is ProductDetailEvent.RemoveProductFromWishlist -> {
+                removeProductFromWishlist(id = event.id)
+            }
+        }
     }
 }

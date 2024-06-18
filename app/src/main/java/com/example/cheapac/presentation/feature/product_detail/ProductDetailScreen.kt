@@ -81,9 +81,7 @@ internal fun ProductDetailRoute(
     ProductDetailScreen(
         id = id,
         uiState = uiState,
-        getProduct = viewModel::getProduct,
-        addToWishlist = viewModel::addToWishlist,
-        removeProductFromWishlist = viewModel::removeFromWishlist,
+        onEvent = viewModel::onEvent,
         navigateToProductList = navigateToProductList,
         navigateToSearchResultScreen = navigateToSearchResultScreen,
         navigateToReviewsScreen = navigateToReviewsScreen,
@@ -95,10 +93,8 @@ internal fun ProductDetailRoute(
 private fun ProductDetailScreen(
     id: Int?,
     uiState: ProductDetailUiState,
-    getProduct: (Int) -> Unit,
-    addToWishlist: (Int, String, String, String, String) -> Unit,
-    removeProductFromWishlist: (Int) -> Unit,
     goBack: () -> Unit,
+    onEvent: (ProductDetailEvent) -> Unit,
     navigateToProductList: (String, String) -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
     navigateToReviewsScreen: (List<Review>) -> Unit,
@@ -120,7 +116,7 @@ private fun ProductDetailScreen(
 
     id?.let {
         LaunchedEffect(true) {
-            getProduct(it)
+            onEvent(ProductDetailEvent.InitialFetch(id = it))
         }
     }
 
@@ -142,8 +138,17 @@ private fun ProductDetailScreen(
                     Description(
                         context = LocalContext.current,
                         scrollState = scrollState,
-                        addToWishlist = addToWishlist,
-                        removeProductFromWishlist = removeProductFromWishlist,
+                        addProductToWishlist = { product, note ->
+                            onEvent(
+                                ProductDetailEvent.AddProductToWishlist(
+                                    product = product,
+                                    note = note
+                                )
+                            )
+                        },
+                        removeProductFromWishlist = { id ->
+                            onEvent(ProductDetailEvent.RemoveProductFromWishlist(id = id))
+                        },
                         addToWishlistStatus = uiState.addToWishlistStatus,
                         navigateToProductList = navigateToProductList,
                         navigateToSearchResultScreen = navigateToSearchResultScreen,
@@ -282,7 +287,7 @@ private fun Description(
     addToWishlistStatus: UiState<Boolean>,
     isWishlisted: Boolean,
     modifier: Modifier,
-    addToWishlist: (Int, String, String, String, String) -> Unit,
+    addProductToWishlist: (Product, String) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
     navigateToProductList: (String, String) -> Unit,
     navigateToSearchResultScreen: (String) -> Unit,
@@ -324,11 +329,8 @@ private fun Description(
                         } ?: run {
                             if (!isWishlisted) {
                                 IconButton(onClick = {
-                                    addToWishlist(
-                                        product.id,
-                                        product.title,
-                                        product.thumbnail,
-                                        product.category,
+                                    addProductToWishlist(
+                                        product,
                                         "test"
                                     )
                                 }) {

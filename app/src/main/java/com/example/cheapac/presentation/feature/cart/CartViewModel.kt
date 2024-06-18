@@ -52,7 +52,7 @@ class CartViewModel @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun incrementQuantity(cartItem: CartItem) {
+    private fun incrementQuantity(cartItem: CartItem) {
         viewModelScope.launch {
             val items = (uiState.value.cart.data ?: emptyList()).toMutableList()
             if (items.isNotEmpty()) {
@@ -70,7 +70,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun decrementQuantity(cartItem: CartItem) {
+    private fun decrementQuantity(cartItem: CartItem) {
         viewModelScope.launch {
             val items = (uiState.value.cart.data ?: emptyList()).toMutableList()
             if (items.isNotEmpty()) {
@@ -88,7 +88,7 @@ class CartViewModel @Inject constructor(
         }
     }
 
-    fun clear() {
+    private fun clear() {
         clearCartUseCase().map { result ->
             if (result) {
                 _uiState.update {
@@ -96,5 +96,21 @@ class CartViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: CartEvent) {
+        when (event) {
+            is CartEvent.Clear -> {
+                clear()
+            }
+
+            is CartEvent.IncrementQuantity -> {
+                incrementQuantity(cartItem = event.cartItem)
+            }
+
+            is CartEvent.DecrementQuantity -> {
+                decrementQuantity(cartItem = event.cartItem)
+            }
+        }
     }
 }

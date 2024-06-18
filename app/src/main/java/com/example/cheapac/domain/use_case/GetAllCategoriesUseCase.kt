@@ -15,7 +15,7 @@ class GetAllCategoriesUseCase @Inject constructor(private val categoryRepository
             val categories = categoryRepository.getAll().toCategoryList()
             emit(Resource.Success(data = categories))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

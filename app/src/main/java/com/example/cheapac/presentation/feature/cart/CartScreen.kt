@@ -42,20 +42,16 @@ internal fun CartRoute(
 
     CartScreen(
         goBack = goBack,
-        clear = viewModel::clear,
+        onEvent = viewModel::onEvent,
         uiState = uiState,
-        incrementQuantity = viewModel::incrementQuantity,
-        decrementQuantity = viewModel::decrementQuantity
     )
 }
 
 @Composable
 private fun CartScreen(
     goBack: () -> Unit,
-    clear: () -> Unit,
+    onEvent: (CartEvent) -> Unit,
     uiState: CartUiState,
-    incrementQuantity: (CartItem) -> Unit,
-    decrementQuantity: (CartItem) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -71,15 +67,22 @@ private fun CartScreen(
                 ),
                 primaryButtonOpts = TopBarButtonOpts(
                     icon = CheapacIcons.DeleteOutlined,
-                    onClick = clear,
+                    onClick = {
+                        onEvent(CartEvent.Clear)
+                    },
                     shouldHideButton = data.isEmpty(),
                 )
             )
+
             SuccessState(
                 total = uiState.total,
                 data = data,
-                incrementQuantity = incrementQuantity,
-                decrementQuantity = decrementQuantity
+                incrementQuantity = { item ->
+                    onEvent(CartEvent.IncrementQuantity(cartItem = item))
+                },
+                decrementQuantity = { item ->
+                    onEvent(CartEvent.DecrementQuantity(cartItem = item))
+                }
             )
         }
 

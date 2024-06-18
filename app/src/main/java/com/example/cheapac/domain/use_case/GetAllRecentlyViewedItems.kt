@@ -14,7 +14,7 @@ class GetAllRecentlyViewedItems @Inject constructor(private val recentlyViewedRe
             val items = recentlyViewedRepository.getAll()
             emit(Resource.Success(data = items))
         } catch (exception: Exception) {
-            emit(Resource.Error(message = exception.message ?: ""))
+            emit(Resource.Error(message = exception.message.orEmpty()))
         }
     }
 }

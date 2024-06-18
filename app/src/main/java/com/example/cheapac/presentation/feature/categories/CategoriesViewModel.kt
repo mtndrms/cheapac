@@ -17,15 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val getAllCategoriesUseCase: GetAllCategoriesUseCase
-): ViewModel() {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(CategoriesUiState())
     val uiState = _uiState.asStateFlow()
 
     private var job: Job? = null
-
-    init {
-        getAllCategories()
-    }
 
     private fun getAllCategories() {
         job = getAllCategoriesUseCase().onEach { result ->
@@ -51,5 +47,13 @@ class CategoriesViewModel @Inject constructor(
                 }
             }
         }.launchIn(viewModelScope)
+    }
+
+    fun onEvent(event: CategoriesEvent) {
+        when (event) {
+            is CategoriesEvent.InitialFetch -> {
+                getAllCategories()
+            }
+        }
     }
 }
