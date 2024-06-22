@@ -40,9 +40,6 @@ class HomeViewModel @Inject constructor(
 
     private var job: Job? = null
 
-    init {
-    }
-
     private fun getHighlights() {
         job = getHighlightsUseCase().onEach { result ->
             when (result) {

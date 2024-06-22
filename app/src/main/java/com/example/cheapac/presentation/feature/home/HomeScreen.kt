@@ -67,7 +67,7 @@ private fun HomeScreen(
     uiState: HomeUiState,
     modifier: Modifier
 ) {
-    LaunchedEffect(key1 = true) {
+    LaunchedEffect(key1 = Unit) {
         onEvent(HomeEvent.InitialFetch)
     }
 

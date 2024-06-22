@@ -31,7 +31,7 @@ fun HorizontalProducts(
     addProductToWishlist: (product: Product, note: String) -> Unit,
     addProductToCart: (Product) -> Unit,
     removeProductFromWishlist: (Int) -> Unit,
-    modifier: Modifier
+    modifier: Modifier = Modifier
 ) {
     Text(
         text = stringResource(R.string.featured),

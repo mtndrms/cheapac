@@ -2,8 +2,8 @@ package com.example.cheapac.presentation.common
 
 import androidx.annotation.DrawableRes
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowLeft
-import androidx.compose.material.icons.automirrored.outlined.Send
+import androidx.compose.material.icons.automirrored.filled.List
+import androidx.compose.material.icons.automirrored.outlined.List
 import androidx.compose.material.icons.automirrored.rounded.ArrowLeft
 import androidx.compose.material.icons.automirrored.rounded.ArrowRight
 import androidx.compose.material.icons.automirrored.rounded.Send
@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowDownward
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.ArrowDropUp
-import androidx.compose.material.icons.filled.ArrowLeft
 import androidx.compose.material.icons.filled.ChevronLeft
 import androidx.compose.material.icons.filled.ChevronRight
 import androidx.compose.material.icons.filled.Delete
@@ -20,7 +19,6 @@ import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.List
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Share
@@ -28,19 +26,20 @@ import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.DeleteOutline
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Flag
 import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Person
+import androidx.compose.material.icons.outlined.Phone
+import androidx.compose.material.icons.outlined.Place
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material.icons.outlined.ShoppingCart
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material.icons.outlined.StarBorder
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.CreditCard
 import androidx.compose.material.icons.rounded.RateReview
 import androidx.compose.material.icons.rounded.Search
-import androidx.compose.material.icons.rounded.Send
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.cheapac.R
 
@@ -53,8 +52,8 @@ object CheapacIcons {
     val CartOutlined: ImageVector = Icons.Outlined.ShoppingCart
     val Favorite: ImageVector = Icons.Default.Favorite
     val FavoriteOutlined: ImageVector = Icons.Outlined.FavoriteBorder
-    val Category: ImageVector = Icons.Default.List
-    val CategoryOutlined: ImageVector = Icons.Outlined.List
+    val Category: ImageVector = Icons.AutoMirrored.Filled.List
+    val CategoryOutlined: ImageVector = Icons.AutoMirrored.Outlined.List
     val ArrowBack: ImageVector = Icons.Default.ArrowBack
     val ArrowDown: ImageVector = Icons.Default.ArrowDownward
     val Settings: ImageVector = Icons.Outlined.Settings
@@ -79,6 +78,10 @@ object CheapacIcons {
     val Review: ImageVector = Icons.Rounded.RateReview
     val Close: ImageVector = Icons.Rounded.Close
     val Send: ImageVector = Icons.AutoMirrored.Rounded.Send
+    val Phone: ImageVector = Icons.Outlined.Phone
+    val Address: ImageVector = Icons.Outlined.Place
+    val Country: ImageVector = Icons.Outlined.Flag
+    val Card: ImageVector = Icons.Rounded.CreditCard
     val Smartphone: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_smartphone)
     val Beauty: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_beauty)
     val KitchenAccessories: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_kitchen_accessories)
@@ -112,6 +115,8 @@ object CheapacIcons {
     val Refund: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_refund)
     val Return: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_return)
     val Coupon: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_coupon)
+    val CreditCardProviderOne: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_cc_one)
+    val CreditCardProviderTwo: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_cc_two)
 }
 
 sealed class Icon {

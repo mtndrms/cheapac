@@ -12,13 +12,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -31,6 +37,11 @@ import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.presentation.component.NothingToListState
 import com.example.cheapac.presentation.component.top_bar.TopBar
 import com.example.cheapac.presentation.component.top_bar.TopBarButtonOpts
+import com.example.cheapac.presentation.feature.cart.checkout.CheckoutBottomSheet
+import com.example.cheapac.presentation.feature.cart.checkout.payment.PaymentEvent
+import com.example.cheapac.presentation.feature.cart.checkout.payment.PaymentInfo
+import com.example.cheapac.presentation.feature.cart.checkout.shipping.ShippingEvent
+import com.example.cheapac.presentation.feature.cart.checkout.shipping.ShippingInfo
 import com.example.cheapac.presentation.feature.cart.component.CartItem
 
 @Composable
@@ -43,6 +54,8 @@ internal fun CartRoute(
     CartScreen(
         goBack = goBack,
         onEvent = viewModel::onEvent,
+        onShippingEvent = viewModel::onEvent,
+        onPaymentEvent = viewModel::onEvent,
         uiState = uiState,
     )
 }
@@ -51,8 +64,14 @@ internal fun CartRoute(
 private fun CartScreen(
     goBack: () -> Unit,
     onEvent: (CartEvent) -> Unit,
+    onShippingEvent: (ShippingEvent) -> Unit,
+    onPaymentEvent: (PaymentEvent) -> Unit,
     uiState: CartUiState,
 ) {
+    LaunchedEffect(key1 = Unit) {
+        onEvent(CartEvent.InitialFetch)
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -77,12 +96,17 @@ private fun CartScreen(
             SuccessState(
                 total = uiState.total,
                 data = data,
+                shippingInfo = uiState.shippingInfo,
+                paymentInfo = uiState.paymentInfo,
                 incrementQuantity = { item ->
                     onEvent(CartEvent.IncrementQuantity(cartItem = item))
                 },
                 decrementQuantity = { item ->
                     onEvent(CartEvent.DecrementQuantity(cartItem = item))
-                }
+                },
+                onCartEvent = onEvent,
+                onShippingEvent = onShippingEvent,
+                onPaymentEvent = onPaymentEvent
             )
         }
 
@@ -99,13 +123,22 @@ private fun CartScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SuccessState(
     total: Int,
     data: List<CartItem>,
+    shippingInfo: ShippingInfo,
+    paymentInfo: PaymentInfo,
     incrementQuantity: (CartItem) -> Unit,
-    decrementQuantity: (CartItem) -> Unit
+    decrementQuantity: (CartItem) -> Unit,
+    onCartEvent: (CartEvent) -> Unit,
+    onShippingEvent: (ShippingEvent) -> Unit,
+    onPaymentEvent: (PaymentEvent) -> Unit,
 ) {
+    val checkoutSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var checkoutBottomSheetVisibility by remember { mutableStateOf(false) }
+
     Box(modifier = Modifier.fillMaxSize()) {
         if (data.isNotEmpty()) {
             Column(
@@ -138,7 +171,7 @@ private fun SuccessState(
             }
 
             ExtendedFloatingActionButton(
-                onClick = { },
+                onClick = { checkoutBottomSheetVisibility = true },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(16.dp)
@@ -153,6 +186,17 @@ private fun SuccessState(
                 imageVector = CheapacIcons.CartOutlined,
             )
         }
+
+        CheckoutBottomSheet(
+            isVisible = checkoutBottomSheetVisibility,
+            state = checkoutSheetState,
+            shippingInfo = shippingInfo,
+            paymentInfo = paymentInfo,
+            dismiss = { checkoutBottomSheetVisibility = false },
+            onCartEvent = onCartEvent,
+            onShippingEvent = onShippingEvent,
+            onPaymentEvent = onPaymentEvent,
+        )
     }
 }
 
