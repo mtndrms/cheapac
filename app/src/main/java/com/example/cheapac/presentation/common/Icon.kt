@@ -115,8 +115,6 @@ object CheapacIcons {
     val Refund: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_refund)
     val Return: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_return)
     val Coupon: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_coupon)
-    val CreditCardProviderOne: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_cc_one)
-    val CreditCardProviderTwo: Icon.DrawableResourceIcon = Icon.DrawableResourceIcon(R.drawable.ic_cc_two)
 }
 
 sealed class Icon {

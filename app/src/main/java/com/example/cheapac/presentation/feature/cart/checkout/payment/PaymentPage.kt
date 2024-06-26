@@ -96,7 +96,7 @@ fun PaymentPage(onEvent: (PaymentEvent) -> Unit, markAsDone: () -> Unit, uiState
             )
 
             Icon(
-                painter = painterResource(id = CheapacIcons.CreditCardProviderTwo.id),
+                imageVector = CheapacIcons.Card,
                 contentDescription = "credit card provider logo",
                 tint = MaterialTheme.colorScheme.onError,
                 modifier = Modifier
