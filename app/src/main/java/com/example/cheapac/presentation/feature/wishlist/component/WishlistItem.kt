@@ -38,6 +38,13 @@ import com.example.cheapac.R
 import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.handleShareProductClick
 
+/**
+ * A Composable function that represents an item in a wishlist.
+ *
+ * @param title The title of the wishlist item.
+ * @param thumbnailUrl The URL of the thumbnail image for the wishlist item.
+ * @param note A note or description associated with the wishlist item.
+ */
 @Composable
 fun WishlistItem(title: String, thumbnailUrl: String, note: String) {
     var isExpanded by remember { mutableStateOf(false) }

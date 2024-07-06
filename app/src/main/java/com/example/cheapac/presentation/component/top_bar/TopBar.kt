@@ -26,6 +26,19 @@ import androidx.compose.ui.unit.dp
 import com.example.cheapac.utils.Dimens
 import com.example.cheapac.utils.capitalize
 
+/**
+ * A Composable function that represents a top app bar.
+ *
+ * @param title The title to display in the top app bar.
+ * @param titleLocation The location of the title in relation to other elements (default: TopBarTitleLocation.START).
+ * @param onTitleClick Lambda function to be executed when the title is clicked.
+ * @param navigationButtonOpts Options for the navigation button on the left side of the top bar.
+ * @param primaryButtonOpts Options for the primary action button on the right side of the top bar.
+ * @param secondaryButtonOpts Options for the secondary action button on the right side of the top bar.
+ *
+ * @see TopBarTitleLocation
+ * @see TopBarButtonOpts
+ */
 @Composable
 fun TopBar(
     title: String,

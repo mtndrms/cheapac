@@ -19,6 +19,12 @@ import androidx.compose.ui.unit.sp
 import com.example.cheapac.data.remote.dto.product.Review
 import com.example.cheapac.presentation.component.RatingBar
 
+/**
+ * A Composable function that represents a single review item.
+ *
+ * @param review The review object containing details of the review.
+ * @param modifier Optional modifier for customizing the layout and behavior of this Composable.
+ */
 @Composable
 fun ReviewItem(review: Review, modifier: Modifier = Modifier) {
     Column(

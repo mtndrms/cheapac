@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.cheapac.presentation.common.CheapacIcons
 
+// Previews of all the possibilities a top bar can have.
 
 @Composable
 @Preview(group = "Center")

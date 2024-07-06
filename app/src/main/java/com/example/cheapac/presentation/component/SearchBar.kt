@@ -33,6 +33,12 @@ import androidx.compose.ui.unit.dp
 import com.example.cheapac.R
 import com.example.cheapac.presentation.common.CheapacIcons
 
+/**
+ * A Composable function that represents a search bar.
+ *
+ * @param query The current query text in the search bar.
+ * @param onSearchClick Callback function invoked when the search button is clicked with the current query text.
+ */
 @Composable
 fun SearchBar(modifier: Modifier = Modifier, query: String = "", onSearchClick: (String) -> Unit) {
     val value = remember { mutableStateOf(query) }

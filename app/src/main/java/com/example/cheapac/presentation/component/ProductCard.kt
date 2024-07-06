@@ -52,6 +52,9 @@ import com.example.cheapac.presentation.common.CheapacIcons
 import com.example.cheapac.utils.applyDiscount
 import com.example.cheapac.utils.handleShareProductClick
 
+/**
+ * A Composable function that represents a product.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ProductCard(

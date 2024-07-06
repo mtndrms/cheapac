@@ -14,6 +14,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cheapac.data.local.entity.PurchaseHistoryItem
 
+//TODO: Not yet implemented
 @Composable
 internal fun PurchaseHistoryRoute(viewModel: PurchaseHistoryViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
